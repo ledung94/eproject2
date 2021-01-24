@@ -16,11 +16,12 @@ public class connectiondb {
     java.sql.Connection con = null;
     java.sql.Statement stmt = null;
     ResultSet rs = null;
+    public static final String DATABASE_URL = "jdbc:mysql://localhost:3306/inventorymanagement";
     
     public connectiondb(){
         try{
             Class.forName("com.mysql.jdbc.Driver");
-            con=DriverManager.getConnection("jdbc:mysql://localhost:3306/eproject22","root","");
+            con=DriverManager.getConnection(DATABASE_URL,"root","");
             stmt=con.createStatement();
         }catch(Exception e){
             e.printStackTrace();
@@ -30,7 +31,7 @@ public class connectiondb {
     public java.sql.Connection getConnection(){
         try{
             Class.forName("com.mysql.jdbc.Driver");
-            con=DriverManager.getConnection("jdbc:mysql://localhost:3306/eproject22","root","");
+            con=DriverManager.getConnection(DATABASE_URL,"root","");
         }catch(Exception e){
             e.printStackTrace();
         }
