@@ -71,6 +71,8 @@ public class Product extends javax.swing.JDialog {
         sellingPrice = new javax.swing.JFormattedTextField();
         costPrice = new javax.swing.JFormattedTextField();
         uploadImage = new javax.swing.JButton();
+        productCode = new javax.swing.JTextField();
+        jLabel12 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         productTable = new javax.swing.JTable();
         jLabel4 = new javax.swing.JLabel();
@@ -153,6 +155,8 @@ public class Product extends javax.swing.JDialog {
             }
         });
 
+        jLabel12.setText("Product Code");
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -161,23 +165,28 @@ public class Product extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(jLabel17)
+                                .addComponent(jLabel11)
                                 .addGap(27, 27, 27)
-                                .addComponent(productCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(jLabel16)
+                                .addComponent(productName, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                                .addComponent(jLabel12)
                                 .addGap(27, 27, 27)
-                                .addComponent(sellingPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel11, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.TRAILING))
-                                .addGap(27, 27, 27)
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(productName)
-                                    .addComponent(costPrice, javax.swing.GroupLayout.DEFAULT_SIZE, 274, Short.MAX_VALUE))))
+                                .addComponent(productCode, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                                    .addComponent(jLabel17)
+                                    .addGap(27, 27, 27)
+                                    .addComponent(productCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(jLabel15)
+                                        .addComponent(jLabel16))
+                                    .addGap(27, 27, 27)
+                                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(costPrice)
+                                        .addComponent(sellingPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -212,10 +221,19 @@ public class Product extends javax.swing.JDialog {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(35, 35, 35)
+                        .addComponent(productImage, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(uploadImage))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(33, 33, 33)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel11)
                             .addComponent(productName, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel12)
+                            .addComponent(productCode, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel15)
@@ -223,16 +241,12 @@ public class Product extends javax.swing.JDialog {
                         .addGap(18, 18, 18)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel16)
-                            .addComponent(sellingPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                        .addGap(31, 31, 31)
-                        .addComponent(productImage, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel17)
-                    .addComponent(productCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(uploadImage))
-                .addGap(49, 49, 49)
+                            .addComponent(sellingPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel17)
+                            .addComponent(productCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel3)
                     .addComponent(jLabel2)
@@ -244,7 +258,7 @@ public class Product extends javax.swing.JDialog {
                     .addComponent(delete)
                     .addComponent(edit)
                     .addComponent(clear))
-                .addContainerGap(48, Short.MAX_VALUE))
+                .addGap(24, 24, 24))
         );
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -277,7 +291,7 @@ public class Product extends javax.swing.JDialog {
 
             },
             new String [] {
-                "Index", "Product Name", "Cost Price", "Selling Price", "Category", "Date"
+                "Index", "Name", "Code", "Cost Price", "Selling Price", "Category", "Date"
             }
         ));
         productTable.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -322,7 +336,7 @@ public class Product extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 588, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 588, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
@@ -333,19 +347,18 @@ public class Product extends javax.swing.JDialog {
                         .addComponent(jLabel6)
                         .addGap(38, 38, 38)
                         .addComponent(searchByTab, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 89, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(103, Short.MAX_VALUE)
+                .addContainerGap(23, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 52, Short.MAX_VALUE)
                     .addComponent(searchByTab)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(refresh, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                        .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(refresh, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(41, 41, 41)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 504, Short.MAX_VALUE)
@@ -362,6 +375,7 @@ public class Product extends javax.swing.JDialog {
         product = products.get(row);
 
         productName.setText(product.getProductName());
+        productCode.setText(product.getProductCode());
         costPrice.setText(Float.toString(product.getCostPrice()));
         sellingPrice.setText(Float.toString(product.getSellingPrice()));
         productCategory.setText(product.getProductCategory());
@@ -372,15 +386,17 @@ public class Product extends javax.swing.JDialog {
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
         // TODO add your handling code here:
         product = new model.Product();
-        UUID uuid = UUID.randomUUID();
+//        UUID uuid = UUID.randomUUID();
         product.setProductName(productName.getText());
+        product.setProductCode(productCode.getText());
         product.setCostPrice(Float.parseFloat(costPrice.getText()));
         product.setSellingPrice(Float.parseFloat(sellingPrice.getText()));
         product.setProductCategory(productCategory.getText());
         product.setDate(LocalDate.now().toString());
-        product.setProductID(uuid.toString());
+//        product.setProductID(uuid.toString());
         product.setProductStatus(ProductStatus.ACTIVE);
         product.setProductImage(path);
+        
         products.add(product);
         new ProductDAO().addProductDAO(product);
         showResult();
@@ -390,6 +406,7 @@ public class Product extends javax.swing.JDialog {
     private void clearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearActionPerformed
         // TODO add your handling code here:
         productName.setText("");
+        productCode.setText("");
         costPrice.setText("");
         sellingPrice.setText("");
         productCategory.setText("");
@@ -419,8 +436,8 @@ public class Product extends javax.swing.JDialog {
     private void deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteActionPerformed
         // TODO add your handling code here:
         int row = productTable.getSelectedRow();
-        model.removeRow(row);
         new ProductDAO().deleteProductDAO(products.get(row));
+        refreshActionPerformed(evt);
     }//GEN-LAST:event_deleteActionPerformed
 
     private void editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editActionPerformed
@@ -431,12 +448,14 @@ public class Product extends javax.swing.JDialog {
             int row = productTable.getSelectedRow();
 
             model.setValueAt(productName.getText(), row, 1);
-            model.setValueAt(costPrice.getText(), row, 2);
-            model.setValueAt(sellingPrice.getText(), row, 3);
-            model.setValueAt(productCategory.getText(), row, 4);
+            model.setValueAt(productCode.getText(), row, 2);
+            model.setValueAt(costPrice.getText(), row, 3);
+            model.setValueAt(sellingPrice.getText(), row, 4);
+            model.setValueAt(productCategory.getText(), row, 5);
 
             product = products.get(row);
             product.setProductName(productName.getText());
+            product.setProductCode(productCode.getText());
             product.setCostPrice(Float.parseFloat(costPrice.getText()));
             product.setSellingPrice(Float.parseFloat(sellingPrice.getText()));
             product.setProductCategory(productCategory.getText());
@@ -516,6 +535,7 @@ public class Product extends javax.swing.JDialog {
     private javax.swing.JButton edit;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
@@ -529,6 +549,7 @@ public class Product extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField productCategory;
+    private javax.swing.JTextField productCode;
     private javax.swing.JLabel productImage;
     private javax.swing.JTextField productName;
     private javax.swing.JTable productTable;
@@ -543,6 +564,7 @@ public class Product extends javax.swing.JDialog {
         model.addRow(new Object[]{
             products.size(),
             product.getProductName(),
+            product.getProductCode(),
             product.getCostPrice(),
             product.getSellingPrice(),
             product.getProductCategory(),
@@ -558,6 +580,7 @@ public class Product extends javax.swing.JDialog {
             model.addRow(new Object[]{
                 products.indexOf(product) + 1,
                 product.getProductName(),
+                product.getProductCode(),
                 product.getCostPrice(),
                 product.getSellingPrice(),
                 product.getProductCategory(),
@@ -588,6 +611,7 @@ public class Product extends javax.swing.JDialog {
                 model.addRow(new Object[]{
                     products.indexOf(product) + 1,
                     product.getProductName(),
+                    product.getProductCode(),
                     product.getCostPrice(),
                     product.getSellingPrice(),
                     product.getProductCategory(),

@@ -10,7 +10,7 @@ package model;
  * @author Flynn
  */
 public class Product {
-    private String productID;
+
     private String productName;
     private float costPrice;
     private float sellingPrice;
@@ -18,9 +18,14 @@ public class Product {
     private String productCategory;
     private ProductStatus productStatus;
     private String date;
+    private String productCode;
 
-    public void setProductID(String productID) {
-        this.productID = productID;
+    public void setProductCode(String productCode) {
+        this.productCode = productCode;
+    }
+
+    public String getProductCode() {
+        return productCode;
     }
 
     public void setProductName(String productName) {
@@ -51,10 +56,6 @@ public class Product {
         this.date = date;
     }
 
-    public String getProductID() {
-        return productID;
-    }
-
     public String getProductName() {
         return productName;
     }
@@ -83,5 +84,4 @@ public class Product {
         return date;
     }
 
-    
 }

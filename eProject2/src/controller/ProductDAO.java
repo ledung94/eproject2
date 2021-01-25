@@ -57,7 +57,7 @@ public class ProductDAO {
 
     public void addProductDAO(Product product) {
         try {
-            String query = "SELECT * FROM products WHERE productname='" + product.getProductName() + "' AND costprice='" + product.getCostPrice() + "' AND sellingprice='" + product.getSellingPrice() + "' AND category='" + product.getProductCategory() + "'";
+            String query = "SELECT * FROM products WHERE productname='" + product.getProductName() + "' AND productCode='" + product.getProductCode() + "' AND category='" + product.getProductCategory() + "'";
             rs = stmt.executeQuery(query);
             if (rs.next()) {
                 JOptionPane.showMessageDialog(null, "Same Product has already been added!");
@@ -73,10 +73,11 @@ public class ProductDAO {
     public void addFunction(Product product) {
         try {
 
-            String q = "INSERT INTO products VALUES(?,?,?,?,?,?,?,?)";
+            String q = "INSERT INTO products VALUES(null,?,?,?,?,?,?,?,?)";
             pstmt = (PreparedStatement) con.prepareStatement(q);
-            pstmt.setString(1, product.getProductID());
-            pstmt.setString(2, product.getProductName());
+//            pstmt.setString(1, product.getProductID());
+            pstmt.setString(1, product.getProductName());
+            pstmt.setString(2, product.getProductCode());
             pstmt.setDouble(3, product.getCostPrice());
             pstmt.setDouble(4, product.getSellingPrice());
             pstmt.setString(5, product.getProductCategory());
@@ -93,9 +94,9 @@ public class ProductDAO {
 
     public void deleteProductDAO(Product product) {
         try {
-            String query = "UPDATE products SET status = 'REMOVE' WHERE productID=?";
+            String query = "UPDATE products SET status = 'REMOVE' WHERE productCode=?";
             pstmt = (PreparedStatement) con.prepareStatement(query);
-            pstmt.setString(1, product.getProductID());
+            pstmt.setString(1, product.getProductCode());
             pstmt.executeUpdate();
             JOptionPane.showMessageDialog(null, "Delete Successfully!");
         } catch (SQLException ex) {
@@ -106,14 +107,15 @@ public class ProductDAO {
 
     public void editProductDAO(Product product) {
         try {
-            String query = "UPDATE products SET productname=?,costprice=?,sellingprice=?,category=?,productImage=? WHERE productID=?";
+            String query = "UPDATE products SET productname=?,costprice=?,sellingprice=?,category=?,productImage=? WHERE productCode=?";
             pstmt = (PreparedStatement) con.prepareStatement(query);
             pstmt.setString(1, product.getProductName());
+//            pstmt.setString(2, product.getProductCode());
             pstmt.setDouble(2, product.getCostPrice());
             pstmt.setDouble(3, product.getSellingPrice());
             pstmt.setString(4, product.getProductCategory());
             pstmt.setString(5, product.getProductImage());
-            pstmt.setString(6, product.getProductID());
+            pstmt.setString(6, product.getProductCode());
             pstmt.executeUpdate();
             JOptionPane.showMessageDialog(null, "Updated Successfully");
         } catch (Exception e) {
@@ -124,7 +126,7 @@ public class ProductDAO {
 
     public ResultSet getSearchProductsQueryResult(String searchTxt) {
         try {
-            String query = "SELECT productID,productImage,productName,costPrice,sellingPrice,category,date,status FROM products WHERE productName LIKE '%" + searchTxt + "%' OR category LIKE '%" + searchTxt + "%' OR status LIKE '%" + searchTxt + "%'";
+            String query = "SELECT productImage,productCode,productName,costPrice,sellingPrice,category,date,status FROM products WHERE productName LIKE '%" + searchTxt + "%' OR category LIKE '%" + searchTxt + "%' OR status LIKE '%" + searchTxt + "%' OR productCode LIKE '%" + searchTxt + "%'"  ;
             rs = stmt.executeQuery(query);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -137,8 +139,9 @@ public class ProductDAO {
             products = new ArrayList<>();
             while (rs.next()) {
                 Product product = new Product();
-                product.setProductID(rs.getString("productID"));
+//                product.setProductID(rs.getString("productID"));
                 product.setProductName(rs.getString("productName"));
+                product.setProductCode(rs.getString("productCode"));
                 product.setCostPrice(rs.getFloat("costPrice"));
                 product.setSellingPrice(rs.getFloat("sellingPrice"));
                 product.setProductCategory(rs.getString("category"));
