@@ -16,7 +16,7 @@ public class connectiondb {
     java.sql.Connection con = null;
     java.sql.Statement stmt = null;
     ResultSet rs = null;
-    public static final String DATABASE_URL = "jdbc:mysql://localhost:3306/inventorymanagement";
+    public static final String DATABASE_URL = "jdbc:mysql://localhost:3306/eproject2";
     
     public connectiondb(){
         try{

@@ -14,14 +14,15 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.Purchase;
+import model.Product;
+import model.ProductStatus;
 import model.Supplier;
 
 /**
  *
  * @author Flynn
  */
-public class PurchaseDAO {
+public class SupplierDAO {
 
     Connection con = null;
     PreparedStatement pstmt = null;
@@ -29,9 +30,9 @@ public class PurchaseDAO {
     ResultSet rs1 = null;
     Statement stmt1 = null;
     ResultSet rs = null;
-    ArrayList<Purchase> purchase = null;
+    ArrayList<Supplier> suppliers;
 
-    public PurchaseDAO() {
+    public SupplierDAO() {
         try {
             con = new connectiondb().getConnection();
             stmt = con.createStatement();
@@ -40,19 +41,32 @@ public class PurchaseDAO {
             Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
-    public ArrayList<String> getInfo(String table, String field, String condition) {
-        ArrayList<String> list = new ArrayList<>();
+    
+     public ResultSet getQueryResult(String condition) {
         try {
-            String query = "SELECT * FROM "+ table + " "  + condition;
+            String query = "SELECT * FROM suppliers " + "WHERE " + condition;
             rs = stmt.executeQuery(query);
-            while (rs.next()) {
-                list.add(rs.getString(field));
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(PurchaseDAO.class.getName()).log(Level.SEVERE, null, ex);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        return list;
+        return rs;
     }
 
+    public ArrayList<Supplier> convertToArrayList(ResultSet rs) {
+        try {
+            suppliers = new ArrayList<>();
+            while (rs.next()) {
+                Supplier supplier = new Supplier();
+                supplier.setSupplierCode(rs.getString("supplierCode"));
+                supplier.setSupplierContact(rs.getString("supplierContact"));
+                supplier.setSupplierLocation(rs.getString("supplierLocation"));
+                supplier.setSupplierName(rs.getString("supplierName"));
+                suppliers.add(supplier);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return suppliers;
+    }
 }

@@ -5,29 +5,48 @@
  */
 package View;
 
-import controller.PurchaseDAO;
+import controller.ProductDAO;
+import controller.RecordDAO;
+import controller.SupplierDAO;
+import java.awt.event.KeyEvent;
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import model.Constant;
+import model.RecordDetail;
+import model.RecordType;
+import model.Supplier;
 
 /**
  *
  * @author Flynn
  */
-public class Purchase extends javax.swing.JDialog {
+public class Record extends javax.swing.JDialog {
 
     ArrayList<String> suppliers;
-    model.Purchase purchase;
+    ArrayList<RecordDetail> recordDetails;
+    RecordDetail recordDetail;
+    Supplier supplier;
+    model.Record record;
+    model.Product product;
+    DefaultTableModel model;
+    int taxPercent;
 
     /**
-     * Creates new form Purchase
+     * Creates new form Receipt
      */
-    public Purchase(java.awt.Frame parent, boolean modal) {
+    public Record(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        supplierComboBox.removeAllItems();
-        supplierComboBox.addItem("Select Supplier's Name");
-        supplierName();
+        initialRecord();
     }
 
     /**
@@ -42,7 +61,6 @@ public class Purchase extends javax.swing.JDialog {
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        date = new javax.swing.JFormattedTextField();
         jLabel2 = new javax.swing.JLabel();
         productCode = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
@@ -58,6 +76,7 @@ public class Purchase extends javax.swing.JDialog {
         jLabel18 = new javax.swing.JLabel();
         clear = new javax.swing.JButton();
         supplierComboBox = new javax.swing.JComboBox<>();
+        date = new com.toedter.calendar.JDateChooser();
         jPanel3 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
@@ -65,27 +84,28 @@ public class Purchase extends javax.swing.JDialog {
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        purchaseTable = new javax.swing.JTable();
+        recordTable = new javax.swing.JTable();
         vat = new javax.swing.JCheckBox();
         jLabel13 = new javax.swing.JLabel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        comment = new javax.swing.JTextArea();
         jLabel14 = new javax.swing.JLabel();
         subtotal = new javax.swing.JTextField();
         jLabel15 = new javax.swing.JLabel();
         tax = new javax.swing.JTextField();
         jLabel16 = new javax.swing.JLabel();
         total = new javax.swing.JTextField();
-        purchaseID = new javax.swing.JTextField();
-        supplierID = new javax.swing.JTextField();
-        purchaseDate = new javax.swing.JTextField();
+        receiptCode = new javax.swing.JTextField();
+        supplierCode = new javax.swing.JTextField();
+        receiptDate = new javax.swing.JFormattedTextField();
+        comment = new javax.swing.JTextField();
         jLabel17 = new javax.swing.JLabel();
         supplierVoiceComboBox = new javax.swing.JComboBox<>();
         jButton5 = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        Buy = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
         jLabel19 = new javax.swing.JLabel();
         jButton7 = new javax.swing.JButton();
+        jLabel22 = new javax.swing.JLabel();
+        cancel = new javax.swing.JButton();
         refresh = new javax.swing.JButton();
         jLabel20 = new javax.swing.JLabel();
         jLabel21 = new javax.swing.JLabel();
@@ -97,23 +117,17 @@ public class Purchase extends javax.swing.JDialog {
 
         jLabel1.setText("Date");
 
-        date.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT))));
-        date.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                dateActionPerformed(evt);
-            }
-        });
-
         jLabel2.setText("Product Code");
 
-        productCode.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                productCodeActionPerformed(evt);
+        productCode.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                productCodeKeyPressed(evt);
             }
         });
 
         jLabel3.setText("Cost Price");
 
+        costPrice.setEditable(false);
         costPrice.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 costPriceActionPerformed(evt);
@@ -142,12 +156,22 @@ public class Purchase extends javax.swing.JDialog {
         remove.setText("Remove");
 
         edit.setText("Edit");
+        edit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editActionPerformed(evt);
+            }
+        });
 
         jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/icons8-edit-26.png"))); // NOI18N
 
         jLabel18.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/icons8-clear-symbol-24.png"))); // NOI18N
 
         clear.setText("Clear");
+        clear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                clearActionPerformed(evt);
+            }
+        });
 
         supplierComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select Supplier' Name" }));
 
@@ -165,8 +189,8 @@ public class Purchase extends javax.swing.JDialog {
                         .addComponent(productCode, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(date, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(89, 89, 89)
+                        .addComponent(date, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -198,10 +222,12 @@ public class Purchase extends javax.swing.JDialog {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(118, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(date, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(103, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(date, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(13, 13, 13)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(supplierComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -248,15 +274,15 @@ public class Purchase extends javax.swing.JDialog {
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(0, 204, 0));
-        jLabel9.setText("PURCHASE INVOICE");
+        jLabel9.setText("WAREHOUSE RECEIPT");
 
-        jLabel10.setText("ID:");
+        jLabel10.setText("Receipt Code");
 
         jLabel11.setText("Supplier Inv. No:");
 
         jLabel12.setText("Date:");
 
-        purchaseTable.setModel(new javax.swing.table.DefaultTableModel(
+        recordTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -264,21 +290,35 @@ public class Purchase extends javax.swing.JDialog {
                 "Index", "Item name", "Code", "Qyt", "Unit price", "VAT", "Total"
             }
         ));
-        jScrollPane1.setViewportView(purchaseTable);
+        jScrollPane1.setViewportView(recordTable);
 
         vat.setText("Prices Include VAT");
+        vat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                vatActionPerformed(evt);
+            }
+        });
 
         jLabel13.setText("Comment:");
 
-        comment.setColumns(20);
-        comment.setRows(5);
-        jScrollPane2.setViewportView(comment);
-
         jLabel14.setText("Subtotal:");
+
+        subtotal.setEditable(false);
 
         jLabel15.setText("Tax:");
 
+        tax.setEditable(false);
+
         jLabel16.setText("Total:");
+
+        total.setEditable(false);
+
+        receiptCode.setEditable(false);
+
+        supplierCode.setEditable(false);
+
+        receiptDate.setEditable(false);
+        receiptDate.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT))));
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -287,30 +327,30 @@ public class Purchase extends javax.swing.JDialog {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jScrollPane1)
+                        .addContainerGap())
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jLabel10)
-                                .addGap(92, 92, 92)
-                                .addComponent(purchaseID, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jLabel9)
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel11)
-                                    .addComponent(jLabel12))
+                                    .addComponent(jLabel12)
+                                    .addComponent(jLabel10))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(purchaseDate, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(supplierID, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(receiptCode, javax.swing.GroupLayout.DEFAULT_SIZE, 97, Short.MAX_VALUE)
+                                    .addComponent(supplierCode, javax.swing.GroupLayout.DEFAULT_SIZE, 97, Short.MAX_VALUE)
+                                    .addComponent(receiptDate))))
+                        .addContainerGap(558, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(21, 21, 21)
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 276, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(comment, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 287, Short.MAX_VALUE)
                                 .addComponent(jLabel16)
                                 .addGap(27, 27, 27)
                                 .addComponent(total, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -335,15 +375,15 @@ public class Purchase extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel10)
-                    .addComponent(purchaseID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(receiptCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel11)
-                    .addComponent(supplierID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(supplierCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel12)
-                    .addComponent(purchaseDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(receiptDate, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 265, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
@@ -351,19 +391,20 @@ public class Purchase extends javax.swing.JDialog {
                     .addComponent(vat)
                     .addComponent(jLabel14)
                     .addComponent(subtotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel15)
-                        .addComponent(tax, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(29, 29, 29)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jLabel16)
-                                .addComponent(total, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel15)
+                            .addComponent(tax, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(comment, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(36, 36, 36)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel16)
+                            .addComponent(total, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
 
@@ -379,13 +420,27 @@ public class Purchase extends javax.swing.JDialog {
         jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/icons8-email-send-24.png"))); // NOI18N
         jButton5.setMargin(new java.awt.Insets(0, 0, 0, 0));
 
-        jButton1.setText("Purchase");
+        Buy.setText("Buy");
+        Buy.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BuyActionPerformed(evt);
+            }
+        });
 
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/icons8-purchase-order-26.png"))); // NOI18N
 
         jLabel19.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/icons8-print-26.png"))); // NOI18N
 
         jButton7.setText("Print");
+
+        jLabel22.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/icons8-clear-symbol-24.png"))); // NOI18N
+
+        cancel.setText("Cancel");
+        cancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -411,25 +466,37 @@ public class Purchase extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel5)
                 .addGap(18, 18, 18)
-                .addComponent(jButton1)
-                .addGap(61, 61, 61))
+                .addComponent(Buy)
+                .addGap(37, 37, 37)
+                .addComponent(jLabel22)
+                .addGap(18, 18, 18)
+                .addComponent(cancel)
+                .addGap(46, 46, 46))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(12, 12, 12)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(supplierVoiceComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel17)
-                    .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(20, 20, 20)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel19, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton7, javax.swing.GroupLayout.Alignment.TRAILING))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel22)
+                            .addComponent(cancel, javax.swing.GroupLayout.Alignment.TRAILING)))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(12, 12, 12)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButton5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(supplierVoiceComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel17)))
+                        .addGap(20, 20, 20)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel5)
+                            .addComponent(Buy, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel19, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jButton7, javax.swing.GroupLayout.Alignment.TRAILING))))
                 .addContainerGap())
         );
 
@@ -439,7 +506,7 @@ public class Purchase extends javax.swing.JDialog {
 
         jLabel20.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
         jLabel20.setForeground(new java.awt.Color(0, 102, 204));
-        jLabel20.setText("PURCHASE");
+        jLabel20.setText("RECEIPT");
 
         jLabel21.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel21.setText("SEARCH");
@@ -483,7 +550,7 @@ public class Purchase extends javax.swing.JDialog {
                                     .addComponent(searchByTab, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel21)))
                             .addComponent(jLabel20))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 56, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jTabbedPane1)
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -492,14 +559,6 @@ public class Purchase extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void dateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dateActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_dateActionPerformed
-
-    private void productCodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_productCodeActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_productCodeActionPerformed
 
     private void costPriceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_costPriceActionPerformed
         // TODO add your handling code here:
@@ -515,21 +574,170 @@ public class Purchase extends javax.swing.JDialog {
 
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
         // TODO add your handling code here:
-        purchase = new model.Purchase();
-        if(productCode.getText().equals("") || date.getText().equals("") || productQuantity.getText().equals("")){
-            JOptionPane.showMessageDialog(null,"Please fill all the fields!");
-        }else{
+        recordDetail = new RecordDetail();
+        if (productCode.getText().equals("") || date.getDateFormatString().equals("") || productQuantity.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Please fill all the fields!");
+        } else {
+            if (recordDetails.size() > 0) {//TH da co sp trong record
+                try {
+                    String selectedSupplier = ((String) supplierComboBox.getSelectedItem());
+                    if ("SELECT SUPPLIER'S NAME".equalsIgnoreCase(supplier.getSupplierName())) {
+                        JOptionPane.showMessageDialog(null, "Please select a supplier and try again!");
+                    } else {
+                        if (!selectedSupplier.equals(supplier.getSupplierName()) | !record.getDate().equals(new SimpleDateFormat("dd/MM/yyyy").format(date.getDate()))) {
+                            JOptionPane.showConfirmDialog(null, "Would you like to change Record date or supplier name");
+                            if (JOptionPane.YES_NO_OPTION == JOptionPane.YES_OPTION) {
+                                supplier = new SupplierDAO().convertToArrayList(new SupplierDAO().getQueryResult("supplierName = '" + selectedSupplier + "'")).get(0);
+                                record.setSupplierID(supplier.getSupplierID());
+                                record.setDate(new SimpleDateFormat("dd/MM/yyyy").format(date.getDate()));
+                            }
+                        }
+                    }
+                    supplierComboBox.setSelectedItem(supplier.getSupplierName());
+                    date.setDate(new SimpleDateFormat("dd/MM/yyyy").parse(record.getDate()));
 
-            String supplierName = (String)supplierComboBox.getSelectedItem();
-            if("SELECT SUPPLIER'S NAME".equalsIgnoreCase(supplierName)){
-                JOptionPane.showMessageDialog(null, "Please select a supplier and try again!");
-            }else{
+                    //check existed prod
+                    if (isExisted(product.getProductCode()) != -1) {
+                        int index = isExisted(product.getProductCode());
+                        int newQuantity = recordDetails.get(index).getQuantity() + Integer.parseInt(productQuantity.getText());
+                        model.setValueAt(Integer.toString(newQuantity), index, 3);
+                        recordDetails.get(index).setQuantity(newQuantity);
+                    } else {
+                        //create new recordDetail
+                        recordDetail.setProductID(product.getProductID());
+                        recordDetail.setQuantity(Integer.parseInt(productQuantity.getText()));
+                        recordDetails.add(recordDetail);
+                        //update record
+                        record.setTotalPrice(getTotalPrice());
+                        if (vat.isSelected()) {
+                            showInvoice(Constant.VAT);
+                        } else {
+                            showInvoice(Constant.NO_VAT);
+                        }
+                    }
+                } catch (ParseException ex) {
+                    Logger.getLogger(Record.class.getName()).log(Level.SEVERE, null, ex);
+                }
 
-                ArrayList<String> supplierCode = new PurchaseDAO().getInfo("suppliers","supplierCode", "WHERE supplierName = '" + supplierName +"'");
-                purchase.setSupplierCode(supplierCode.toString());
-                purchase.setProductCode(productCode.getText());
-                purchase.setProductQuantity(Integer.parseInt(productQuantity.getText()));
+            } else { //TH chua co sp nao trong record
+                supplier.setSupplierName((String) supplierComboBox.getSelectedItem());
+                if ("SELECT SUPPLIER'S NAME".equalsIgnoreCase(supplier.getSupplierName())) {
+                    JOptionPane.showMessageDialog(null, "Please select a supplier and try again!");
+                } else {
+                    supplier = new SupplierDAO().convertToArrayList(new SupplierDAO().getQueryResult("supplierName = '" + supplier.getSupplierName() + "'")).get(0);
+                    //create new recordDetail
+                    recordDetail.setProductID(product.getProductID());
+                    recordDetail.setQuantity(Integer.parseInt(productQuantity.getText()));
+                    recordDetails.add(recordDetail);
+                    //set record
+                    record.setSupplierID(supplier.getSupplierID());
+                    record.setDate(new SimpleDateFormat("dd/MM/yyyy").format(date.getDate()));
+                    record.setRecordType(RecordType.IMPORT);
+                    //record.setHandleBy(WIDTH);
+                    record.setTotalPrice(getTotalPrice());
+                    //show table
+                    if (vat.isSelected()) {
+                        showInvoice(Constant.VAT);
+                    } else {
+                        showInvoice(Constant.NO_VAT);
+                    }
+
+                }
+            }
+            //show invoice
+
+        }
+
     }//GEN-LAST:event_addActionPerformed
+
+    private void productCodeKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_productCodeKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            // Enter was pressed. Your code goes here.
+            try {
+                // TODO add your handling code here:
+                String text = productCode.getText();
+                if (!new ProductDAO().getQueryResult("productCode = '" + text + "'").next()) {
+                    JOptionPane.showMessageDialog(null, "This product is not exist or wrong product code!");
+                } else {
+                    product = new ProductDAO().convertToArrayList(new ProductDAO().getQueryResult("productCode = '" + productCode.getText() + "'")).get(0);
+                    costPrice.setText(Float.toString(product.getCostPrice()));
+
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(Record.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+    }//GEN-LAST:event_productCodeKeyPressed
+
+    private void BuyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BuyActionPerformed
+        // TODO add your handling code here:
+        new RecordDAO().addRecord(record, recordDetails);
+        receiptCode.setText(record.getRecordCode());
+        clearActionPerformed(evt);
+        add.setEnabled(false);
+        remove.setEnabled(false);
+        edit.setEnabled(false);
+        clear.setEnabled(false);
+        Buy.setEnabled(false);
+        vat.setEnabled(false);
+        comment.setEnabled(false);
+    }//GEN-LAST:event_BuyActionPerformed
+
+    private void clearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearActionPerformed
+        // TODO add your handling code here:
+        date.setDateFormatString("");
+        productCode.setText("");
+        productQuantity.setText("");
+        costPrice.setText("");
+        supplierComboBox.setSelectedIndex(0);
+    }//GEN-LAST:event_clearActionPerformed
+
+    private void vatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_vatActionPerformed
+        // TODO add your handling code here:
+        if (vat.isSelected()) {
+            taxPercent = Constant.VAT;
+            for (int i = 0; i < model.getRowCount(); i++) {
+                model.setValueAt(Integer.toString(Constant.VAT), i, 5);
+            }
+        } else {
+            taxPercent = Constant.NO_VAT;
+            for (int i = 0; i < model.getRowCount(); i++) {
+                model.setValueAt(Integer.toString(Constant.NO_VAT), i, 5);
+            }
+        }
+        tax.setText(Integer.toString(taxPercent));
+        total.setText(Float.toString(record.getTotalPrice() * (100 + taxPercent) / 100));
+
+    }//GEN-LAST:event_vatActionPerformed
+
+    private void cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelActionPerformed
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_cancelActionPerformed
+
+    private void editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editActionPerformed
+        // TODO add your handling code here:
+        if (recordTable.getSelectedRow() < 0) {
+            JOptionPane.showMessageDialog(null, "Select a table data first!");
+        } else {
+            int row = recordTable.getSelectedRow();
+
+            model.setValueAt(product.getProductName(), row, 1);
+            model.setValueAt(productCode.getText(), row, 2);
+            model.setValueAt(productQuantity.getText(), row, 3);
+            model.setValueAt(costPrice.getText(), row, 4);
+
+            recordDetails.get(row).setProductID(product.getProductID());
+            recordDetails.get(row).setQuantity(Integer.parseInt(productQuantity.getText()));
+
+            productCode.setText("");
+            costPrice.setText("");
+            productQuantity.setText("");
+
+        }
+    }//GEN-LAST:event_editActionPerformed
 
     /**
      * @param args the command line arguments
@@ -548,20 +756,23 @@ public class Purchase extends javax.swing.JDialog {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Purchase.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Record.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Purchase.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Record.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Purchase.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Record.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Purchase.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Record.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                Purchase dialog = new Purchase(new javax.swing.JFrame(), true);
+                Record dialog = new Record(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -574,13 +785,14 @@ public class Purchase extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton Buy;
     private javax.swing.JButton add;
+    private javax.swing.JButton cancel;
     private javax.swing.JButton clear;
-    private javax.swing.JTextArea comment;
+    private javax.swing.JTextField comment;
     private javax.swing.JTextField costPrice;
-    private javax.swing.JFormattedTextField date;
+    private com.toedter.calendar.JDateChooser date;
     private javax.swing.JButton edit;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton7;
     private javax.swing.JLabel jLabel1;
@@ -597,6 +809,7 @@ public class Purchase extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -608,19 +821,18 @@ public class Purchase extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTextField productCode;
     private javax.swing.JTextField productQuantity;
-    private javax.swing.JTextField purchaseDate;
-    private javax.swing.JTextField purchaseID;
-    private javax.swing.JTable purchaseTable;
+    private javax.swing.JTextField receiptCode;
+    private javax.swing.JFormattedTextField receiptDate;
+    private javax.swing.JTable recordTable;
     private javax.swing.JButton refresh;
     private javax.swing.JButton remove;
     private javax.swing.JTextField searchByTab;
     private javax.swing.JTextField subtotal;
+    private javax.swing.JTextField supplierCode;
     private javax.swing.JComboBox<String> supplierComboBox;
-    private javax.swing.JTextField supplierID;
     private javax.swing.JComboBox<String> supplierVoiceComboBox;
     private javax.swing.JTextField tax;
     private javax.swing.JTextField total;
@@ -628,10 +840,68 @@ public class Purchase extends javax.swing.JDialog {
     // End of variables declaration//GEN-END:variables
 
     public void supplierName() {
-        suppliers = new PurchaseDAO().getInfo("suppliers", "supplierName", "GROUP BY supplierName");
+        suppliers = new RecordDAO().getInfo("suppliers", "supplierName", "GROUP BY supplierName");
         for (String supplier : suppliers) {
             supplierComboBox.addItem(supplier);
             supplierVoiceComboBox.addItem(supplier);
         }
+    }
+
+    private void showInvoice(int taxValue) {
+
+        supplierCode.setText(supplier.getSupplierCode());
+        receiptDate.setText(record.getDate());
+        subtotal.setText(Float.toString(record.getTotalPrice()));
+        if (vat.isSelected()) {
+            taxPercent = Constant.VAT;
+        } else {
+            taxPercent = Constant.NO_VAT;
+        }
+        tax.setText(Integer.toString(taxPercent));
+        total.setText(Float.toString(record.getTotalPrice() * (100 + taxPercent) / 100));
+        productCode.setText("");
+        costPrice.setText("");
+        productQuantity.setText("");
+
+        model.addRow(new Object[]{
+            model.getRowCount() + 1,
+            product.getProductName(),
+            product.getProductCode(),
+            recordDetail.getQuantity(),
+            product.getCostPrice(),
+            taxValue,
+            product.getCostPrice() * recordDetail.getQuantity()
+        });
+
+    }
+
+    public void initialRecord() {
+        model = (DefaultTableModel) recordTable.getModel();
+        recordDetails = new ArrayList<RecordDetail>();
+        supplierComboBox.removeAllItems();
+        supplierComboBox.addItem("Select Supplier's Name");
+        supplierName();
+        record = new model.Record();
+        supplier = new Supplier();
+    }
+
+    public int isExisted(String productCode) {
+        int result = -1;
+        for (int i = 0; i < recordDetails.size(); i++) {
+            String output = new RecordDAO().getInfo("products", "productCode", "WHERE productID = '" + recordDetails.get(i).getProductID() + "'").get(0);
+            if (productCode.toLowerCase().equals(output.toLowerCase())) {
+                result = i;
+                break;
+            }
+        }
+        return result;
+    }
+
+    private float getTotalPrice() {
+        float total = 0;
+        for (RecordDetail rcdt : recordDetails) {
+            total += rcdt.getQuantity() * Float.parseFloat(new RecordDAO().getInfo("products", "costPrice", "WHERE productID = '" + rcdt.getProductID() + "'").get(0));
+        }
+        return total;
     }
 }

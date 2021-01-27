@@ -10,10 +10,20 @@ package model;
  * @author Flynn
  */
 public class Supplier {
+
+    private int supplierID;
     private String supplierCode;
     private String supplierName;
     private String supplierLocation;
     private String supplierContact;
+
+    public int getSupplierID() {
+        return supplierID;
+    }
+
+    public void setSupplierID(int supplierID) {
+        this.supplierID = supplierID;
+    }
 
     public String getSupplierCode() {
         return supplierCode;
@@ -47,6 +57,4 @@ public class Supplier {
         this.supplierContact = supplierContact;
     }
 
-    
-    
 }

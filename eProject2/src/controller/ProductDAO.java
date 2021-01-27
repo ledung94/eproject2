@@ -57,7 +57,7 @@ public class ProductDAO {
 
     public void addProductDAO(Product product) {
         try {
-            String query = "SELECT * FROM products WHERE productname='" + product.getProductName() + "' AND productCode='" + product.getProductCode() + "' AND category='" + product.getProductCategory() + "'";
+            String query = "SELECT * FROM products WHERE productName='" + product.getProductName() + "' AND productCode='" + product.getProductCode() + "' AND category='" + product.getProductCategory() + "'";
             rs = stmt.executeQuery(query);
             if (rs.next()) {
                 JOptionPane.showMessageDialog(null, "Same Product has already been added!");
@@ -107,7 +107,7 @@ public class ProductDAO {
 
     public void editProductDAO(Product product) {
         try {
-            String query = "UPDATE products SET productname=?,costprice=?,sellingprice=?,category=?,productImage=? WHERE productCode=?";
+            String query = "UPDATE products SET productName=?,costprice=?,sellingprice=?,category=?,productImage=? WHERE productCode=?";
             pstmt = (PreparedStatement) con.prepareStatement(query);
             pstmt.setString(1, product.getProductName());
 //            pstmt.setString(2, product.getProductCode());
@@ -139,7 +139,7 @@ public class ProductDAO {
             products = new ArrayList<>();
             while (rs.next()) {
                 Product product = new Product();
-//                product.setProductID(rs.getString("productID"));
+                product.setProductID(Integer.parseInt(rs.getString("productID")));
                 product.setProductName(rs.getString("productName"));
                 product.setProductCode(rs.getString("productCode"));
                 product.setCostPrice(rs.getFloat("costPrice"));
