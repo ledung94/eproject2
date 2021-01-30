@@ -10,7 +10,7 @@ package model;
  * @author Flynn
  */
 public class Record {
-    private String recordID;
+    private int recordID;
     private String recordCode;
     private RecordType recordType;
     private int supplierID;
@@ -19,11 +19,11 @@ public class Record {
     private String date;
     private float totalPrice;
 
-    public String getRecordID() {
+    public int getRecordID() {
         return recordID;
     }
 
-    public void setRecordID(String recordID) {
+    public void setRecordID(int recordID) {
         this.recordID = recordID;
     }
 

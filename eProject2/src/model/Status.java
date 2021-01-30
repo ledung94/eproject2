@@ -9,6 +9,6 @@ package model;
  *
  * @author Flynn
  */
-public enum ProductStatus {
-    ACTIVE,REMOVE
+public enum Status {
+    AVAILABLE,REMOVE
 }

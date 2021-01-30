@@ -18,7 +18,7 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import jdk.internal.org.objectweb.asm.Opcodes;
 import model.Product;
-import model.ProductStatus;
+import model.Status;
 
 /**
  *
@@ -146,7 +146,7 @@ public class ProductDAO {
                 product.setSellingPrice(rs.getFloat("sellingPrice"));
                 product.setProductCategory(rs.getString("category"));
                 product.setDate(rs.getString("date"));
-                product.setProductStatus(ProductStatus.valueOf(rs.getString("status")));
+                product.setProductStatus(Status.valueOf(rs.getString("status")));
                 product.setProductImage(rs.getString("productImage"));
                 products.add(product);
             }

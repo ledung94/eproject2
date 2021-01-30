@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Product;
-import model.ProductStatus;
+import model.Status;
 import model.Supplier;
 
 /**

@@ -31,6 +31,8 @@ public class RecordDAO {
     ResultSet rs1 = null;
     Statement stmt1 = null;
     ResultSet rs = null;
+    ArrayList<RecordDetail> recordDetails;
+    Record record;
 
     public RecordDAO() {
         try {
@@ -72,7 +74,7 @@ public class RecordDAO {
 
     public void addRecord(Record record, ArrayList<RecordDetail> recordDetails) {
         try {
-            record.setRecordCode("RC" + Integer.toString(Integer.parseInt(new RecordDAO().getInfo("records", "recordID" ,"WHERE recordID = (SELECT MAX(recordID) FROM records)").get(0))+1));
+            record.setRecordCode("RC" + Integer.toString(Integer.parseInt(new RecordDAO().getInfo("records", "recordID", "WHERE recordID = (SELECT MAX(recordID) FROM records)").get(0)) + 1));
             String q = "INSERT INTO records VALUES(null,?,?,?,?,?,?,?)";
             pstmt = (PreparedStatement) con.prepareStatement(q);
 //            pstmt.setString(1, record.getRecordID());
@@ -98,6 +100,33 @@ public class RecordDAO {
         }
     }
     
-   
+    public ResultSet getSearchRecordQueryResult(String searchTxt) {
+        try {
+            String query = "SELECT * FROM records WHERE recordID = '" + searchTxt + "' OR recordCode = '" + searchTxt + "'";
+            rs = stmt.executeQuery(query);
+            while (rs.next()) {                
+                record = new Record();
+                record.setCustomerID(rs.getInt("customerID"));
+                record.setDate(rs.getString("date"));
+                record.setHandleBy(rs.getInt("handleBy"));
+                record.setRecordCode(rs.getString("recordCode"));
+                record.setRecordID(rs.getInt("recordID"));
+                record.setRecordType(rs.getString("recordType"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return rs;
+    }
+    
+    public ResultSet getSearchRecordDetailQueryResult(Record record) {
+        try {
+            String query = "SELECT productID, quantity FROM recordDetail WHERE recordID = '" + record.getRecordID() + "'";
+            rs = stmt.executeQuery(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return rs;
+    }
 
 }

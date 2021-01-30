@@ -16,7 +16,7 @@ public class Product {
     private float sellingPrice;
     private String productImage;
     private String productCategory;
-    private ProductStatus productStatus;
+    private Status productStatus;
     private String date;
     private String productCode;
 
@@ -56,7 +56,7 @@ public class Product {
         this.productCategory = productCategory;
     }
 
-    public void setProductStatus(ProductStatus productStatus) {
+    public void setProductStatus(Status productStatus) {
         this.productStatus = productStatus;
     }
 
@@ -84,7 +84,7 @@ public class Product {
         return productCategory;
     }
 
-    public ProductStatus getProductStatus() {
+    public Status getProductStatus() {
         return productStatus;
     }
 

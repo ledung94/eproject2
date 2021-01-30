@@ -18,7 +18,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
-import model.ProductStatus;
+import model.Status;
 
 /**
  *
@@ -394,7 +394,7 @@ public class Product extends javax.swing.JDialog {
         product.setProductCategory(productCategory.getText());
         product.setDate(LocalDate.now().toString());
 //        product.setProductID(uuid.toString());
-        product.setProductStatus(ProductStatus.ACTIVE);
+        product.setProductStatus(Status.ACTIVE);
         product.setProductImage(path);
         
         products.add(product);
@@ -576,7 +576,6 @@ public class Product extends javax.swing.JDialog {
         products = new ProductDAO().convertToArrayList(new ProductDAO().getQueryResult("status = 'ACTIVE'"));
         model = (DefaultTableModel) productTable.getModel();
         for (model.Product product : products) {
-            System.out.println(product.getProductName());
             model.addRow(new Object[]{
                 products.indexOf(product) + 1,
                 product.getProductName(),
