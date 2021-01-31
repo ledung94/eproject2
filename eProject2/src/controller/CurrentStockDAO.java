@@ -40,26 +40,18 @@ public class CurrentStockDAO {
             Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-<<<<<<< HEAD
 
     public int getCurrentStock(int productID) {
-=======
-    public int getCurrentStock(int productID){
->>>>>>> 61b2d32e618968e1223a1a0ab7c5ae3f8cd7f505
         int quantity = 0;
         try {
             String query = "SELECT * FROM currentStocks WHERE productID = '" + productID + "'";
             rs = stmt.executeQuery(query);
-<<<<<<< HEAD
+
             while (rs.next()) {
-=======
-            while (rs.next()) {                
->>>>>>> 61b2d32e618968e1223a1a0ab7c5ae3f8cd7f505
                 quantity = rs.getInt("quantity");
             }
         } catch (SQLException ex) {
             Logger.getLogger(CurrentStockDAO.class.getName()).log(Level.SEVERE, null, ex);
-<<<<<<< HEAD
         }
         return quantity;
     }
@@ -89,20 +81,7 @@ public class CurrentStockDAO {
             Logger.getLogger(CurrentStockDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+}
 
-}
-=======
-        } 
-        return quantity;
-    }
-    
-    public void updateCurrentStock(int productID,int number,RecordType recordType){
-        String calculation = "+";
-        if(recordType.equals(RecordType.EXPORT)){
-            calculation = "-";
-        }
-        String query = "UPDATE currentStocks SET quantity = quantity" + calculation + number + " WHERE productID = "+ productID +"'"; 
-    }
-    
-}
->>>>>>> 61b2d32e618968e1223a1a0ab7c5ae3f8cd7f505
+
+

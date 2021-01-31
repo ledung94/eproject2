@@ -72,6 +72,7 @@ public class ProductDAO {
                 
             } else {
                 addFunction(product);
+                product = convertToArrayList(getQueryResult("productCode = '" + product.getProductCode()+ "'")).get(0);
                 new CurrentStockDAO().initialCurrentStock(product);
             }
         } catch (Exception e) {
