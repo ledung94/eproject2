@@ -84,7 +84,7 @@ public class RecordDAO {
             pstmt.setInt(4, record.getCustomerID());
             pstmt.setInt(5, record.getHandleBy());
             pstmt.setString(6, record.getDate());
-            pstmt.setFloat(7, record.getTotalPrice());
+            pstmt.setFloat(7, record.getTotalPrice()*(100 + record.getVat())/100);
             pstmt.setInt(8, record.getVat());
 
             pstmt.executeUpdate();
