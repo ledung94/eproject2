@@ -10,5 +10,5 @@ package model;
  * @author Flynn
  */
 public enum RecordType {
-    IMPORT,EXPORT
+    IMPORT,EXPORT,DELETED;
 }

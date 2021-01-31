@@ -126,7 +126,7 @@ public class ProductDAO {
 
     public ResultSet getSearchProductsQueryResult(String searchTxt) {
         try {
-            String query = "SELECT productImage,productCode,productName,costPrice,sellingPrice,category,date,status FROM products WHERE productName LIKE '%" + searchTxt + "%' OR category LIKE '%" + searchTxt + "%' OR status LIKE '%" + searchTxt + "%' OR productCode LIKE '%" + searchTxt + "%'"  ;
+            String query = "SELECT productID,productImage,productCode,productName,costPrice,sellingPrice,category,date,status FROM products WHERE productName LIKE '%" + searchTxt + "%' OR category LIKE '%" + searchTxt + "%' OR status LIKE '%" + searchTxt + "%' OR productCode LIKE '%" + searchTxt + "%'"  ;
             rs = stmt.executeQuery(query);
         } catch (SQLException e) {
             e.printStackTrace();
