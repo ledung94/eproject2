@@ -10,5 +10,5 @@ package model;
  * @author Flynn
  */
 public enum Status {
-    AVAILABLE,REMOVE
+    AVAILABLE,DELETED,SOLD_OUT;
 }

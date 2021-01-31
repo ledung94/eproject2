@@ -621,7 +621,7 @@ public class exportRecord extends javax.swing.JDialog {
 
                 }
             } catch (SQLException ex) {
-                Logger.getLogger(importRecord.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(exportRecord.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }//GEN-LAST:event_productCodeKeyPressed
@@ -674,7 +674,7 @@ public class exportRecord extends javax.swing.JDialog {
                         }
                     }
                 } catch (ParseException ex) {
-                    Logger.getLogger(importRecord.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(exportRecord.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
             } else { //TH chua co sp nao trong record
@@ -838,7 +838,7 @@ public class exportRecord extends javax.swing.JDialog {
                     customerPhone.setText((customer.getCustomerPhone()));
                 }
             } catch (SQLException ex) {
-                Logger.getLogger(importRecord.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(exportRecord.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }//GEN-LAST:event_customerIDKeyPressed

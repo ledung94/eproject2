@@ -545,7 +545,7 @@ public class dashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCustomerActionPerformed
 
     private void btnSaleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaleActionPerformed
-        importRecord r = new importRecord(this, rootPaneCheckingEnabled);
+        ImportRecord r = new ImportRecord(this, rootPaneCheckingEnabled);
         r.setVisible(true);
     }//GEN-LAST:event_btnSaleActionPerformed
 

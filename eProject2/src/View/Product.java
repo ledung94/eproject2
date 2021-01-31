@@ -394,7 +394,7 @@ public class Product extends javax.swing.JDialog {
         product.setProductCategory(productCategory.getText());
         product.setDate(LocalDate.now().toString());
 //        product.setProductID(uuid.toString());
-        product.setProductStatus(Status.ACTIVE);
+        product.setProductStatus(Status.AVAILABLE);
         product.setProductImage(path);
         
         products.add(product);
@@ -573,7 +573,7 @@ public class Product extends javax.swing.JDialog {
     }
 
     private void loadData() {
-        products = new ProductDAO().convertToArrayList(new ProductDAO().getQueryResult("status = 'ACTIVE'"));
+        products = new ProductDAO().convertToArrayList(new ProductDAO().getQueryResult("status = 'AVAILABLE'"));
         model = (DefaultTableModel) productTable.getModel();
         for (model.Product product : products) {
             model.addRow(new Object[]{

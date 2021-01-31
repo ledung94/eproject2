@@ -94,7 +94,7 @@ public class ProductDAO {
 
     public void deleteProductDAO(Product product) {
         try {
-            String query = "UPDATE products SET status = 'REMOVE' WHERE productCode=?";
+            String query = "UPDATE products SET status = 'DELETED' WHERE productCode=?";
             pstmt = (PreparedStatement) con.prepareStatement(query);
             pstmt.setString(1, product.getProductCode());
             pstmt.executeUpdate();

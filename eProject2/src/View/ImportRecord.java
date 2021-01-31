@@ -931,6 +931,5 @@ public class ImportRecord extends javax.swing.JDialog {
 
     private void loadBySearch(String text) {
         
-        newRecordActionPerformed(evt);
     }
 }

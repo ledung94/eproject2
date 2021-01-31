@@ -17,6 +17,7 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import model.Record;
 import model.RecordDetail;
+import model.RecordType;
 import model.Supplier;
 
 /**
@@ -111,7 +112,7 @@ public class RecordDAO {
                 record.setHandleBy(rs.getInt("handleBy"));
                 record.setRecordCode(rs.getString("recordCode"));
                 record.setRecordID(rs.getInt("recordID"));
-                record.setRecordType(rs.getString("recordType"));
+                record.setRecordType(RecordType.valueOf(rs.getString("recordType")));
             }
         } catch (SQLException e) {
             e.printStackTrace();
