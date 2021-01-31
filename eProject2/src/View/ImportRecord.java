@@ -9,25 +9,30 @@ import controller.ProductDAO;
 import controller.RecordDAO;
 import controller.SupplierDAO;
 import java.awt.Component;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
+import java.awt.print.PageFormat;
+import java.awt.print.Printable;
+import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
+import java.io.FileOutputStream;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import model.Constant;
 import model.RecordDetail;
 import model.RecordType;
 import model.Supplier;
+
 
 /**
  *
@@ -43,7 +48,6 @@ public class ImportRecord extends javax.swing.JDialog {
     model.Product product;
     DefaultTableModel model;
     int taxPercent;
-    
 
     /**
      * Creates new form Receipt
@@ -52,7 +56,7 @@ public class ImportRecord extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         initialRecord();
-        
+
     }
 
     /**
@@ -107,7 +111,7 @@ public class ImportRecord extends javax.swing.JDialog {
         supplierContact = new javax.swing.JTextField();
         jLabel17 = new javax.swing.JLabel();
         createRecord = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
+        print = new javax.swing.JButton();
         delete = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
         newRecord = new javax.swing.JButton();
@@ -441,8 +445,13 @@ public class ImportRecord extends javax.swing.JDialog {
             }
         });
 
-        jButton7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/icons8-print-26.png"))); // NOI18N
-        jButton7.setText("Print");
+        print.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/icons8-print-26.png"))); // NOI18N
+        print.setText("Print");
+        print.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                printActionPerformed(evt);
+            }
+        });
 
         delete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/icons8-delete-26.png"))); // NOI18N
         delete.setText("Delete");
@@ -464,7 +473,7 @@ public class ImportRecord extends javax.swing.JDialog {
                 .addGroup(receiptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(invoice, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, receiptLayout.createSequentialGroup()
-                        .addComponent(jButton7)
+                        .addComponent(print)
                         .addGap(31, 31, 31)
                         .addComponent(jButton1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -482,7 +491,7 @@ public class ImportRecord extends javax.swing.JDialog {
                 .addGroup(receiptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(createRecord)
                     .addComponent(delete)
-                    .addComponent(jButton7)
+                    .addComponent(print)
                     .addComponent(jButton1))
                 .addGap(21, 21, 21))
         );
@@ -774,6 +783,11 @@ public class ImportRecord extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_productQuantityKeyReleased
 
+    private void printActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printActionPerformed
+        // TODO add your handling code here:
+        new RecordDAO().printInvoice(invoice);
+    }//GEN-LAST:event_printActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -833,7 +847,6 @@ public class ImportRecord extends javax.swing.JDialog {
     private javax.swing.JButton edit;
     private javax.swing.JPanel invoice;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton7;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -856,6 +869,7 @@ public class ImportRecord extends javax.swing.JDialog {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JButton newRecord;
+    private javax.swing.JButton print;
     private javax.swing.JTextField productCode;
     private javax.swing.JTextField productQuantity;
     private javax.swing.JPanel receipt;
@@ -956,9 +970,11 @@ public class ImportRecord extends javax.swing.JDialog {
             loadData();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Cannot found this record!");
-            
+
         }
 
     }
+
+  
 
 }
