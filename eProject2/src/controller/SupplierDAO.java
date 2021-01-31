@@ -58,6 +58,7 @@ public class SupplierDAO {
             suppliers = new ArrayList<>();
             while (rs.next()) {
                 Supplier supplier = new Supplier();
+                supplier.setSupplierID(rs.getInt("supplierID"));
                 supplier.setSupplierCode(rs.getString("supplierCode"));
                 supplier.setSupplierContact(rs.getString("supplierContact"));
                 supplier.setSupplierLocation(rs.getString("supplierLocation"));

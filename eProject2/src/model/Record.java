@@ -18,6 +18,16 @@ public class Record {
     private int handleBy;
     private String date;
     private float totalPrice;
+    private int vat;
+
+    public int getVat() {
+        return vat;
+    }
+
+    public void setVat(int vat) {
+        this.vat = vat;
+    }
+    
 
     public int getRecordID() {
         return recordID;

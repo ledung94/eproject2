@@ -75,10 +75,9 @@ public class RecordDAO {
 
     public void addRecord(Record record, ArrayList<RecordDetail> recordDetails) {
         try {
-            record.setRecordCode("RC" + Integer.toString(Integer.parseInt(new RecordDAO().getInfo("records", "recordID", "WHERE recordID = (SELECT MAX(recordID) FROM records)").get(0)) + 1));
-            String q = "INSERT INTO records VALUES(null,?,?,?,?,?,?,?)";
+            record.setRecordCode("RC" + Integer.toString(new RecordDAO().getInfo("records", "recordID", "").size() + 1));
+            String q = "INSERT INTO records VALUES(null,?,?,?,?,?,?,?,?)";
             pstmt = (PreparedStatement) con.prepareStatement(q);
-//            pstmt.setString(1, record.getRecordID());
             pstmt.setString(1, record.getRecordCode());
             pstmt.setString(2, record.getRecordType().toString());
             pstmt.setInt(3, record.getSupplierID());
@@ -86,13 +85,13 @@ public class RecordDAO {
             pstmt.setInt(5, record.getHandleBy());
             pstmt.setString(6, record.getDate());
             pstmt.setFloat(7, record.getTotalPrice());
+            pstmt.setInt(8, record.getVat());
 
             pstmt.executeUpdate();
 
             String recordID = new RecordDAO().getInfo("records", "recordID", "WHERE recordCode = '" + record.getRecordCode() + "'").get(0);
             for (RecordDetail recordDetail : recordDetails) {
                 recordDetail.setRecordID(Integer.parseInt(recordID));
-                System.out.println(recordDetail.getProductID());
                 addRecordDetail(recordDetail);
             }
             JOptionPane.showMessageDialog(null, "Successfully!");
@@ -100,34 +99,56 @@ public class RecordDAO {
             Logger.getLogger(RecordDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public ResultSet getSearchRecordQueryResult(String searchTxt) {
+
+    public Record getSearchRecordQueryResult(String searchTxt) {
         try {
             String query = "SELECT * FROM records WHERE recordID = '" + searchTxt + "' OR recordCode = '" + searchTxt + "'";
             rs = stmt.executeQuery(query);
-            while (rs.next()) {                
+            while (rs.next()) {
                 record = new Record();
                 record.setCustomerID(rs.getInt("customerID"));
                 record.setDate(rs.getString("date"));
+                record.setSupplierID(rs.getInt("supplierID"));
                 record.setHandleBy(rs.getInt("handleBy"));
                 record.setRecordCode(rs.getString("recordCode"));
                 record.setRecordID(rs.getInt("recordID"));
                 record.setRecordType(RecordType.valueOf(rs.getString("recordType")));
+                record.setVat(rs.getInt("vat"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return rs;
+        return record;
     }
-    
-    public ResultSet getSearchRecordDetailQueryResult(Record record) {
+
+    public ArrayList<RecordDetail> getSearchRecordDetailQueryResult(Record record) {
         try {
-            String query = "SELECT productID, quantity FROM recordDetail WHERE recordID = '" + record.getRecordID() + "'";
+            String query = "SELECT * FROM recordDetail WHERE recordID = '" + record.getRecordID() + "'";
             rs = stmt.executeQuery(query);
+            recordDetails = new ArrayList<>();
+            while (rs.next()) {
+                RecordDetail rcdt = new RecordDetail();
+                rcdt.setProductID(rs.getInt("productID"));
+                rcdt.setQuantity(Integer.parseInt(rs.getString("quantity")));
+                rcdt.setRecordID(Integer.parseInt(rs.getString("recordID")));
+                recordDetails.add(rcdt);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return rs;
+        return recordDetails;
+    }
+
+    public void deleteRecord(Record record) {
+        try {
+            String query = "UPDATE records SET recordType = 'DELETED' WHERE recordID=?";
+            pstmt = (PreparedStatement) con.prepareStatement(query);
+            pstmt.setInt(1, record.getRecordID());
+            pstmt.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Delete Successfully!");
+        } catch (SQLException ex) {
+            Logger.getLogger(RecordDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 }

@@ -69,7 +69,6 @@ public class ImportRecord extends javax.swing.JDialog {
         productCode = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         costPrice = new javax.swing.JTextField();
-        productQuantity = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         add = new javax.swing.JButton();
         remove = new javax.swing.JButton();
@@ -77,6 +76,8 @@ public class ImportRecord extends javax.swing.JDialog {
         clear = new javax.swing.JButton();
         supplierComboBox = new javax.swing.JComboBox<>();
         date = new com.toedter.calendar.JDateChooser();
+        productQuantity = new javax.swing.JTextField();
+        validate_text = new javax.swing.JLabel();
         receipt = new javax.swing.JPanel();
         invoice = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
@@ -86,7 +87,6 @@ public class ImportRecord extends javax.swing.JDialog {
         jScrollPane1 = new javax.swing.JScrollPane();
         recordTable = new javax.swing.JTable();
         vat = new javax.swing.JCheckBox();
-        jLabel13 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
         subtotal = new javax.swing.JTextField();
         jLabel15 = new javax.swing.JLabel();
@@ -96,7 +96,14 @@ public class ImportRecord extends javax.swing.JDialog {
         receiptCode = new javax.swing.JTextField();
         supplierCode = new javax.swing.JTextField();
         receiptDate = new javax.swing.JFormattedTextField();
-        comment = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        supplierName = new javax.swing.JTextField();
+        jLabel13 = new javax.swing.JLabel();
+        supplierLocation = new javax.swing.JTextField();
+        supplierContact = new javax.swing.JTextField();
+        jLabel17 = new javax.swing.JLabel();
         createRecord = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
         delete = new javax.swing.JButton();
@@ -105,6 +112,7 @@ public class ImportRecord extends javax.swing.JDialog {
         jLabel20 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         searchByTab = new javax.swing.JTextField();
+        search_false = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -123,17 +131,6 @@ public class ImportRecord extends javax.swing.JDialog {
         jLabel3.setText("Cost Price");
 
         costPrice.setEditable(false);
-        costPrice.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                costPriceActionPerformed(evt);
-            }
-        });
-
-        productQuantity.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                productQuantityActionPerformed(evt);
-            }
-        });
 
         jLabel4.setText("Quantity");
 
@@ -171,6 +168,14 @@ public class ImportRecord extends javax.swing.JDialog {
 
         supplierComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select Supplier' Name" }));
 
+        productQuantity.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                productQuantityKeyReleased(evt);
+            }
+        });
+
+        validate_text.setForeground(new java.awt.Color(255, 0, 51));
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -179,43 +184,45 @@ public class ImportRecord extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(supplierComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
-                        .addComponent(productCode, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(89, 89, 89)
-                        .addComponent(date, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(costPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(productQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(add)
                             .addComponent(edit))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 140, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(remove, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(clear, javax.swing.GroupLayout.Alignment.TRAILING))))
+                            .addComponent(clear, javax.swing.GroupLayout.Alignment.TRAILING)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel1))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(date, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(productCode, javax.swing.GroupLayout.DEFAULT_SIZE, 219, Short.MAX_VALUE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel4))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(costPrice, javax.swing.GroupLayout.DEFAULT_SIZE, 219, Short.MAX_VALUE)
+                            .addComponent(productQuantity)
+                            .addComponent(validate_text, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(84, Short.MAX_VALUE)
+                .addContainerGap(98, Short.MAX_VALUE)
                 .addComponent(supplierComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(13, 13, 13))
-                    .addComponent(date, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(23, 23, 23)
+                        .addComponent(date, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(35, 35, 35)
+                        .addComponent(jLabel1)))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
@@ -226,9 +233,11 @@ public class ImportRecord extends javax.swing.JDialog {
                     .addComponent(costPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(productQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(60, 60, 60)
+                    .addComponent(productQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(validate_text)
+                .addGap(15, 15, 15)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(clear)
                     .addComponent(add))
@@ -278,8 +287,6 @@ public class ImportRecord extends javax.swing.JDialog {
             }
         });
 
-        jLabel13.setText("Comment:");
-
         jLabel14.setText("Subtotal:");
 
         subtotal.setEditable(false);
@@ -299,6 +306,18 @@ public class ImportRecord extends javax.swing.JDialog {
         receiptDate.setEditable(false);
         receiptDate.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT))));
 
+        jLabel5.setFont(new java.awt.Font("Tahoma", 3, 14)); // NOI18N
+        jLabel5.setText("Công ty TNHH Aptech, 54 Lê Thanh Nghị, Hai Bà Trưng, Hà Nội");
+
+        jLabel7.setFont(new java.awt.Font("Tahoma", 2, 13)); // NOI18N
+        jLabel7.setText("Tel: 03099999");
+
+        jLabel8.setText("Supplier Name");
+
+        jLabel13.setText("Supplier Loaction");
+
+        jLabel17.setText("Supplier Contact");
+
         javax.swing.GroupLayout invoiceLayout = new javax.swing.GroupLayout(invoice);
         invoice.setLayout(invoiceLayout);
         invoiceLayout.setHorizontalGroup(
@@ -307,7 +326,7 @@ public class ImportRecord extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(invoiceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(invoiceLayout.createSequentialGroup()
-                        .addComponent(jScrollPane1)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 751, Short.MAX_VALUE)
                         .addContainerGap())
                     .addGroup(invoiceLayout.createSequentialGroup()
                         .addGroup(invoiceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -321,29 +340,44 @@ public class ImportRecord extends javax.swing.JDialog {
                                 .addGroup(invoiceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(receiptCode, javax.swing.GroupLayout.DEFAULT_SIZE, 97, Short.MAX_VALUE)
                                     .addComponent(supplierCode, javax.swing.GroupLayout.DEFAULT_SIZE, 97, Short.MAX_VALUE)
-                                    .addComponent(receiptDate))))
-                        .addContainerGap(558, Short.MAX_VALUE))
+                                    .addComponent(receiptDate))
+                                .addGap(230, 230, 230)
+                                .addGroup(invoiceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(invoiceLayout.createSequentialGroup()
+                                        .addComponent(jLabel8)
+                                        .addGap(30, 30, 30)
+                                        .addComponent(supplierName, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(invoiceLayout.createSequentialGroup()
+                                        .addComponent(jLabel13)
+                                        .addGap(30, 30, 30)
+                                        .addComponent(supplierLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(invoiceLayout.createSequentialGroup()
+                                        .addComponent(jLabel17)
+                                        .addGap(30, 30, 30)
+                                        .addComponent(supplierContact, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addContainerGap(46, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, invoiceLayout.createSequentialGroup()
                         .addGroup(invoiceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(invoiceLayout.createSequentialGroup()
-                                .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(comment, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 287, Short.MAX_VALUE)
-                                .addComponent(jLabel16)
-                                .addGap(27, 27, 27)
-                                .addComponent(total, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(invoiceLayout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(jLabel15)
-                                .addGap(27, 27, 27)
-                                .addComponent(tax, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(invoiceLayout.createSequentialGroup()
                                 .addComponent(vat)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jLabel14)
                                 .addGap(27, 27, 27)
-                                .addComponent(subtotal, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(subtotal, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(invoiceLayout.createSequentialGroup()
+                                .addGroup(invoiceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 447, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(invoiceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(invoiceLayout.createSequentialGroup()
+                                        .addComponent(jLabel16)
+                                        .addGap(27, 27, 27)
+                                        .addComponent(total, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(invoiceLayout.createSequentialGroup()
+                                        .addComponent(jLabel15)
+                                        .addGap(27, 27, 27)
+                                        .addComponent(tax, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                         .addGap(36, 36, 36))))
         );
         invoiceLayout.setVerticalGroup(
@@ -354,15 +388,25 @@ public class ImportRecord extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(invoiceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel10)
-                    .addComponent(receiptCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(receiptCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel8)
+                    .addComponent(supplierName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(invoiceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel11)
-                    .addComponent(supplierCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(invoiceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(supplierCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(invoiceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel13)
+                            .addComponent(supplierLocation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(invoiceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel12)
-                    .addComponent(receiptDate, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(invoiceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(receiptDate, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(invoiceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel17)
+                            .addComponent(supplierContact, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 265, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
@@ -370,26 +414,25 @@ public class ImportRecord extends javax.swing.JDialog {
                     .addComponent(vat)
                     .addComponent(jLabel14)
                     .addComponent(subtotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(invoiceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(invoiceLayout.createSequentialGroup()
-                        .addGroup(invoiceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel15)
-                            .addComponent(tax, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(invoiceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(comment, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(invoiceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(invoiceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel15)
+                        .addComponent(tax, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(invoiceLayout.createSequentialGroup()
                         .addGap(36, 36, 36)
                         .addGroup(invoiceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel16)
-                            .addComponent(total, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap())
+                            .addComponent(total, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(invoiceLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18))
         );
 
         createRecord.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/icons8-purchase-order-26.png"))); // NOI18N
         createRecord.setText("Create");
-        createRecord.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         createRecord.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 createRecordActionPerformed(evt);
@@ -398,11 +441,9 @@ public class ImportRecord extends javax.swing.JDialog {
 
         jButton7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/icons8-print-26.png"))); // NOI18N
         jButton7.setText("Print");
-        jButton7.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
         delete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/icons8-delete-26.png"))); // NOI18N
         delete.setText("Delete");
-        delete.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         delete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 deleteActionPerformed(evt);
@@ -411,7 +452,6 @@ public class ImportRecord extends javax.swing.JDialog {
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/icons8-important-mail-24.png"))); // NOI18N
         jButton1.setText("Mail");
-        jButton1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
         javax.swing.GroupLayout receiptLayout = new javax.swing.GroupLayout(receipt);
         receipt.setLayout(receiptLayout);
@@ -461,17 +501,9 @@ public class ImportRecord extends javax.swing.JDialog {
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel6.setText("SEARCH");
 
-        searchByTab.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                searchByTabActionPerformed(evt);
-            }
-        });
         searchByTab.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 searchByTabKeyPressed(evt);
-            }
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                searchByTabKeyReleased(evt);
             }
         });
 
@@ -487,7 +519,7 @@ public class ImportRecord extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 367, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())
-                    .addGroup(layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(7, 7, 7)
                         .addComponent(newRecord)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -495,7 +527,9 @@ public class ImportRecord extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel6)
                         .addGap(38, 38, 38)
-                        .addComponent(searchByTab, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(searchByTab, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(search_false, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(72, 72, 72))))
         );
         layout.setVerticalGroup(
@@ -508,6 +542,8 @@ public class ImportRecord extends javax.swing.JDialog {
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(searchByTab, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(search_false)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 63, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jTabbedPane1)
@@ -517,14 +553,6 @@ public class ImportRecord extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void costPriceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_costPriceActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_costPriceActionPerformed
-
-    private void productQuantityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_productQuantityActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_productQuantityActionPerformed
 
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
         // TODO add your handling code here:
@@ -554,20 +582,16 @@ public class ImportRecord extends javax.swing.JDialog {
                     if (isExisted(product.getProductCode()) != -1) {
                         int index = isExisted(product.getProductCode());
                         int newQuantity = recordDetails.get(index).getQuantity() + Integer.parseInt(productQuantity.getText());
-                        model.setValueAt(Integer.toString(newQuantity), index, 3);
+//                        model.setValueAt(Integer.toString(newQuantity), index, 3);
                         recordDetails.get(index).setQuantity(newQuantity);
                     } else {
                         //create new recordDetail
                         recordDetail.setProductID(product.getProductID());
+
                         recordDetail.setQuantity(Integer.parseInt(productQuantity.getText()));
                         recordDetails.add(recordDetail);
                         //update record
-                        record.setTotalPrice(getTotalPrice());
-                        if (vat.isSelected()) {
-                            showInvoice(Constant.VAT);
-                        } else {
-                            showInvoice(Constant.NO_VAT);
-                        }
+                        loadData();
                     }
                 } catch (ParseException ex) {
                     Logger.getLogger(ImportRecord.class.getName()).log(Level.SEVERE, null, ex);
@@ -588,14 +612,8 @@ public class ImportRecord extends javax.swing.JDialog {
                     record.setDate(new SimpleDateFormat("dd/MM/yyyy").format(date.getDate()));
                     record.setRecordType(RecordType.IMPORT);
                     //record.setHandleBy(WIDTH);
-                    record.setTotalPrice(getTotalPrice());
                     //show table
-                    if (vat.isSelected()) {
-                        showInvoice(Constant.VAT);
-                    } else {
-                        showInvoice(Constant.NO_VAT);
-                    }
-
+                    loadData();
                 }
             }
             //show invoice
@@ -636,7 +654,6 @@ public class ImportRecord extends javax.swing.JDialog {
         clear.setEnabled(false);
         createRecord.setEnabled(false);
         vat.setEnabled(false);
-        comment.setEnabled(false);
     }//GEN-LAST:event_createRecordActionPerformed
 
     private void clearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearActionPerformed
@@ -651,24 +668,21 @@ public class ImportRecord extends javax.swing.JDialog {
     private void vatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_vatActionPerformed
         // TODO add your handling code here:
         if (vat.isSelected()) {
-            taxPercent = Constant.VAT;
-            for (int i = 0; i < model.getRowCount(); i++) {
-                model.setValueAt(Integer.toString(Constant.VAT), i, 5);
-            }
+            record.setVat(Constant.VAT);
         } else {
-            taxPercent = Constant.NO_VAT;
-            for (int i = 0; i < model.getRowCount(); i++) {
-                model.setValueAt(Integer.toString(Constant.NO_VAT), i, 5);
-            }
+            record.setVat(Constant.NO_VAT);
         }
-        tax.setText(Integer.toString(taxPercent));
-        total.setText(Float.toString(record.getTotalPrice() * (100 + taxPercent) / 100));
-
+        loadData();
     }//GEN-LAST:event_vatActionPerformed
 
     private void deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteActionPerformed
         // TODO add your handling code here:
-
+        JOptionPane.showConfirmDialog(null, "Are you sure you want to delete? This action cannot be undone!");
+        if (JOptionPane.YES_NO_OPTION == JOptionPane.YES_OPTION) {
+            System.out.println(record.getRecordID());
+            new RecordDAO().deleteRecord(record);
+            newRecordActionPerformed(evt);
+        }
     }//GEN-LAST:event_deleteActionPerformed
 
     private void editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editActionPerformed
@@ -678,17 +692,10 @@ public class ImportRecord extends javax.swing.JDialog {
         } else {
             int row = recordTable.getSelectedRow();
 
-            model.setValueAt(product.getProductName(), row, 1);
-            model.setValueAt(productCode.getText(), row, 2);
-            model.setValueAt(productQuantity.getText(), row, 3);
-            model.setValueAt(costPrice.getText(), row, 4);
-
             recordDetails.get(row).setProductID(product.getProductID());
             recordDetails.get(row).setQuantity(Integer.parseInt(productQuantity.getText()));
 
-            productCode.setText("");
-            costPrice.setText("");
-            productQuantity.setText("");
+            loadData();
 
         }
     }//GEN-LAST:event_editActionPerformed
@@ -707,15 +714,13 @@ public class ImportRecord extends javax.swing.JDialog {
         // TODO add your handling code here:
         int row = recordTable.getSelectedRow();
         recordDetails.remove(row);
-        model.getDataVector().removeAllElements();
-        model.fireTableDataChanged();
 
         productCode.setText("");
         costPrice.setText("");
         productQuantity.setText("");
         record.setTotalPrice(getTotalPrice());
 
-        loadData(taxPercent);
+        loadData();
         tax.setText(Integer.toString(taxPercent));
         total.setText(Float.toString(record.getTotalPrice() * (100 + taxPercent) / 100));
     }//GEN-LAST:event_removeActionPerformed
@@ -724,7 +729,13 @@ public class ImportRecord extends javax.swing.JDialog {
         // TODO add your handling code here:
         model.getDataVector().removeAllElements();
         model.fireTableDataChanged();
-
+        initialRecord();
+        add.setEnabled(true);
+        remove.setEnabled(true);
+        edit.setEnabled(true);
+        clear.setEnabled(true);
+        createRecord.setEnabled(true);
+        vat.setEnabled(true);
         for (Component control : invoice.getComponents()) {
             if (control instanceof JTextField) {
                 JTextField ctrl = (JTextField) control;
@@ -736,22 +747,30 @@ public class ImportRecord extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_newRecordActionPerformed
 
-    private void searchByTabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchByTabActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_searchByTabActionPerformed
-
-    private void searchByTabKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchByTabKeyReleased
-        // TODO add your handling code here:
-
-    }//GEN-LAST:event_searchByTabKeyReleased
-
     private void searchByTabKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchByTabKeyPressed
         // TODO add your handling code here:
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             String text = searchByTab.getText();
             loadBySearch(text);
+            add.setEnabled(false);
+            remove.setEnabled(false);
+            edit.setEnabled(false);
+            clear.setEnabled(false);
+            createRecord.setEnabled(false);
+            vat.setEnabled(false);
+            delete.setEnabled(true);
         }
     }//GEN-LAST:event_searchByTabKeyPressed
+
+    private void productQuantityKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_productQuantityKeyReleased
+        // TODO add your handling code here:
+        try {
+            int i = Integer.parseInt(productQuantity.getText());
+            validate_text.setText("");
+        } catch (NumberFormatException e) {
+            validate_text.setText("Invalid Number");
+        }
+    }//GEN-LAST:event_productQuantityKeyReleased
 
     /**
      * @param args the command line arguments
@@ -805,7 +824,6 @@ public class ImportRecord extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton add;
     private javax.swing.JButton clear;
-    private javax.swing.JTextField comment;
     private javax.swing.JTextField costPrice;
     private javax.swing.JButton createRecord;
     private com.toedter.calendar.JDateChooser date;
@@ -822,11 +840,15 @@ public class ImportRecord extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
@@ -840,11 +862,16 @@ public class ImportRecord extends javax.swing.JDialog {
     private javax.swing.JTable recordTable;
     private javax.swing.JButton remove;
     private javax.swing.JTextField searchByTab;
+    private javax.swing.JLabel search_false;
     private javax.swing.JTextField subtotal;
     private javax.swing.JTextField supplierCode;
     private javax.swing.JComboBox<String> supplierComboBox;
+    private javax.swing.JTextField supplierContact;
+    private javax.swing.JTextField supplierLocation;
+    private javax.swing.JTextField supplierName;
     private javax.swing.JTextField tax;
     private javax.swing.JTextField total;
+    private javax.swing.JLabel validate_text;
     private javax.swing.JCheckBox vat;
     // End of variables declaration//GEN-END:variables
 
@@ -853,34 +880,6 @@ public class ImportRecord extends javax.swing.JDialog {
         for (String supplier : suppliers) {
             supplierComboBox.addItem(supplier);
         }
-    }
-
-    private void showInvoice(int taxValue) {
-
-        supplierCode.setText(supplier.getSupplierCode());
-        receiptDate.setText(record.getDate());
-        subtotal.setText(Float.toString(record.getTotalPrice()));
-        if (vat.isSelected()) {
-            taxPercent = Constant.VAT;
-        } else {
-            taxPercent = Constant.NO_VAT;
-        }
-        tax.setText(Integer.toString(taxPercent));
-        total.setText(Float.toString(record.getTotalPrice() * (100 + taxPercent) / 100));
-        productCode.setText("");
-        costPrice.setText("");
-        productQuantity.setText("");
-
-        model.addRow(new Object[]{
-            model.getRowCount() + 1,
-            product.getProductName(),
-            product.getProductCode(),
-            recordDetail.getQuantity(),
-            product.getCostPrice(),
-            taxValue,
-            product.getCostPrice() * recordDetail.getQuantity()
-        });
-
     }
 
     public void initialRecord() {
@@ -914,22 +913,48 @@ public class ImportRecord extends javax.swing.JDialog {
         return total;
     }
 
-    private void loadData(int taxValue) {
+    private void loadData() {
+        receiptCode.setText(record.getRecordCode());
+        productCode.setText("");
+        costPrice.setText("");
+        productQuantity.setText("");
+
+        record.setTotalPrice(getTotalPrice());
+        supplier = new SupplierDAO().convertToArrayList(new SupplierDAO().getQueryResult("supplierID = '" + record.getSupplierID() + "'")).get(0);
+        supplierCode.setText(supplier.getSupplierCode());
+        supplierName.setText(supplier.getSupplierName());
+        supplierLocation.setText(supplier.getSupplierLocation());
+        supplierContact.setText(supplier.getSupplierContact());
+        receiptDate.setText(record.getDate());
+        subtotal.setText(Float.toString(record.getTotalPrice()));
+        tax.setText(Integer.toString(record.getVat()));
+        total.setText(Float.toString(record.getTotalPrice() * (100 + record.getVat()) / 100));
+
+        model.getDataVector().removeAllElements();
+        model.fireTableDataChanged();
+
         for (RecordDetail rcdt : recordDetails) {
             product = new ProductDAO().convertToArrayList(new ProductDAO().getQueryResult("productID = '" + rcdt.getProductID() + "'")).get(0);
             model.addRow(new Object[]{
                 recordDetails.indexOf(rcdt) + 1,
                 product.getProductName(),
                 product.getProductCode(),
-                recordDetail.getQuantity(),
+                rcdt.getQuantity(),
                 product.getCostPrice(),
-                taxValue,
-                product.getCostPrice() * recordDetail.getQuantity()
+                record.getVat(),
+                product.getCostPrice() * rcdt.getQuantity()
             });
         }
     }
 
     private void loadBySearch(String text) {
-        
+        if (text.equals("")) {
+            search_false.setText("Cannot found");
+        } else {
+            record = new RecordDAO().getSearchRecordQueryResult(text);
+            recordDetails = new RecordDAO().getSearchRecordDetailQueryResult(record);
+            loadData();
+        }
     }
+
 }
