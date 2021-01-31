@@ -5,6 +5,7 @@
  */
 package View;
 
+import View.*;
 import eproject2.connection.connectiondb;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -143,6 +144,7 @@ public class login extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void usernameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usernameActionPerformed
@@ -150,7 +152,7 @@ public class login extends javax.swing.JFrame {
     }//GEN-LAST:event_usernameActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-       String url = "jdbc:mysql://localhost:3306/eproject22";
+       String url = "jdbc:mysql://localhost:3306/eproject2";
         try {
             Connection conn = DriverManager.getConnection(url,"root","");
             System.out.println("Kết nối CSDL thành công");
@@ -195,6 +197,7 @@ public class login extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
