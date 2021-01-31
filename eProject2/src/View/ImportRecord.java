@@ -43,6 +43,7 @@ public class ImportRecord extends javax.swing.JDialog {
     model.Product product;
     DefaultTableModel model;
     int taxPercent;
+    
 
     /**
      * Creates new form Receipt
@@ -51,6 +52,7 @@ public class ImportRecord extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         initialRecord();
+        
     }
 
     /**
@@ -326,7 +328,7 @@ public class ImportRecord extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(invoiceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(invoiceLayout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 751, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 842, Short.MAX_VALUE)
                         .addContainerGap())
                     .addGroup(invoiceLayout.createSequentialGroup()
                         .addGroup(invoiceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -355,7 +357,7 @@ public class ImportRecord extends javax.swing.JDialog {
                                         .addComponent(jLabel17)
                                         .addGap(30, 30, 30)
                                         .addComponent(supplierContact, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                        .addContainerGap(46, Short.MAX_VALUE))
+                        .addContainerGap(137, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, invoiceLayout.createSequentialGroup()
                         .addGroup(invoiceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(invoiceLayout.createSequentialGroup()
@@ -542,9 +544,9 @@ public class ImportRecord extends javax.swing.JDialog {
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(searchByTab, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(search_false)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 63, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 79, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jTabbedPane1)
                     .addComponent(receipt, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -629,7 +631,7 @@ public class ImportRecord extends javax.swing.JDialog {
             try {
                 // TODO add your handling code here:
                 String text = productCode.getText();
-                if (!new ProductDAO().getQueryResult("productCode = '" + text + "'").next()) {
+                if (!new ProductDAO().getQueryResult("productCode = '" + text + "' AND status = 'AVAILABLE'").next()) {
                     JOptionPane.showMessageDialog(null, "This product is not exist or wrong product code!");
                 } else {
                     product = new ProductDAO().convertToArrayList(new ProductDAO().getQueryResult("productCode = '" + productCode.getText() + "'")).get(0);
@@ -948,13 +950,15 @@ public class ImportRecord extends javax.swing.JDialog {
     }
 
     private void loadBySearch(String text) {
-        if (text.equals("")) {
-            search_false.setText("Cannot found");
-        } else {
+        try {
             record = new RecordDAO().getSearchRecordQueryResult(text);
             recordDetails = new RecordDAO().getSearchRecordDetailQueryResult(record);
             loadData();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Cannot found this record!");
+            
         }
+
     }
 
 }

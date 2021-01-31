@@ -93,6 +93,7 @@ public class RecordDAO {
             for (RecordDetail recordDetail : recordDetails) {
                 recordDetail.setRecordID(Integer.parseInt(recordID));
                 addRecordDetail(recordDetail);
+                new CurrentStockDAO().updateCurrentStock(recordDetail.getProductID(), recordDetail.getQuantity(), RecordType.IMPORT);
             }
             JOptionPane.showMessageDialog(null, "Successfully!");
         } catch (SQLException ex) {
