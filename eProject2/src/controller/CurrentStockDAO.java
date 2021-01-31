@@ -62,8 +62,9 @@ public class CurrentStockDAO {
             if (recordType.equals(RecordType.EXPORT)) {
                 calculation = "-";
             }
-            String query = "UPDATE currentStocks SET quantity = quantity" + calculation + number + " WHERE productID = " + productID + "'";
-            rs = stmt.executeQuery(query);
+            String query = "UPDATE currentStocks SET quantity = quantity " + calculation + number + " WHERE productID = '" + productID + "'";
+            pstmt = (PreparedStatement) con.prepareStatement(query);
+            pstmt.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(CurrentStockDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
