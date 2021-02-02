@@ -40,26 +40,49 @@ public class CurrentStockDAO {
             Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    public int getCurrentStock(int productID){
+
+    public int getCurrentStock(int productID) {
         int quantity = 0;
         try {
             String query = "SELECT * FROM currentStocks WHERE productID = '" + productID + "'";
             rs = stmt.executeQuery(query);
-            while (rs.next()) {                
+
+            while (rs.next()) {
                 quantity = rs.getInt("quantity");
             }
         } catch (SQLException ex) {
             Logger.getLogger(CurrentStockDAO.class.getName()).log(Level.SEVERE, null, ex);
-        } 
+        }
         return quantity;
     }
-    
-    public void updateCurrentStock(int productID,int number,RecordType recordType){
-        String calculation = "+";
-        if(recordType.equals(RecordType.EXPORT)){
-            calculation = "-";
+
+    public void updateCurrentStock(int productID, int number, RecordType recordType) {
+        try {
+            String calculation = "+";
+            if (recordType.equals(RecordType.EXPORT)) {
+                calculation = "-";
+            }
+            String query = "UPDATE currentStocks SET quantity = quantity " + calculation + number + " WHERE productID = '" + productID + "'";
+            pstmt = (PreparedStatement) con.prepareStatement(query);
+            pstmt.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(CurrentStockDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-        String query = "UPDATE currentStocks SET quantity = quantity" + calculation + number + " WHERE productID = "+ productID +"'"; 
     }
-    
+
+    public void initialCurrentStock(Product product) {
+        try {
+            String q = "INSERT INTO currentStocks VALUES(?,?)";
+            pstmt = (PreparedStatement) con.prepareStatement(q);
+            pstmt.setInt(1, product.getProductID());
+            pstmt.setInt(2, 0);
+
+            pstmt.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(CurrentStockDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }
+
+
+

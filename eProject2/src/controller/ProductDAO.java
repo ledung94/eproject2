@@ -60,9 +60,20 @@ public class ProductDAO {
             String query = "SELECT * FROM products WHERE productName='" + product.getProductName() + "' AND productCode='" + product.getProductCode() + "' AND category='" + product.getProductCategory() + "'";
             rs = stmt.executeQuery(query);
             if (rs.next()) {
-                JOptionPane.showMessageDialog(null, "Same Product has already been added!");
+                if(rs.getString("status").equals(Status.AVAILABLE)){
+                    JOptionPane.showMessageDialog(null, "Same Product has already been added!");
+                } else if(rs.getString("status").equals(Status.DELETED)){
+                    JOptionPane.showConfirmDialog(null, "This product is deleted! Are you sure you want to add this product to list?");
+                    if(JOptionPane.YES_NO_OPTION == JOptionPane.YES_OPTION){
+                        product.setProductStatus(Status.AVAILABLE);
+                        editProductDAO(product);
+                    }
+                }
+                
             } else {
                 addFunction(product);
+                product = convertToArrayList(getQueryResult("productCode = '" + product.getProductCode()+ "'")).get(0);
+                new CurrentStockDAO().initialCurrentStock(product);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -75,7 +86,6 @@ public class ProductDAO {
 
             String q = "INSERT INTO products VALUES(null,?,?,?,?,?,?,?,?)";
             pstmt = (PreparedStatement) con.prepareStatement(q);
-//            pstmt.setString(1, product.getProductID());
             pstmt.setString(1, product.getProductName());
             pstmt.setString(2, product.getProductCode());
             pstmt.setDouble(3, product.getCostPrice());

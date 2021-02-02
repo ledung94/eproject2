@@ -5,6 +5,7 @@
  */
 package View;
 
+import controller.CurrentStockDAO;
 import controller.ProductDAO;
 import java.awt.Image;
 import java.io.File;
@@ -272,7 +273,7 @@ public class Product extends javax.swing.JDialog {
 
             },
             new String [] {
-                "Index", "Name", "Code", "Cost Price", "Selling Price", "Category", "Date"
+                "Index", "Name", "Qyt", "Code", "Cost Price", "Selling Price", "Category", "Date", "Status"
             }
         ));
         productTable.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -565,11 +566,13 @@ public class Product extends javax.swing.JDialog {
         model.addRow(new Object[]{
             products.size(),
             product.getProductName(),
+            new CurrentStockDAO().getCurrentStock(product.getProductID()),
             product.getProductCode(),
             product.getCostPrice(),
             product.getSellingPrice(),
             product.getProductCategory(),
-            product.getDate()
+            product.getDate(),
+            product.getProductStatus()
         });
     }
 
@@ -580,11 +583,13 @@ public class Product extends javax.swing.JDialog {
             model.addRow(new Object[]{
                 products.indexOf(product) + 1,
                 product.getProductName(),
+                new CurrentStockDAO().getCurrentStock(product.getProductID()),
                 product.getProductCode(),
                 product.getCostPrice(),
                 product.getSellingPrice(),
                 product.getProductCategory(),
-                product.getDate()
+                product.getDate(),
+                product.getProductStatus()
             });
         }
 
@@ -611,11 +616,13 @@ public class Product extends javax.swing.JDialog {
                 model.addRow(new Object[]{
                     products.indexOf(product) + 1,
                     product.getProductName(),
+                    new CurrentStockDAO().getCurrentStock(product.getProductID()),
                     product.getProductCode(),
                     product.getCostPrice(),
                     product.getSellingPrice(),
                     product.getProductCategory(),
-                    product.getDate()
+                    product.getDate(),
+                    product.getProductStatus()
                 });
             }
         }
