@@ -6,6 +6,12 @@
 package controller;
 
 import eproject2.connection.connectiondb;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.print.PageFormat;
+import java.awt.print.Printable;
+import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,6 +21,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import model.Record;
 import model.RecordDetail;
 import model.RecordType;
@@ -34,7 +41,7 @@ public class RecordDAO {
     ResultSet rs = null;
     ArrayList<RecordDetail> recordDetails;
     Record record;
-
+    ArrayList<Record> records;
     public RecordDAO() {
         try {
             con = new connectiondb().getConnection();
@@ -58,6 +65,7 @@ public class RecordDAO {
         }
         return list;
     }
+    
 
     public void addRecordDetail(RecordDetail recordDetail) {
         try {
@@ -84,7 +92,7 @@ public class RecordDAO {
             pstmt.setInt(4, record.getCustomerID());
             pstmt.setInt(5, record.getHandleBy());
             pstmt.setString(6, record.getDate());
-            pstmt.setFloat(7, record.getTotalPrice()*(100 + record.getVat())/100);
+            pstmt.setFloat(7, record.getTotalPrice() * (100 + record.getVat()) / 100);
             pstmt.setInt(8, record.getVat());
 
             pstmt.executeUpdate();
@@ -121,7 +129,46 @@ public class RecordDAO {
         }
         return record;
     }
-
+    public ArrayList<Record> findAll(Record record) {
+        try {
+            String query = "SELECT * FROM `records` ORDER BY `recordID` DESC ";
+            rs = stmt.executeQuery(query);
+            records = new ArrayList<>();
+            while (rs.next()) {
+                record = new Record();
+                record.setCustomerID(rs.getInt("customerID"));
+                record.setDate(rs.getString("date"));
+                record.setSupplierID(rs.getInt("supplierID"));
+                record.setHandleBy(rs.getInt("handleBy"));
+                record.setRecordCode(rs.getString("recordCode"));
+                record.setRecordID(rs.getInt("recordID"));
+                record.setRecordType(RecordType.valueOf(rs.getString("recordType")));
+                record.setVat(rs.getInt("vat"));
+                record.setTotalPrice((float) rs.getDouble("totalPrice"));
+                records.add(record);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return records;
+    }
+    public ArrayList<RecordDetail> findDetails(RecordDetail recordDetail) {
+        try {
+            String query = "SELECT * FROM `recorddetail` WHERE recordID";
+            rs = stmt.executeQuery(query);
+            recordDetails = new ArrayList<>();
+            while (rs.next()) {
+                recordDetail = new RecordDetail();
+                recordDetail.setRecordID(Integer.parseInt(rs.getString("recordID")));
+                recordDetail.setProductID(Integer.parseInt(rs.getString("productID")));
+                recordDetail.setQuantity(Integer.parseInt(rs.getString("quantity")));
+                recordDetails.add(recordDetail);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return recordDetails;
+    }
     public ArrayList<RecordDetail> getSearchRecordDetailQueryResult(Record record) {
         try {
             String query = "SELECT * FROM recordDetail WHERE recordID = '" + record.getRecordID() + "'";
@@ -152,4 +199,50 @@ public class RecordDAO {
         }
     }
 
+    public void printInvoice(JPanel panel) {
+        PrinterJob printerJob = PrinterJob.getPrinterJob();
+        printerJob.setJobName("Print Record");
+        printerJob.setPrintable(new Printable() {
+            @Override
+            public int print(Graphics grphcs, PageFormat pf, int i) throws PrinterException {
+                if (i > 0) {
+                    return Printable.NO_SUCH_PAGE;
+                }
+                Graphics2D graphics2D = (Graphics2D) grphcs;
+                graphics2D.translate(pf.getImageableX() * 2, pf.getImageableY() * 2);
+                graphics2D.scale(0.5, 0.5);
+                panel.paint(graphics2D);
+                return Printable.PAGE_EXISTS;
+            }
+        });
+        boolean returnResult = printerJob.printDialog();
+        if (returnResult) {
+            try {
+                printerJob.print();
+            } catch (PrinterException e) {
+                JOptionPane.showMessageDialog(null, "Print error: " + e.getMessage());
+            }
+        }
+    }
+    public ArrayList<Record> convertToArrayList(ResultSet rs) {
+        try {
+            records = new ArrayList<>();
+            while (rs.next()) {
+                Record record = new Record();
+                record.setRecordID(Integer.parseInt(rs.getString("recordID")));
+                record.setRecordCode(rs.getString("recodeCode"));
+                record.setRecordType(RecordType.valueOf(rs.getString("recordType")));
+                record.setSupplierID(Integer.parseInt(rs.getString("supplierID")));
+                record.setCustomerID(Integer.parseInt(rs.getString("customerID")));
+                record.setHandleBy(Integer.parseInt(rs.getString("handleBy")));
+                record.setDate(rs.getString("date"));
+                record.setTotalPrice((float) Double.parseDouble(rs.getString("totalPrice")));
+                record.setVat(Integer.parseInt(rs.getString("vat")));
+                records.add(record);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return records;
+    }
 }

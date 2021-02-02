@@ -8,6 +8,8 @@ package View;
 import controller.CustomerDAO;
 import controller.ProductDAO;
 import controller.RecordDAO;
+import controller.SupplierDAO;
+import java.awt.Component;
 import java.awt.event.KeyEvent;
 import java.sql.SQLException;
 import java.text.ParseException;
@@ -15,7 +17,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import model.Constant;
 import model.Customer;
@@ -72,7 +76,6 @@ public class exportRecord extends javax.swing.JDialog {
         clear = new javax.swing.JButton();
         jLabel17 = new javax.swing.JLabel();
         jLabel23 = new javax.swing.JLabel();
-        customerName = new javax.swing.JTextField();
         jLabel24 = new javax.swing.JLabel();
         customerAddress = new javax.swing.JTextField();
         jLabel25 = new javax.swing.JLabel();
@@ -80,6 +83,7 @@ public class exportRecord extends javax.swing.JDialog {
         jLabel26 = new javax.swing.JLabel();
         customerID = new javax.swing.JTextField();
         date = new com.toedter.calendar.JDateChooser();
+        customerName1 = new javax.swing.JTextField();
         refresh = new javax.swing.JButton();
         jLabel20 = new javax.swing.JLabel();
         jLabel21 = new javax.swing.JLabel();
@@ -104,9 +108,15 @@ public class exportRecord extends javax.swing.JDialog {
         customerCode2 = new javax.swing.JTextField();
         receiptDate = new javax.swing.JFormattedTextField();
         comment = new javax.swing.JTextField();
-        Buy = new javax.swing.JButton();
+        jLabel27 = new javax.swing.JLabel();
+        customerName2 = new javax.swing.JTextField();
+        jLabel28 = new javax.swing.JLabel();
+        customerAddress2 = new javax.swing.JTextField();
+        jLabel29 = new javax.swing.JLabel();
+        customerPhone2 = new javax.swing.JTextField();
+        createRecord = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
-        cancel = new javax.swing.JButton();
+        delete = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -154,6 +164,11 @@ public class exportRecord extends javax.swing.JDialog {
 
         remove.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/icons8-remove-26.png"))); // NOI18N
         remove.setText("Remove");
+        remove.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                removeActionPerformed(evt);
+            }
+        });
 
         edit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/icons8-edit-26.png"))); // NOI18N
         edit.setText("Edit");
@@ -172,12 +187,6 @@ public class exportRecord extends javax.swing.JDialog {
         });
 
         jLabel23.setText("Customer name");
-
-        customerName.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                customerNameActionPerformed(evt);
-            }
-        });
 
         jLabel24.setText("Customer address");
 
@@ -208,6 +217,12 @@ public class exportRecord extends javax.swing.JDialog {
             }
         });
 
+        customerName1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                customerName1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -230,11 +245,11 @@ public class exportRecord extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(customerID)
-                            .addComponent(customerName)
                             .addComponent(productQuantity)
                             .addComponent(sellingPrice)
                             .addComponent(productCode)
-                            .addComponent(date, javax.swing.GroupLayout.DEFAULT_SIZE, 241, Short.MAX_VALUE)))
+                            .addComponent(date, javax.swing.GroupLayout.DEFAULT_SIZE, 241, Short.MAX_VALUE)
+                            .addComponent(customerName1, javax.swing.GroupLayout.Alignment.TRAILING)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel24)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -282,10 +297,10 @@ public class exportRecord extends javax.swing.JDialog {
                         .addComponent(jLabel17)
                         .addGap(125, 125, 125))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(customerName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel23))
+                        .addGap(21, 21, 21)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel23)
+                            .addComponent(customerName1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel24)
@@ -324,6 +339,12 @@ public class exportRecord extends javax.swing.JDialog {
 
         jLabel21.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel21.setText("SEARCH");
+
+        searchByTab.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                searchByTabKeyPressed(evt);
+            }
+        });
 
         jPanel3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -383,6 +404,30 @@ public class exportRecord extends javax.swing.JDialog {
         receiptDate.setEditable(false);
         receiptDate.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT))));
 
+        jLabel27.setText("Customer name");
+
+        customerName2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                customerName2ActionPerformed(evt);
+            }
+        });
+
+        jLabel28.setText("Customer address");
+
+        customerAddress2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                customerAddress2ActionPerformed(evt);
+            }
+        });
+
+        jLabel29.setText("Customer phone");
+
+        customerPhone2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                customerPhone2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -391,11 +436,13 @@ public class exportRecord extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 578, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 584, Short.MAX_VALUE)
                         .addContainerGap())
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel9)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jLabel9)
+                                .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel11)
@@ -405,8 +452,18 @@ public class exportRecord extends javax.swing.JDialog {
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(receiptCode, javax.swing.GroupLayout.DEFAULT_SIZE, 97, Short.MAX_VALUE)
                                     .addComponent(customerCode2, javax.swing.GroupLayout.DEFAULT_SIZE, 97, Short.MAX_VALUE)
-                                    .addComponent(receiptDate))))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(receiptDate))
+                                .addGap(115, 115, 115)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel29)
+                                    .addComponent(jLabel28)
+                                    .addComponent(jLabel27))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(customerName2)
+                                    .addComponent(customerAddress2)
+                                    .addComponent(customerPhone2))))
+                        .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel2Layout.createSequentialGroup()
@@ -440,14 +497,22 @@ public class exportRecord extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel10)
-                    .addComponent(receiptCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(receiptCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel27)
+                    .addComponent(customerName2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel11)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel28)
+                        .addComponent(customerAddress2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(customerCode2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel12)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel29)
+                        .addComponent(customerPhone2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(receiptDate, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 211, Short.MAX_VALUE)
@@ -473,22 +538,27 @@ public class exportRecord extends javax.swing.JDialog {
                 .addGap(20, 20, 20))
         );
 
-        Buy.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/icons8-purchase-order-26.png"))); // NOI18N
-        Buy.setText("Sell");
-        Buy.addActionListener(new java.awt.event.ActionListener() {
+        createRecord.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/icons8-purchase-order-26.png"))); // NOI18N
+        createRecord.setText("Sell");
+        createRecord.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BuyActionPerformed(evt);
+                createRecordActionPerformed(evt);
             }
         });
 
         jButton7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/icons8-print-26.png"))); // NOI18N
         jButton7.setText("Print");
-
-        cancel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/icons8-repeat-48.png"))); // NOI18N
-        cancel.setText("Cancel");
-        cancel.addActionListener(new java.awt.event.ActionListener() {
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cancelActionPerformed(evt);
+                jButton7ActionPerformed(evt);
+            }
+        });
+
+        delete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/icons8-delete-26.png"))); // NOI18N
+        delete.setText("Delete");
+        delete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteActionPerformed(evt);
             }
         });
 
@@ -503,9 +573,9 @@ public class exportRecord extends javax.swing.JDialog {
                         .addGap(10, 10, 10)
                         .addComponent(jButton7)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(Buy)
+                        .addComponent(createRecord)
                         .addGap(79, 79, 79)
-                        .addComponent(cancel))
+                        .addComponent(delete))
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -516,9 +586,9 @@ public class exportRecord extends javax.swing.JDialog {
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(Buy, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(createRecord, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(cancel, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(delete, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -533,7 +603,7 @@ public class exportRecord extends javax.swing.JDialog {
                         .addComponent(refresh)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel20)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addGap(0, 244, Short.MAX_VALUE))
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -606,7 +676,7 @@ public class exportRecord extends javax.swing.JDialog {
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
         // TODO add your handling code here:
         recordDetail = new RecordDetail();
-        if (productCode.getText().equals("") || date.getDateFormatString().equals("") || productQuantity.getText().equals("") || customerID.getText().equals("") || customerName.equals("") || customerAddress.equals("") || customerPhone.equals("") ) {
+        if (productCode.getText().equals("") || date.getDateFormatString().equals("") || productQuantity.getText().equals("") || customerID.getText().equals("") || customerName2.equals("") || customerAddress.equals("") || customerPhone.equals("") ) {
             JOptionPane.showMessageDialog(null, "Please fill all the fields!");
         } else {
             if (recordDetails.size() > 0) {//TH da co sp trong record
@@ -735,13 +805,13 @@ public class exportRecord extends javax.swing.JDialog {
         sellingPrice.setText("");
         customerID.setText("");
         customerAddress.setText("");
-        customerName.setText("");
+        customerName2.setText("");
         customerPhone.setText("");
     }//GEN-LAST:event_clearActionPerformed
 
-    private void customerNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customerNameActionPerformed
+    private void customerName2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customerName2ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_customerNameActionPerformed
+    }//GEN-LAST:event_customerName2ActionPerformed
 
     private void customerAddressActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customerAddressActionPerformed
         // TODO add your handling code here:
@@ -763,7 +833,7 @@ public class exportRecord extends javax.swing.JDialog {
                     JOptionPane.showMessageDialog(null, "This customer is not exist or wrong customer code!");
                 } else {
                     customer = new CustomerDAO().convertToArrayList(new CustomerDAO().getQueryResult("customerID = '" + customerID.getText() + "'")).get(0);
-                    customerName.setText((customer.getCustomerName()));
+                    customerName2.setText((customer.getCustomerName()));
                     customerAddress.setText((customer.getCustomerAddress()));
                     customerPhone.setText((customer.getCustomerPhone()));
                 }
@@ -773,11 +843,38 @@ public class exportRecord extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_customerIDKeyPressed
 
-    private void cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelActionPerformed
+    private void deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteActionPerformed
+        if (JOptionPane.showConfirmDialog(null, "Are you sure you want to delete? This action cannot be undone!", "WARNING",
+        JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+            System.out.println(record.getRecordID());
+            new RecordDAO().deleteRecord(record);
+            newRecordActionPerformed(evt);
+        }
+        else{       
+    }
+    }//GEN-LAST:event_deleteActionPerformed
+    private void newRecordActionPerformed(java.awt.event.ActionEvent evt) {                                          
         // TODO add your handling code here:
-    }//GEN-LAST:event_cancelActionPerformed
-
-    private void BuyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BuyActionPerformed
+        model.getDataVector().removeAllElements();
+        model.fireTableDataChanged();
+        initialRecord();
+        add.setEnabled(true);
+        remove.setEnabled(true);
+        edit.setEnabled(true);
+        clear.setEnabled(true);
+        createRecord.setEnabled(true);
+        vat.setEnabled(true);
+//        for (Component control : invoice.getComponents()) {
+//            if (control instanceof JTextField) {
+//                JTextField ctrl = (JTextField) control;
+//                ctrl.setText("");
+//            } else if (control instanceof JComboBox) {
+//                JComboBox ctrl = (JComboBox) control;
+//                ctrl.setSelectedIndex(0);
+//            }
+//        }
+    }                  
+    private void createRecordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createRecordActionPerformed
         // TODO add your handling code here:
                 new RecordDAO().addRecord(record, recordDetails);
                 receiptCode.setText(record.getRecordCode());
@@ -786,10 +883,10 @@ public class exportRecord extends javax.swing.JDialog {
                 remove.setEnabled(false);
                 edit.setEnabled(false);
                 clear.setEnabled(false);
-                Buy.setEnabled(false);
+                createRecord.setEnabled(false);
                 vat.setEnabled(false);
                 comment.setEnabled(false);
-    }//GEN-LAST:event_BuyActionPerformed
+    }//GEN-LAST:event_createRecordActionPerformed
 
     private void vatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_vatActionPerformed
         if (vat.isSelected()) {
@@ -828,6 +925,93 @@ public class exportRecord extends javax.swing.JDialog {
 
     }//GEN-LAST:event_productQuantityKeyPressed
 
+    private void removeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeActionPerformed
+        int row = recordTable.getSelectedRow();
+        recordDetails.remove(row);
+
+        productCode.setText("");
+        sellingPrice.setText("");
+        productQuantity.setText("");
+        record.setTotalPrice(getTotalPrice());
+
+        loadData();
+        tax.setText(Integer.toString(taxPercent));
+        total.setText(Float.toString(record.getTotalPrice() * (100 + taxPercent) / 100));
+    }//GEN-LAST:event_removeActionPerformed
+
+    private void customerName1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customerName1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_customerName1ActionPerformed
+
+    private void customerAddress2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customerAddress2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_customerAddress2ActionPerformed
+
+    private void customerPhone2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customerPhone2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_customerPhone2ActionPerformed
+
+    private void searchByTabKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchByTabKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            String text = searchByTab.getText();
+            loadBySearch(text);
+            add.setEnabled(false);
+            remove.setEnabled(false);
+            edit.setEnabled(false);
+            clear.setEnabled(false);
+            createRecord.setEnabled(false);
+            vat.setEnabled(false);
+            remove.setEnabled(true);
+        }
+    }//GEN-LAST:event_searchByTabKeyPressed
+
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+//        new RecordDAO().printInvoice(invoice);
+    }//GEN-LAST:event_jButton7ActionPerformed
+    private void loadBySearch(String text) {
+        try {
+            record = new RecordDAO().getSearchRecordQueryResult(text);
+            recordDetails = new RecordDAO().getSearchRecordDetailQueryResult(record);
+            loadData();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Cannot found this record!");
+
+        }
+
+    }
+    private void loadData() {
+        receiptCode.setText(record.getRecordCode());
+        productCode.setText("");
+        sellingPrice.setText("");
+        productQuantity.setText("");
+
+        record.setTotalPrice(getTotalPrice());
+        customer = new CustomerDAO().convertToArrayList(new CustomerDAO().getQueryResult("customerID = '" + record.getCustomerID()+ "'")).get(0);
+        customerName2.setText(customer.getCustomerName());
+        customerCode2.setText(Integer.toString(customer.getCustomerID()));
+        customerAddress2.setText(customer.getCustomerAddress());
+        customerPhone2.setText(customer.getCustomerPhone());
+        receiptDate.setText(record.getDate());
+        subtotal.setText(Float.toString(record.getTotalPrice()));
+        tax.setText(Integer.toString(record.getVat()));
+        total.setText(Float.toString(record.getTotalPrice() * (100 + record.getVat()) / 100));
+
+        model.getDataVector().removeAllElements();
+        model.fireTableDataChanged();
+
+        for (RecordDetail rcdt : recordDetails) {
+            product = new ProductDAO().convertToArrayList(new ProductDAO().getQueryResult("productID = '" + rcdt.getProductID() + "'")).get(0);
+            model.addRow(new Object[]{
+                recordDetails.indexOf(rcdt) + 1,
+                product.getProductName(),
+                product.getProductCode(),
+                rcdt.getQuantity(),
+                product.getCostPrice(),
+                record.getVat(),
+                product.getCostPrice() * rcdt.getQuantity()
+            });
+        }
+    }
     /**
      * @param args the command line arguments
      */
@@ -872,17 +1056,20 @@ public class exportRecord extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton Buy;
     private javax.swing.JButton add;
-    private javax.swing.JButton cancel;
     private javax.swing.JButton clear;
     private javax.swing.JTextField comment;
+    private javax.swing.JButton createRecord;
     private javax.swing.JTextField customerAddress;
+    private javax.swing.JTextField customerAddress2;
     private javax.swing.JTextField customerCode2;
     private javax.swing.JTextField customerID;
-    private javax.swing.JTextField customerName;
+    private javax.swing.JTextField customerName1;
+    private javax.swing.JTextField customerName2;
     private javax.swing.JTextField customerPhone;
+    private javax.swing.JTextField customerPhone2;
     private com.toedter.calendar.JDateChooser date;
+    private javax.swing.JButton delete;
     private javax.swing.JButton edit;
     private javax.swing.JButton jButton7;
     private javax.swing.JLabel jLabel1;
@@ -901,6 +1088,9 @@ public class exportRecord extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel26;
+    private javax.swing.JLabel jLabel27;
+    private javax.swing.JLabel jLabel28;
+    private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel9;
