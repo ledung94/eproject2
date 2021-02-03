@@ -8,6 +8,7 @@ package controller;
 import eproject2.connection.connectiondb;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.MouseEvent;
 import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
@@ -41,7 +42,7 @@ public class RecordDAO {
     ResultSet rs = null;
     ArrayList<RecordDetail> recordDetails;
     Record record;
-
+    ArrayList<Record> records;
     public RecordDAO() {
         try {
             con = new connectiondb().getConnection();
@@ -65,6 +66,7 @@ public class RecordDAO {
         }
         return list;
     }
+    
 
     public void addRecordDetail(RecordDetail recordDetail) {
         try {
@@ -128,7 +130,46 @@ public class RecordDAO {
         }
         return record;
     }
-
+    public ArrayList<Record> findAll(Record record) {
+        try {
+            String query = "SELECT * FROM `records` ORDER BY `recordID` DESC ";
+            rs = stmt.executeQuery(query);
+            records = new ArrayList<>();
+            while (rs.next()) {
+                record = new Record();
+                record.setCustomerID(rs.getInt("customerID"));
+                record.setDate(rs.getString("date"));
+                record.setSupplierID(rs.getInt("supplierID"));
+                record.setHandleBy(rs.getInt("handleBy"));
+                record.setRecordCode(rs.getString("recordCode"));
+                record.setRecordID(rs.getInt("recordID"));
+                record.setRecordType(RecordType.valueOf(rs.getString("recordType")));
+                record.setVat(rs.getInt("vat"));
+                record.setTotalPrice((float) rs.getDouble("totalPrice"));
+                records.add(record);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return records;
+    }
+    public ArrayList<Record> findDetails(Record recordID) {
+        try {
+            String query = "SELECT * FROM `recorddetail` WHERE recordID = '" + record.getRecordID() + "'";
+            rs = stmt.executeQuery(query);
+            recordDetails = new ArrayList<>();
+            while (rs.next()) {
+                record = new Record();
+                record.setRecordID(Integer.parseInt(rs.getString("recordID")));
+                record.setProductID(Integer.parseInt(rs.getString("productID")));
+                record.setQuantity(Integer.parseInt(rs.getString("quantity")));
+                records.add(record);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return records;
+    }
     public ArrayList<RecordDetail> getSearchRecordDetailQueryResult(Record record) {
         try {
             String query = "SELECT * FROM recordDetail WHERE recordID = '" + record.getRecordID() + "'";
@@ -184,5 +225,25 @@ public class RecordDAO {
             }
         }
     }
-
+    public ArrayList<Record> convertToArrayList(ResultSet rs) {
+        try {
+            records = new ArrayList<>();
+            while (rs.next()) {
+                Record record = new Record();
+                record.setRecordID(Integer.parseInt(rs.getString("recordID")));
+                record.setRecordCode(rs.getString("recodeCode"));
+                record.setRecordType(RecordType.valueOf(rs.getString("recordType")));
+                record.setSupplierID(Integer.parseInt(rs.getString("supplierID")));
+                record.setCustomerID(Integer.parseInt(rs.getString("customerID")));
+                record.setHandleBy(Integer.parseInt(rs.getString("handleBy")));
+                record.setDate(rs.getString("date"));
+                record.setTotalPrice((float) Double.parseDouble(rs.getString("totalPrice")));
+                record.setVat(Integer.parseInt(rs.getString("vat")));
+                records.add(record);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return records;
+    }
 }
