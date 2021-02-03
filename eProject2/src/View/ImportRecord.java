@@ -9,14 +9,7 @@ import controller.ProductDAO;
 import controller.RecordDAO;
 import controller.SupplierDAO;
 import java.awt.Component;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
-import java.awt.print.PageFormat;
-import java.awt.print.Printable;
-import java.awt.print.PrinterException;
-import java.awt.print.PrinterJob;
-import java.io.FileOutputStream;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -25,14 +18,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import model.Constant;
 import model.RecordDetail;
 import model.RecordType;
 import model.Supplier;
-
 
 /**
  *
@@ -578,32 +569,33 @@ public class ImportRecord extends javax.swing.JDialog {
                         JOptionPane.showMessageDialog(null, "Please select a supplier and try again!");
                     } else {
                         if (!selectedSupplier.equals(supplier.getSupplierName()) || !record.getDate().equals(new SimpleDateFormat("dd/MM/yyyy").format(date.getDate()))) {
-                            JOptionPane.showConfirmDialog(null, "Would you like to change Record date or supplier name");
-                            if (JOptionPane.YES_NO_OPTION == JOptionPane.YES_OPTION) {
+                            int dialogResult = JOptionPane.showConfirmDialog(null, "Would you like to change Record date or supplier name", "Warning", JOptionPane.YES_NO_OPTION);
+                            if (dialogResult == JOptionPane.YES_OPTION) {
                                 supplier = new SupplierDAO().convertToArrayList(new SupplierDAO().getQueryResult("supplierName = '" + selectedSupplier + "'")).get(0);
                                 record.setSupplierID(supplier.getSupplierID());
                                 record.setDate(new SimpleDateFormat("dd/MM/yyyy").format(date.getDate()));
+                            } else {
+                                System.out.println("Here");
                             }
                         }
-                    }
-                    supplierComboBox.setSelectedItem(supplier.getSupplierName());
-                    date.setDate(new SimpleDateFormat("dd/MM/yyyy").parse(record.getDate()));
+                        supplierComboBox.setSelectedItem(supplier.getSupplierName());
+                        date.setDate(new SimpleDateFormat("dd/MM/yyyy").parse(record.getDate()));
 
-                    //check existed prod
-                    if (isExisted(product.getProductCode()) != -1) {
-                        int index = isExisted(product.getProductCode());
-                        int newQuantity = recordDetails.get(index).getQuantity() + Integer.parseInt(productQuantity.getText());
-//                        model.setValueAt(Integer.toString(newQuantity), index, 3);
-                        recordDetails.get(index).setQuantity(newQuantity);
-                    } else {
-                        //create new recordDetail
-                        recordDetail.setProductID(product.getProductID());
-
-                        recordDetail.setQuantity(Integer.parseInt(productQuantity.getText()));
-                        recordDetails.add(recordDetail);
-                        //update record
+                        //check existed prod
+                        if (isExisted(product.getProductCode()) != -1) {
+                            int index = isExisted(product.getProductCode());
+                            int newQuantity = recordDetails.get(index).getQuantity() + Integer.parseInt(productQuantity.getText());
+                            recordDetails.get(index).setQuantity(newQuantity);
+                        } else {
+                            //create new recordDetail
+                            recordDetail.setProductID(product.getProductID());
+                            recordDetail.setQuantity(Integer.parseInt(productQuantity.getText()));
+                            recordDetails.add(recordDetail);
+                        }
                         loadData();
+
                     }
+
                 } catch (ParseException ex) {
                     Logger.getLogger(ImportRecord.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -688,8 +680,8 @@ public class ImportRecord extends javax.swing.JDialog {
 
     private void deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteActionPerformed
         // TODO add your handling code here:
-        JOptionPane.showConfirmDialog(null, "Are you sure you want to delete? This action cannot be undone!");
-        if (JOptionPane.YES_NO_OPTION == JOptionPane.YES_OPTION) {
+        int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete? This action cannot be undone!","Warning",JOptionPane.YES_NO_OPTION);
+        if (dialogResult == JOptionPane.YES_OPTION) {
             System.out.println(record.getRecordID());
             new RecordDAO().deleteRecord(record);
             newRecordActionPerformed(evt);
@@ -974,7 +966,5 @@ public class ImportRecord extends javax.swing.JDialog {
         }
 
     }
-
-  
 
 }

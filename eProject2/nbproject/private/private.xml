@@ -3,12 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/THINH%20PC/Desktop/eproject2/eProject2/src/View/dashboard.java</file>
-            <file>file:/C:/Users/THINH%20PC/Desktop/eproject2/eProject2/src/View/login.java</file>
-            <file>file:/C:/Users/THINH%20PC/Desktop/eproject2/eProject2/src/model/CurrentStock.java</file>
-            <file>file:/C:/Users/THINH%20PC/Desktop/eproject2/eProject2/src/View/exportRecord.java</file>
-            <file>file:/C:/Users/THINH%20PC/Desktop/eproject2/eProject2/src/controller/CurrentStockDAO.java</file>
-            <file>file:/C:/Users/THINH%20PC/Desktop/eproject2/eProject2/src/View/ImportRecord.java</file>
+            <file>file:/D:/Flynn/java/prj/eproject2.github.io/eProject2/src/controller/RecordDAO.java</file>
+            <file>file:/D:/Flynn/java/prj/eproject2.github.io/eProject2/src/View/Product.java</file>
+            <file>file:/D:/Flynn/java/prj/eproject2.github.io/eProject2/src/View/ImportRecord.java</file>
         </group>
     </open-files>
 </project-private>

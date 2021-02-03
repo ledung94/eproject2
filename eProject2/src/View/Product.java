@@ -426,8 +426,8 @@ public class Product extends javax.swing.JDialog {
         if (row == -1) {
             JOptionPane.showMessageDialog(null, "Please select product!");
         } else {
-            JOptionPane.showConfirmDialog(null, "Are you sure you want to delete? This action cannot be undone!");
-            if (JOptionPane.YES_NO_OPTION == JOptionPane.YES_OPTION) {
+            int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete? This action cannot be undone!","Warning",JOptionPane.YES_NO_OPTION);
+            if (dialogResult == JOptionPane.YES_OPTION) {
                 new ProductDAO().deleteProductDAO(products.get(row));
                 refreshActionPerformed(evt);
             }
