@@ -151,7 +151,7 @@ public class viewRecord extends javax.swing.JDialog {
     private void viewTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_viewTableMouseClicked
         int row = viewTable.getSelectedRow();
         record = records.get(row);
-        recordDetails = new RecordDAO().convertToArrayList(new RecordDAO().findDetails(record));
+        recordDetails = new RecordDAO().getSearchRecordDetailQueryResult(record);
         
         model = (DefaultTableModel) viewDetail.getModel();
         for(model.RecordDetail recordDetail : recordDetails){
