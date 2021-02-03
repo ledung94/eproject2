@@ -37,5 +37,14 @@ public class RecordDetail {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
+
+    public RecordDetail(int recordID, int productID, int quantity) {
+        this.recordID = recordID;
+        this.productID = productID;
+        this.quantity = quantity;
+    }
+
+    public RecordDetail() {
+    }
     
 }

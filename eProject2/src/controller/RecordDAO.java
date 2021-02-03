@@ -8,6 +8,7 @@ package controller;
 import eproject2.connection.connectiondb;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.MouseEvent;
 import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
@@ -152,22 +153,22 @@ public class RecordDAO {
         }
         return records;
     }
-    public ArrayList<RecordDetail> findDetails(RecordDetail recordDetail) {
+    public ArrayList<Record> findDetails(Record recordID) {
         try {
-            String query = "SELECT * FROM `recorddetail` WHERE recordID";
+            String query = "SELECT * FROM `recorddetail` WHERE recordID = '" + record.getRecordID() + "'";
             rs = stmt.executeQuery(query);
             recordDetails = new ArrayList<>();
             while (rs.next()) {
-                recordDetail = new RecordDetail();
-                recordDetail.setRecordID(Integer.parseInt(rs.getString("recordID")));
-                recordDetail.setProductID(Integer.parseInt(rs.getString("productID")));
-                recordDetail.setQuantity(Integer.parseInt(rs.getString("quantity")));
-                recordDetails.add(recordDetail);
+                record = new Record();
+                record.setRecordID(Integer.parseInt(rs.getString("recordID")));
+                record.setProductID(Integer.parseInt(rs.getString("productID")));
+                record.setQuantity(Integer.parseInt(rs.getString("quantity")));
+                records.add(record);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return recordDetails;
+        return records;
     }
     public ArrayList<RecordDetail> getSearchRecordDetailQueryResult(Record record) {
         try {
