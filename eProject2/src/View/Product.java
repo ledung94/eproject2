@@ -314,34 +314,38 @@ public class Product extends javax.swing.JDialog {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(21, 21, 21)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane1)
                         .addGap(18, 18, 18)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 528, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(21, 21, 21))
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 528, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(refresh)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel4)
-                        .addGap(414, 414, 414)
+                        .addGap(407, 407, 407)
                         .addComponent(jLabel6)
                         .addGap(27, 27, 27)
                         .addComponent(searchByTab, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 128, Short.MAX_VALUE))))
+                        .addGap(107, 107, 107)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(109, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(refresh, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 52, Short.MAX_VALUE)
-                        .addComponent(searchByTab, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap(116, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(refresh, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 52, Short.MAX_VALUE)
+                                .addComponent(searchByTab, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(48, 48, 48)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 504, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -369,8 +373,6 @@ public class Product extends javax.swing.JDialog {
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
         // TODO add your handling code here:
         product = new model.Product();
-//        UUID uuid = UUID.randomUUID();
-//        product.setProductID(uuid.toString());
         if (productName.getText().equals("") || productCode.getText().equals("") || productImage.getIcon()== null || productCategory.getText().equals("") || costPrice.getText().equals("") || sellingPrice.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "Please fill all the fields!");
         } else {
@@ -385,7 +387,7 @@ public class Product extends javax.swing.JDialog {
 
             products.add(product);
             new ProductDAO().addProductDAO(product);
-            showResult();
+            loadData();
             clearActionPerformed(evt);
         }
     }//GEN-LAST:event_addActionPerformed
@@ -429,7 +431,7 @@ public class Product extends javax.swing.JDialog {
             int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete? This action cannot be undone!","Warning",JOptionPane.YES_NO_OPTION);
             if (dialogResult == JOptionPane.YES_OPTION) {
                 new ProductDAO().deleteProductDAO(products.get(row));
-                refreshActionPerformed(evt);
+                loadData();
             }
         }
     }//GEN-LAST:event_deleteActionPerformed
@@ -440,14 +442,7 @@ public class Product extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(null, "Select a table data first!");
         } else {
             int row = productTable.getSelectedRow();
-
-            model.setValueAt(productName.getText(), row, 1);
-            model.setValueAt(productCode.getText(), row, 2);
-            model.setValueAt(costPrice.getText(), row, 3);
-            model.setValueAt(sellingPrice.getText(), row, 4);
-            model.setValueAt(productCategory.getText(), row, 5);
-
-            product = products.get(row);
+            product.setProductID(new ProductDAO().convertToArrayList(new ProductDAO().getQueryResult("productCode = '" + model.getValueAt(row, 3) +"'")).get(0).getProductID());
             product.setProductName(productName.getText());
             product.setProductCode(productCode.getText());
             product.setCostPrice(Float.parseFloat(costPrice.getText()));
@@ -455,6 +450,7 @@ public class Product extends javax.swing.JDialog {
             product.setProductCategory(productCategory.getText());
             product.setProductImage(path);
             new ProductDAO().editProductDAO(product);
+            loadData();
             clearActionPerformed(evt);
 
         }
@@ -462,9 +458,7 @@ public class Product extends javax.swing.JDialog {
 
     private void refreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshActionPerformed
         // TODO add your handling code here:
-        model.getDataVector().removeAllElements();
-        model.fireTableDataChanged();
-
+        clearActionPerformed(evt);
         loadData();
     }//GEN-LAST:event_refreshActionPerformed
 
@@ -561,24 +555,12 @@ public class Product extends javax.swing.JDialog {
     private javax.swing.JButton uploadImage;
     // End of variables declaration//GEN-END:variables
 
-    private void showResult() {
-        product = products.get(products.size() - 1);
-        model.addRow(new Object[]{
-            products.size(),
-            product.getProductName(),
-            new CurrentStockDAO().getCurrentStock(product.getProductID()),
-            product.getProductCode(),
-            product.getCostPrice(),
-            product.getSellingPrice(),
-            product.getProductCategory(),
-            product.getDate(),
-            product.getProductStatus()
-        });
-    }
 
     private void loadData() {
         products = new ProductDAO().convertToArrayList(new ProductDAO().getQueryResult("status = 'AVAILABLE'"));
         model = (DefaultTableModel) productTable.getModel();
+        model.getDataVector().removeAllElements();
+        model.fireTableDataChanged();
         for (model.Product product : products) {
             model.addRow(new Object[]{
                 products.indexOf(product) + 1,
@@ -612,7 +594,6 @@ public class Product extends javax.swing.JDialog {
             products = new ProductDAO().convertToArrayList(new ProductDAO().getSearchProductsQueryResult(text));
             model = (DefaultTableModel) productTable.getModel();
             for (model.Product product : products) {
-                System.out.println(product.getProductName());
                 model.addRow(new Object[]{
                     products.indexOf(product) + 1,
                     product.getProductName(),

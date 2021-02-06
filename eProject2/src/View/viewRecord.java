@@ -34,6 +34,7 @@ public class viewRecord extends javax.swing.JDialog {
     String path;
     model.Record record;
     model.RecordDetail recordDetail;
+    model.Product product;
     /**
      * Creates new form viewRecord
      */
@@ -106,7 +107,7 @@ public class viewRecord extends javax.swing.JDialog {
 
             },
             new String [] {
-                "RecordID", "ProducdID", "Quantity"
+                "RecordID", "ProducdName", "Quantity"
             }
         ));
         jScrollPane3.setViewportView(viewDetail);
@@ -154,10 +155,13 @@ public class viewRecord extends javax.swing.JDialog {
         recordDetails = new RecordDAO().getSearchRecordDetailQueryResult(record);
         
         model = (DefaultTableModel) viewDetail.getModel();
+        model.getDataVector().removeAllElements();
+        model.fireTableDataChanged();
         for(model.RecordDetail recordDetail : recordDetails){
+            product = new ProductDAO().convertToArrayList(new ProductDAO().getQueryResult("productID = '"+ recordDetail.getProductID()+"'")).get(0);
             model.addRow(new Object[]{
                recordDetail.getRecordID(),
-               recordDetail.getProductID(),
+               product.getProductName(),
                recordDetail.getQuantity()
             });
         }

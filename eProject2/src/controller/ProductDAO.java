@@ -60,23 +60,31 @@ public class ProductDAO {
             String query = "SELECT * FROM products WHERE productName='" + product.getProductName() + "' AND productCode='" + product.getProductCode() + "' AND category='" + product.getProductCategory() + "'";
             rs = stmt.executeQuery(query);
             if (rs.next()) {
-                if(rs.getString("status").equals(Status.AVAILABLE)){
-                    JOptionPane.showMessageDialog(null, "Same Product has already been added!");
-                } else if(rs.getString("status").equals(Status.DELETED)){
-                    JOptionPane.showConfirmDialog(null, "This product is deleted! Are you sure you want to add this product to list?");
-                    if(JOptionPane.YES_NO_OPTION == JOptionPane.YES_OPTION){
-                        product.setProductStatus(Status.AVAILABLE);
-                        editProductDAO(product);
-                    }
+                String text = "";
+                if (rs.getString("status").equals(Status.AVAILABLE.toString())) {
+                    text = "Same Product has already been added! Do you want update this product";
+                } else if (rs.getString("status").equals(Status.DELETED.toString())) {
+                    text = "This product is deleted! Are you sure you want to add this product to list?";
                 }
-                
+                int dialogResult = JOptionPane.showConfirmDialog(null, text, "Warning", JOptionPane.YES_NO_OPTION);
+                if (dialogResult == JOptionPane.YES_OPTION) {
+                    product.setProductStatus(Status.AVAILABLE);
+                    product.setProductID(convertToArrayList(getSearchProductsQueryResult(product.getProductCode())).get(0).getProductID());
+                    new ProductDAO().editProductDAO(product);
+                }
             } else {
                 addFunction(product);
-                product = convertToArrayList(getQueryResult("productCode = '" + product.getProductCode()+ "'")).get(0);
+                product = convertToArrayList(getQueryResult("productCode = '" + product.getProductCode() + "'")).get(0);
                 new CurrentStockDAO().initialCurrentStock(product);
             }
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
     }
@@ -111,32 +119,44 @@ public class ProductDAO {
             JOptionPane.showMessageDialog(null, "Delete Successfully!");
         } catch (SQLException ex) {
             Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
-
     }
 
     public void editProductDAO(Product product) {
         try {
-            String query = "UPDATE products SET productName=?,costprice=?,sellingprice=?,category=?,productImage=? WHERE productCode=?";
+            String query = "UPDATE products SET productName=?,productCode=?,costprice=?,sellingprice=?,category=?,productImage=?,status=? WHERE productID=?";
             pstmt = (PreparedStatement) con.prepareStatement(query);
             pstmt.setString(1, product.getProductName());
-//            pstmt.setString(2, product.getProductCode());
-            pstmt.setDouble(2, product.getCostPrice());
-            pstmt.setDouble(3, product.getSellingPrice());
-            pstmt.setString(4, product.getProductCategory());
-            pstmt.setString(5, product.getProductImage());
-            pstmt.setString(6, product.getProductCode());
+            pstmt.setString(2, product.getProductCode());
+            pstmt.setDouble(3, product.getCostPrice());
+            pstmt.setDouble(4, product.getSellingPrice());
+            pstmt.setString(5, product.getProductCategory());
+            pstmt.setString(6, product.getProductImage());
+            pstmt.setString(7, product.getProductStatus().name());
+            pstmt.setInt(8, product.getProductID());
             pstmt.executeUpdate();
             JOptionPane.showMessageDialog(null, "Updated Successfully");
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
     }
 
     public ResultSet getSearchProductsQueryResult(String searchTxt) {
         try {
-            String query = "SELECT productID,productImage,productCode,productName,costPrice,sellingPrice,category,date,status FROM products WHERE productName LIKE '%" + searchTxt + "%' OR category LIKE '%" + searchTxt + "%' OR status LIKE '%" + searchTxt + "%' OR productCode LIKE '%" + searchTxt + "%'"  ;
+            String query = "SELECT productID,productImage,productCode,productName,costPrice,sellingPrice,category,date,status FROM products WHERE productName LIKE '%" + searchTxt + "%' OR category LIKE '%" + searchTxt + "%' OR status LIKE '%" + searchTxt + "%' OR productCode LIKE '%" + searchTxt + "%'";
             rs = stmt.executeQuery(query);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -162,8 +182,16 @@ public class ProductDAO {
             }
         } catch (SQLException ex) {
             Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return products;
     }
+
+
 
 }

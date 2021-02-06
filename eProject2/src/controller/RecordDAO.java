@@ -153,23 +153,7 @@ public class RecordDAO {
         }
         return records;
     }
-//    public ArrayList<Record> findDetails(Record recordID) {
-//        try {
-//            String query = "SELECT * FROM `recorddetail` WHERE recordID = '" + record.getRecordID() + "'";
-//            rs = stmt.executeQuery(query);
-//            recordDetails = new ArrayList<>();
-//            while (rs.next()) {
-//                recordDetail = new RecordDetail();
-//                record.setRecordID(Integer.parseInt(rs.getString("recordID")));
-//                record.set(Integer.parseInt(rs.getString("productID")));
-//                record.setQuantity(Integer.parseInt(rs.getString("quantity")));
-//                records.add(record);
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return records;
-//    }
+
     public ArrayList<RecordDetail> getSearchRecordDetailQueryResult(Record record) {
         try {
             String query = "SELECT * FROM recordDetail WHERE recordID = '" + record.getRecordID() + "'";

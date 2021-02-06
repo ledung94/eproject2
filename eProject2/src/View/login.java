@@ -6,7 +6,6 @@
 package View;
 
 import View.*;
-import eproject2.connection.connectiondb;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
