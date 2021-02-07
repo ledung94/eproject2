@@ -162,10 +162,13 @@ public class login extends javax.swing.JFrame {
             pt.setString(2, password.getText());
             ResultSet rs = pt.executeQuery();
             if(rs.next()){
-                JOptionPane.showMessageDialog(rootPane, "Đăng nhập thành công");
-                dashboard db = new dashboard();
-                db.setVisible(true);
+                JOptionPane.showMessageDialog(rootPane, "Login successfully");
+                dashboard d = new dashboard();
+                d.setVisible(true);
                 this.hide();
+            }
+            else{
+                JOptionPane.showMessageDialog(rootPane, "Wrong username or password?");
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(rootPane, "Đăng nhập thất bại");
