@@ -169,6 +169,7 @@ public class login extends javax.swing.JFrame {
             pt.setString(1, username.getText());
             pt.setString(2, password.getText());
             ResultSet rs = pt.executeQuery();
+<<<<<<< HEAD
             if (rs.next()) {
                 user = new User();
                 user.setUsername(rs.getString("username"));
@@ -182,12 +183,26 @@ public class login extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Đăng nhập thành công");
                 dashboard db = new dashboard();
                 db.setVisible(true);
+=======
+            if(rs.next()){
+                JOptionPane.showMessageDialog(rootPane, "Login successfully");
+                dashboard d = new dashboard();
+                d.setVisible(true);
+>>>>>>> 6585625b436c73c3e9b31a52a1a56f7c4b470ca6
                 this.hide();
             } else {
                 JOptionPane.showMessageDialog(null, "Đăng nhập thất bại");
             }
+<<<<<<< HEAD
         } catch (SQLException ex) {
             Logger.getLogger(login.class.getName()).log(Level.SEVERE, null, ex);
+=======
+            else{
+                JOptionPane.showMessageDialog(rootPane, "Wrong username or password?");
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(rootPane, "Đăng nhập thất bại");
+>>>>>>> 6585625b436c73c3e9b31a52a1a56f7c4b470ca6
         }
 
     }//GEN-LAST:event_jButton1ActionPerformed

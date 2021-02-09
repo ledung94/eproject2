@@ -5,7 +5,6 @@
  */
 package View;
 
-import View.*;
 import javax.swing.JOptionPane;
 
 /**
@@ -564,7 +563,8 @@ public class dashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_btnProductActionPerformed
 
     private void btnUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUserActionPerformed
-    
+        AddUser u = new AddUser();
+        u.setVisible(true);
     }//GEN-LAST:event_btnUserActionPerformed
 
     private void btnCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCustomerActionPerformed
@@ -583,7 +583,8 @@ public class dashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_btnPurchaseActionPerformed
 
     private void btnSupplierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSupplierActionPerformed
-     
+        Supplier s = new Supplier(this, rootPaneCheckingEnabled);
+        s.setVisible(true);
     }//GEN-LAST:event_btnSupplierActionPerformed
 
     private void btnCurrentStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCurrentStockActionPerformed
