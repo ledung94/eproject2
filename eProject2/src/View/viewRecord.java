@@ -5,29 +5,30 @@
  */
 package View;
 
-import com.sun.org.apache.bcel.internal.generic.AALOAD;
-import controller.CurrentStockDAO;
 import controller.ProductDAO;
 import controller.RecordDAO;
 import java.awt.Color;
-import java.awt.Image;
-import java.io.File;
-import java.time.LocalDate;
+import java.awt.event.KeyEvent;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import javax.swing.ImageIcon;
-import javax.swing.JFileChooser;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import model.Record;
 import model.RecordDetail;
 import model.RecordType;
 import model.Status;
+
 /**
  *
  * @author THINH PC
  */
 public class viewRecord extends javax.swing.JDialog {
+
     public ArrayList<Record> records;
     public ArrayList<RecordDetail> recordDetails;
     DefaultTableModel model;
@@ -35,15 +36,17 @@ public class viewRecord extends javax.swing.JDialog {
     model.Record record;
     model.RecordDetail recordDetail;
     model.Product product;
+    String start, end;
+
     /**
      * Creates new form viewRecord
      */
     public viewRecord(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        loadData();
+        initialRecord();
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -57,9 +60,24 @@ public class viewRecord extends javax.swing.JDialog {
         jScrollPane1 = new javax.swing.JScrollPane();
         viewTable = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        startDate = new com.toedter.calendar.JDateChooser();
+        jLabel3 = new javax.swing.JLabel();
+        endDate = new com.toedter.calendar.JDateChooser();
+        searchByTab = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         viewDetail = new javax.swing.JTable();
+        jPanel3 = new javax.swing.JPanel();
+        jLabel4 = new javax.swing.JLabel();
+        revenue = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        profit = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        totalCost = new javax.swing.JTextField();
+        view = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -81,25 +99,86 @@ public class viewRecord extends javax.swing.JDialog {
         jLabel1.setFont(new java.awt.Font("Arial Narrow", 1, 36)); // NOI18N
         jLabel1.setText("View Record");
 
+        jLabel2.setText("Start Date");
+
+        jLabel3.setText("End Date");
+
+        searchByTab.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                searchByTabKeyReleased(evt);
+            }
+        });
+
+        jLabel7.setText("Search");
+
+        jButton1.setText("Back");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(344, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(341, 341, 341))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jScrollPane1)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(1, 1, 1)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3))
+                        .addGap(28, 28, 28)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(endDate, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
+                            .addComponent(startDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 66, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addGap(238, 238, 238)
+                                .addComponent(jButton1))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel7)
+                                .addGap(32, 32, 32)
+                                .addComponent(searchByTab, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(41, 41, 41)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(startDate, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel2)
+                                        .addGap(8, 8, 8)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(endDate, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addGap(8, 8, 8)))
+                        .addGap(10, 10, 10))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(searchByTab, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel7))
+                        .addGap(34, 34, 34)))
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         viewDetail.setModel(new javax.swing.table.DefaultTableModel(
@@ -107,7 +186,7 @@ public class viewRecord extends javax.swing.JDialog {
 
             },
             new String [] {
-                "RecordID", "ProducdName", "Quantity"
+                "RecordID", "ProducdName", "Quantity", "Cost Price", "Sell Price"
             }
         ));
         jScrollPane3.setViewportView(viewDetail);
@@ -121,9 +200,63 @@ public class viewRecord extends javax.swing.JDialog {
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap()
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 257, Short.MAX_VALUE)
                 .addContainerGap())
+        );
+
+        jLabel4.setText("Revenue");
+
+        jLabel5.setText("Profit");
+
+        jLabel6.setText("Total cost price");
+
+        view.setText("View");
+        view.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                viewActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel6))
+                .addGap(71, 71, 71)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(totalCost)
+                    .addComponent(profit)
+                    .addComponent(revenue))
+                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(view)
+                .addGap(143, 143, 143))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(revenue, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(profit, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(totalCost, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
+                .addComponent(view)
+                .addGap(49, 49, 49))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -132,9 +265,13 @@ public class viewRecord extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -142,8 +279,10 @@ public class viewRecord extends javax.swing.JDialog {
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
@@ -153,26 +292,61 @@ public class viewRecord extends javax.swing.JDialog {
         int row = viewTable.getSelectedRow();
         record = records.get(row);
         recordDetails = new RecordDAO().getSearchRecordDetailQueryResult(record);
-        
+
         model = (DefaultTableModel) viewDetail.getModel();
         model.getDataVector().removeAllElements();
         model.fireTableDataChanged();
-        for(model.RecordDetail recordDetail : recordDetails){
-            product = new ProductDAO().convertToArrayList(new ProductDAO().getQueryResult("productID = '"+ recordDetail.getProductID()+"'")).get(0);
+        for (model.RecordDetail recordDetail : recordDetails) {
+            product = new ProductDAO().convertToArrayList(new ProductDAO().getQueryResult("productID = '" + recordDetail.getProductID() + "'")).get(0);
             model.addRow(new Object[]{
-               recordDetail.getRecordID(),
-               product.getProductName(),
-               recordDetail.getQuantity()
+                recordDetail.getRecordID(),
+                product.getProductName(),
+                recordDetail.getQuantity(),
+                product.getCostPrice(),
+                product.getSellingPrice()
             });
         }
     }//GEN-LAST:event_viewTableMouseClicked
 
+    private void viewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewActionPerformed
+        // TODO add your handling code here:
+        start = new SimpleDateFormat("dd/MM/yyyy").format(startDate.getDate());
+        end = new SimpleDateFormat("dd/MM/yyyy").format(endDate.getDate());
+        records = new RecordDAO().findAll("WHERE date <= '" + end + "' AND date >= '" + start + "'");
+        loadData(records);
+    }//GEN-LAST:event_viewActionPerformed
+
+    private void searchByTabKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchByTabKeyReleased
+        // TODO add your handling code here:
+        String text = searchByTab.getText();
+        try {
+            records = new RecordDAO().findAll("WHERE recordCode LIKE '%" + text + "%' OR recordType LIKE '%" + text + "%' OR supplierID LIKE '%" + text + "%' OR customerID LIKE '%" + text + "%'" + "OR handleBy LIKE '%" + text + "%'");
+            loadData(records);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Cannot found this record!");
+        }
+    }//GEN-LAST:event_searchByTabKeyReleased
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        dashboard d = new dashboard();
+        d.setVisible(true);
+        this.hide();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
-    private void loadData() {
-        records = new RecordDAO().findAll(record);
+    private void loadData(ArrayList<Record> records) {
         model = (DefaultTableModel) viewTable.getModel();
+        model.getDataVector().removeAllElements();
+        model.fireTableDataChanged();
+        revenue.setText(Double.toString(getRevenue(records)));
+        totalCost.setText(Double.toString(getTotalCost(records)));
+        profit.setText(Double.toString(getRevenue(records) - getTotalCost(records)));
+        if (Double.parseDouble(profit.getText()) < 0) {
+            profit.setForeground(Color.RED);
+        }
         for (model.Record record : records) {
             model.addRow(new Object[]{
                 record.getRecordID(),
@@ -186,8 +360,9 @@ public class viewRecord extends javax.swing.JDialog {
                 record.getVat()
             });
         }
-        
+
     }
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -228,12 +403,58 @@ public class viewRecord extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private com.toedter.calendar.JDateChooser endDate;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JTextField profit;
+    private javax.swing.JTextField revenue;
+    private javax.swing.JTextField searchByTab;
+    private com.toedter.calendar.JDateChooser startDate;
+    private javax.swing.JTextField totalCost;
+    private javax.swing.JButton view;
     private javax.swing.JTable viewDetail;
     private javax.swing.JTable viewTable;
     // End of variables declaration//GEN-END:variables
+
+    private void initialRecord() {
+        endDate.setDate(new Date());
+        startDate.setDate(Date.from(ZonedDateTime.now().minusMonths(1).toInstant()));
+        start = new SimpleDateFormat("dd/MM/yyyy").format(startDate.getDate());
+        end = new SimpleDateFormat("dd/MM/yyyy").format(endDate.getDate());
+        records = new RecordDAO().findAll("WHERE date <= '" + end + "' AND date >= '" + start + "'");
+        loadData(records);
+    }
+
+    private double getTotalCost(ArrayList<Record> records) {
+        double sum = 0;
+        for (Record record : records) {
+            if (record.getRecordType() == RecordType.IMPORT) {
+                sum += record.getTotalPrice();
+            }
+        }
+        return sum;
+
+    }
+
+    private double getRevenue(ArrayList<Record> records) {
+        double sum = 0;
+        for (Record record : records) {
+            System.out.println("here");
+            if (record.getRecordType() == RecordType.EXPORT) {
+                sum += record.getTotalPrice();
+            }
+        }
+        return sum;
+    }
 }

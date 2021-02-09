@@ -300,11 +300,6 @@ public class Product extends javax.swing.JDialog {
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel6.setText("SEARCH");
 
-        searchByTab.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                searchByTabActionPerformed(evt);
-            }
-        });
         searchByTab.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 searchByTabKeyReleased(evt);
@@ -476,11 +471,6 @@ public class Product extends javax.swing.JDialog {
         clearActionPerformed(evt);
         loadData();
     }//GEN-LAST:event_refreshActionPerformed
-
-    private void searchByTabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchByTabActionPerformed
-        // TODO add your handling code here:
-
-    }//GEN-LAST:event_searchByTabActionPerformed
 
     private void searchByTabKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchByTabKeyReleased
         // TODO add your handling code here:

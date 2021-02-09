@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th1 31, 2021 lúc 04:29 PM
+-- Thời gian đã tạo: Th2 09, 2021 lúc 11:00 AM
 -- Phiên bản máy phục vụ: 10.4.11-MariaDB
 -- Phiên bản PHP: 7.2.31
 
@@ -31,6 +31,18 @@ CREATE TABLE `currentstocks` (
   `productID` varchar(100) NOT NULL,
   `quantity` int(11) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- Đang đổ dữ liệu cho bảng `currentstocks`
+--
+
+INSERT INTO `currentstocks` (`productID`, `quantity`) VALUES
+('1', 10),
+('2', 24),
+('3', 0),
+('5', 0),
+('6', 5),
+('7', 0);
 
 -- --------------------------------------------------------
 
@@ -76,8 +88,13 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`productID`, `productName`, `productCode`, `costprice`, `sellingprice`, `category`, `productImage`, `status`, `date`) VALUES
-(1, 'Iphone', 'I12', 799, 1299, 'phone', 'C:\\Users\\ADMIN\\Downloads\\image.png', 'AVAILABLE', '2021-01-31'),
-(2, 'samsung', 'S21', 500, 700, 'phone', 'C:\\Users\\ADMIN\\Downloads\\image.png', 'AVAILABLE', '2021-01-31');
+(1, 'samsung', 'S21', 100, 1200, 'phone', 'C:\\Users\\ADMIN\\Downloads\\image.png', 'AVAILABLE', '2021-01-31'),
+(2, 'iphone', 'I12', 200, 1500, 'phone', 'C:\\Users\\ADMIN\\Downloads\\image.png', 'AVAILABLE', '2021-01-31'),
+(3, 'huawei', 'H2', 100, 500, 'phone', NULL, 'AVAILABLE', '2021-02-06'),
+(4, 'xiaomi', 'RED1', 200, 400, 'phone', 'C:\\Users\\ADMIN\\Downloads\\image.png', 'AVAILABLE', '2021-02-06'),
+(5, 'xiami', 'RED7', 100, 300, 'phone', NULL, 'AVAILABLE', '2021-02-06'),
+(6, 'Macbook pro', 'MF2015', 1000, 1799, 'laptop', 'C:\\Users\\ADMIN\\Downloads\\image.png', 'AVAILABLE', '2021-02-09'),
+(7, 'Thinkpad', 'HF5K1', 600, 1200, 'laptop', 'C:\\Users\\ADMIN\\Downloads\\image.png', 'AVAILABLE', '2021-02-09');
 
 -- --------------------------------------------------------
 
@@ -90,6 +107,22 @@ CREATE TABLE `recorddetail` (
   `quantity` int(11) NOT NULL,
   `recordID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Đang đổ dữ liệu cho bảng `recorddetail`
+--
+
+INSERT INTO `recorddetail` (`productID`, `quantity`, `recordID`) VALUES
+(1, 1, 1),
+(1, 2, 2),
+(1, 5, 3),
+(1, 2, 4),
+(2, 2, 1),
+(2, 2, 2),
+(2, 5, 3),
+(2, 5, 4),
+(2, 10, 5),
+(6, 5, 5);
 
 -- --------------------------------------------------------
 
@@ -109,6 +142,17 @@ CREATE TABLE `records` (
   `vat` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Đang đổ dữ liệu cho bảng `records`
+--
+
+INSERT INTO `records` (`recordID`, `recordCode`, `recordType`, `supplierID`, `customerID`, `handleBy`, `date`, `totalPrice`, `vat`) VALUES
+(1, 'RC1', 'DELETED', 68, 0, 0, '05/01/2021', 300, 0),
+(2, 'RC2', 'IMPORT', 69, 0, 0, '07/01/2021', 400, 10),
+(3, 'RC3', 'IMPORT', 69, 0, 0, '05/01/2021', 1100, 10),
+(4, 'RC4', 'IMPORT', 69, 0, 0, '05/01/2021', 770, 10),
+(5, 'RC5', 'IMPORT', 143, 0, 58, '09/02/2021', 7700, 10);
+
 -- --------------------------------------------------------
 
 --
@@ -117,19 +161,20 @@ CREATE TABLE `records` (
 
 CREATE TABLE `suppliers` (
   `supplierID` int(11) NOT NULL,
-  `supplierCode` varchar(100) NOT NULL,
   `supplierName` varchar(50) NOT NULL,
-  `supplierLocation` varchar(50) NOT NULL,
-  `supplierContact` varchar(10) NOT NULL
+  `supplierCode` varchar(100) NOT NULL,
+  `supplierContact` varchar(10) NOT NULL,
+  `supplierLocation` varchar(50) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
 -- Đang đổ dữ liệu cho bảng `suppliers`
 --
 
-INSERT INTO `suppliers` (`supplierID`, `supplierCode`, `supplierName`, `supplierLocation`, `supplierContact`) VALUES
-(69, 'sup5', 'manish', 'ktm', '4123372'),
-(68, 'sup4', 'sia', 'US', '11623231');
+INSERT INTO `suppliers` (`supplierID`, `supplierName`, `supplierCode`, `supplierContact`, `supplierLocation`) VALUES
+(69, 'manish', 'sup5', '4123372', 'ktm'),
+(68, 'sia', 'sup4', '11623231', 'US'),
+(143, 'Cinnamon', 'cin2', '012345678', '36 hoang cau');
 
 -- --------------------------------------------------------
 
@@ -144,17 +189,19 @@ CREATE TABLE `users` (
   `phone` varchar(10) NOT NULL,
   `username` varchar(20) NOT NULL,
   `password` varchar(200) NOT NULL,
-  `role` varchar(20) NOT NULL
+  `role` varchar(20) NOT NULL,
+  `status` varchar(200) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
 -- Đang đổ dữ liệu cho bảng `users`
 --
 
-INSERT INTO `users` (`userID`, `fullname`, `location`, `phone`, `username`, `password`, `role`) VALUES
-(54, 'Sajan Rajbhandari', 'Pokhara', '9849284991', 'user4', 'cc03e747a6afbbcbf8be7668acfebee5', 'ADMINISTRATOR'),
-(56, 'Ram', 'Kathmandu', '9849284991', 'user5', 'a791842f52a0acfbb3a783378c066b8', 'NORMAL USER'),
-(57, 'shyam', 'ktm', '98239832', 'user6', 'affec3b64cf90492377a8114c86fc093', 'NORMAL USER');
+INSERT INTO `users` (`userID`, `fullname`, `location`, `phone`, `username`, `password`, `role`, `status`) VALUES
+(54, 'Sajan Rajbhandari', 'Pokhara', '9849284991', 'user4', 'cc03e747a6afbbcbf8be7668acfebee5', 'ADMINISTRATOR', ''),
+(56, 'Ram', 'Kathmandu', '9849284991', 'user5', 'a791842f52a0acfbb3a783378c066b8', 'NORMAL USER', ''),
+(57, 'shyam', 'ktm', '98239832', 'user6', 'affec3b64cf90492377a8114c86fc093', 'NORMAL USER', ''),
+(58, 'Le Dung', 'HaNoi', '123', 'ledung94', '123', 'ADMINISTRATOR', 'DELETED');
 
 --
 -- Chỉ mục cho các bảng đã đổ
@@ -213,25 +260,25 @@ ALTER TABLE `customers`
 -- AUTO_INCREMENT cho bảng `products`
 --
 ALTER TABLE `products`
-  MODIFY `productID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `productID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT cho bảng `records`
 --
 ALTER TABLE `records`
-  MODIFY `recordID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `recordID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT cho bảng `suppliers`
 --
 ALTER TABLE `suppliers`
-  MODIFY `supplierID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=143;
+  MODIFY `supplierID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=144;
 
 --
 -- AUTO_INCREMENT cho bảng `users`
 --
 ALTER TABLE `users`
-  MODIFY `userID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
+  MODIFY `userID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

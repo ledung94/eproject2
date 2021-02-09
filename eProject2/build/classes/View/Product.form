@@ -493,7 +493,6 @@
     </Component>
     <Component class="javax.swing.JTextField" name="searchByTab">
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="searchByTabActionPerformed"/>
         <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="searchByTabKeyReleased"/>
       </Events>
     </Component>
