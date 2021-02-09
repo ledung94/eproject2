@@ -54,6 +54,7 @@ public class Supplier extends javax.swing.JDialog {
         jLabel12 = new javax.swing.JLabel();
         supplierContact = new javax.swing.JTextField();
         supplierLocation = new javax.swing.JTextField();
+        back = new javax.swing.JButton();
         refresh = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
@@ -129,6 +130,13 @@ public class Supplier extends javax.swing.JDialog {
             }
         });
 
+        back.setText("Back");
+        back.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -136,6 +144,7 @@ public class Supplier extends javax.swing.JDialog {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(back)
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(jPanel3Layout.createSequentialGroup()
                             .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -178,7 +187,8 @@ public class Supplier extends javax.swing.JDialog {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(update)
                     .addComponent(create))
-                .addGap(55, 55, 55))
+                .addGap(30, 30, 30)
+                .addComponent(back))
         );
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -348,6 +358,13 @@ public class Supplier extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_supplierLocationActionPerformed
 
+    private void backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backActionPerformed
+        // TODO add your handling code here:
+        dashboard d = new dashboard();
+        d.setVisible(true);
+        this.hide();
+    }//GEN-LAST:event_backActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -391,6 +408,7 @@ public class Supplier extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton back;
     private javax.swing.JButton create;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;

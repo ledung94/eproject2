@@ -75,6 +75,7 @@ public class ImportRecord extends javax.swing.JDialog {
         date = new com.toedter.calendar.JDateChooser();
         productQuantity = new javax.swing.JTextField();
         validate_text = new javax.swing.JLabel();
+        back = new javax.swing.JButton();
         receipt = new javax.swing.JPanel();
         invoice = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
@@ -173,6 +174,13 @@ public class ImportRecord extends javax.swing.JDialog {
 
         validate_text.setForeground(new java.awt.Color(255, 0, 51));
 
+        back.setText("Back");
+        back.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -205,7 +213,10 @@ public class ImportRecord extends javax.swing.JDialog {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(costPrice, javax.swing.GroupLayout.DEFAULT_SIZE, 219, Short.MAX_VALUE)
                             .addComponent(productQuantity)
-                            .addComponent(validate_text, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(validate_text, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(back)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -242,7 +253,9 @@ public class ImportRecord extends javax.swing.JDialog {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(remove)
                     .addComponent(edit))
-                .addGap(67, 67, 67))
+                .addGap(29, 29, 29)
+                .addComponent(back)
+                .addContainerGap())
         );
 
         jTabbedPane1.addTab("PURCHASE", jPanel1);
@@ -779,6 +792,13 @@ public class ImportRecord extends javax.swing.JDialog {
         new RecordDAO().printInvoice(invoice);
     }//GEN-LAST:event_printActionPerformed
 
+    private void backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backActionPerformed
+        // TODO add your handling code here:
+        dashboard d = new dashboard();
+        d.setVisible(true);
+        this.hide();
+    }//GEN-LAST:event_backActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -830,6 +850,7 @@ public class ImportRecord extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton add;
+    private javax.swing.JButton back;
     private javax.swing.JButton clear;
     private javax.swing.JTextField costPrice;
     private javax.swing.JButton createRecord;
