@@ -23,6 +23,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import model.Product;
 import model.Record;
 import model.RecordDetail;
 import model.RecordType;
@@ -43,6 +44,7 @@ public class RecordDAO {
     ArrayList<RecordDetail> recordDetails;
     Record record;
     ArrayList<Record> records;
+
     public RecordDAO() {
         try {
             con = new connectiondb().getConnection();
@@ -66,7 +68,6 @@ public class RecordDAO {
         }
         return list;
     }
-    
 
     public void addRecordDetail(RecordDetail recordDetail) {
         try {
@@ -130,9 +131,10 @@ public class RecordDAO {
         }
         return record;
     }
+
     public ArrayList<Record> findAll(String condition) {
         try {
-            String query = "SELECT * FROM `records`"+ condition + "ORDER BY `recordID` ASC ";
+            String query = "SELECT * FROM `records`" + condition + "ORDER BY `recordID` ASC ";
             rs = stmt.executeQuery(query);
             records = new ArrayList<>();
             while (rs.next()) {
@@ -209,6 +211,7 @@ public class RecordDAO {
             }
         }
     }
+
     public ArrayList<Record> convertToArrayList(ResultSet rs) {
         try {
             records = new ArrayList<>();
@@ -229,5 +232,29 @@ public class RecordDAO {
             Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return records;
+    }
+
+    public ArrayList<Integer> getSoldQuantity(Product prd) {
+        ArrayList<Integer> list;
+        list = new ArrayList<>();
+        int quantity = 0, sum = 0;
+        try {
+            String query = "SELECT * FROM recordDetail WHERE productID = '" + prd.getProductID() + "' AND recordID IN (SELECT recordID FROM records WHERE recordType = 'EXPORT')";
+            rs = stmt.executeQuery(query);
+            while (rs.next()) {
+                quantity += rs.getInt("quantity");
+            }
+            query = "SELECT SUM(quantity) FROM recordDetail WHERE recordID IN (SELECT recordID FROM records WHERE recordType = 'EXPORT')";
+            rs = stmt.executeQuery(query);
+            while (rs.next()) {
+                sum = rs.getInt("SUM(quantity)");
+            }
+            list.add(quantity);
+            list.add(sum);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return list;
     }
 }

@@ -590,7 +590,8 @@ public class dashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSupplierActionPerformed
 
     private void btnCurrentStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCurrentStockActionPerformed
-     
+        CurrentStock c = new CurrentStock(this, rootPaneCheckingEnabled);
+        c.setVisible(true);
     }//GEN-LAST:event_btnCurrentStockActionPerformed
 
     private void btnViewRecordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewRecordActionPerformed

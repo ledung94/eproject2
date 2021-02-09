@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.event.ListSelectionEvent;
+import model.CurrentStock;
 import model.Product;
 import model.RecordType;
 
@@ -30,6 +32,8 @@ public class CurrentStockDAO {
     ResultSet rs1 = null;
     Statement stmt1 = null;
     ResultSet rs = null;
+    CurrentStock currentStock;
+    ArrayList<CurrentStock> currentStocks;
 
     public CurrentStockDAO() {
         try {
@@ -54,6 +58,23 @@ public class CurrentStockDAO {
             Logger.getLogger(CurrentStockDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return quantity;
+    }
+    
+    public ArrayList<CurrentStock> findAll(){
+        try {
+            String query = "SELECT * FROM currentStocks ORDER BY productID ASC";
+            rs = stmt.executeQuery(query);
+            currentStocks = new ArrayList<>();
+            while (rs.next()) {
+                CurrentStock currentStock = new CurrentStock();
+                currentStock.setProductID(rs.getInt("productID"));
+                currentStock.setQuantity(rs.getInt("quantity"));
+                currentStocks.add(currentStock);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(CurrentStockDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return currentStocks;
     }
 
     public void updateCurrentStock(int productID, int number, RecordType recordType) {

@@ -11,6 +11,7 @@ import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalTime;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Date;
@@ -432,6 +433,7 @@ public class viewRecord extends javax.swing.JDialog {
         startDate.setDate(Date.from(ZonedDateTime.now().minusMonths(1).toInstant()));
         start = new SimpleDateFormat("dd/MM/yyyy").format(startDate.getDate());
         end = new SimpleDateFormat("dd/MM/yyyy").format(endDate.getDate());
+        System.out.println("WHERE date <= '" + end + "' AND date >= '" + start + "'");
         records = new RecordDAO().findAll("WHERE date <= '" + end + "' AND date >= '" + start + "'");
         loadData(records);
     }
@@ -450,11 +452,12 @@ public class viewRecord extends javax.swing.JDialog {
     private double getRevenue(ArrayList<Record> records) {
         double sum = 0;
         for (Record record : records) {
-            System.out.println("here");
             if (record.getRecordType() == RecordType.EXPORT) {
                 sum += record.getTotalPrice();
             }
         }
         return sum;
     }
+
+   
 }
