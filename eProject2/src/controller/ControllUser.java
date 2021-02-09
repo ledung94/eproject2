@@ -120,7 +120,7 @@ public class ControllUser {
     }
     public void deleteUser(User user){
         try {
-            String sql = "UPDATE users SET status = 'REMOVE' WHERE username=?";
+            String sql = "UPDATE users SET status = 'DELETED' WHERE username=?";
             psmt = (PreparedStatement) conn.prepareStatement(sql);
             
             psmt.setString(1, user.getUsername());
