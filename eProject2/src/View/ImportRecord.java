@@ -895,6 +895,8 @@ public class ImportRecord extends javax.swing.JDialog {
         supplierComboBox.addItem("Select Supplier's Name");
         supplierName();
         record = new model.Record();
+        record.setHandleBy(login.user.getId());
+        System.out.println(record.getHandleBy());
         supplier = new Supplier();
         delete.setEnabled(false);
     }

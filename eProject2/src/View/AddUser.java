@@ -214,7 +214,7 @@ public class AddUser extends javax.swing.JFrame {
             us.setUsername(txtUserName.getText());
             us.setPassword(txt_pass.getText());
             String value = cbox_category.getSelectedItem().toString();
-            us.setCategory(value);
+            us.setRole(value);
             System.out.println(value);
             us.setStatus(Status.AVAILABLE);
         

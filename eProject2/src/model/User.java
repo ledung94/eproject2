@@ -12,9 +12,10 @@ import model.Status;
  * @author Admin
  */
 public class User {
+
     int id;
-    String fullname,location,phone,username,password,role;
-    private model.Status status;    
+    String fullname, location, phone, username, password, role;
+    private model.Status status;
 
     public int getId() {
         return id;
@@ -64,12 +65,12 @@ public class User {
         this.password = password;
     }
 
-    public String getCategory() {
-        return role;
+    public void setRole(String role) {
+        this.role = role;
     }
 
-    public void setCategory(String role) {
-        this.role = role;
+    public String getRole() {
+        return role;
     }
 
     public Status getStatus() {
@@ -80,6 +81,4 @@ public class User {
         this.status = status;
     }
 
-
-     
 }

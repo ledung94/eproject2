@@ -47,7 +47,7 @@ public class user extends javax.swing.JFrame {
         tableModel.setRowCount(0);
         
         userList.forEach((user) -> {
-            tableModel.addRow(new Object[]{user.getFullname(), user.getLocation(), user.getPhone(), user.getCategory()});
+            tableModel.addRow(new Object[]{user.getFullname(), user.getLocation(), user.getPhone(), user.getRole()});
         });
     }
     /**

@@ -5,12 +5,16 @@
  */
 package View;
 
-import View.*;
+import Model.User;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import model.Status;
 
 /**
  *
@@ -18,10 +22,12 @@ import javax.swing.JOptionPane;
  */
 public class login extends javax.swing.JFrame {
 
+    public static User user;
+    
+
     /**
      * Creates new form login
      */
-    
     public login() {
         initComponents();
     }
@@ -152,24 +158,38 @@ public class login extends javax.swing.JFrame {
     }//GEN-LAST:event_usernameActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-       String url = "jdbc:mysql://localhost:3306/eproject2";
+
         try {
-            Connection conn = DriverManager.getConnection(url,"root","");
+            String url = "jdbc:mysql://localhost:3306/eproject2";
+
+            Connection conn = DriverManager.getConnection(url, "root", "");
             System.out.println("Kết nối CSDL thành công");
             String sql = "SELECT * FROM users where username=? and password=? ";
             PreparedStatement pt = conn.prepareStatement(sql);
-            pt.setString(1,username.getText());
+            pt.setString(1, username.getText());
             pt.setString(2, password.getText());
             ResultSet rs = pt.executeQuery();
-            if(rs.next()){
-                JOptionPane.showMessageDialog(rootPane, "Đăng nhập thành công");
+            if (rs.next()) {
+                user = new User();
+                user.setUsername(rs.getString("username"));
+                user.setFullname(rs.getString("fullname"));
+                user.setId(rs.getInt("userID"));
+                user.setLocation(rs.getString("location"));
+                user.setPhone(rs.getString("phone"));
+                user.setPassword(rs.getString("password"));
+                user.setRole(rs.getString("role"));
+                user.setStatus(Status.valueOf(rs.getString("status")));
+                JOptionPane.showMessageDialog(null, "Đăng nhập thành công");
                 dashboard db = new dashboard();
                 db.setVisible(true);
                 this.hide();
+            } else {
+                JOptionPane.showMessageDialog(null, "Đăng nhập thất bại");
             }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(rootPane, "Đăng nhập thất bại");
+        } catch (SQLException ex) {
+            Logger.getLogger(login.class.getName()).log(Level.SEVERE, null, ex);
         }
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**

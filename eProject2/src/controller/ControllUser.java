@@ -65,7 +65,7 @@ public class ControllUser {
                 us.setPhone(rs.getString("phone"));
                 us.setUsername(rs.getString("username"));
                 us.setPassword(rs.getString("password"));
-                us.setCategory(rs.getString("role"));
+                us.setRole(rs.getString("role"));
                 us.setStatus(Status.valueOf(rs.getString("status")));
                         
                                                                   
@@ -86,7 +86,7 @@ public class ControllUser {
             psmt.setString(3, user.getPhone());
             psmt.setString(4, user.getUsername());
             psmt.setString(5, user.getPassword());
-            psmt.setString(6, user.getCategory());
+            psmt.setString(6, user.getRole());
 //            psmt.setString(7, user.getStatus());
             psmt.setString(7, user.getStatus().name());
             
@@ -108,7 +108,7 @@ public class ControllUser {
             psmt.setString(1, user.getFullname());
             psmt.setString(2, user.getLocation());
             psmt.setString(3, user.getPhone());
-            psmt.setString(4, user.getCategory());
+            psmt.setString(4, user.getRole());
             psmt.setString(5, user.getUsername());
             
             psmt.executeUpdate();
