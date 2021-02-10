@@ -57,6 +57,7 @@ public class CurrentStock extends javax.swing.JDialog {
         jLabel1.setForeground(new java.awt.Color(0, 51, 204));
         jLabel1.setText("CURRENT STOCK");
 
+        currentStockTable.setAutoCreateRowSorter(true);
         currentStockTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -67,6 +68,7 @@ public class CurrentStock extends javax.swing.JDialog {
         ));
         jScrollPane1.setViewportView(currentStockTable);
 
+        soldTable.setAutoCreateRowSorter(true);
         soldTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 

@@ -263,6 +263,7 @@ public class ImportRecord extends javax.swing.JDialog {
 
         jLabel12.setText("Date:");
 
+        recordTable.setAutoCreateRowSorter(true);
         recordTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
