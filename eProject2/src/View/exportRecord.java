@@ -679,13 +679,13 @@ public class exportRecord extends javax.swing.JDialog {
         } else {
             if (recordDetails.size() > 0) {//TH da co sp trong record
                 try{
-                    if (!record.getDate().equals(new SimpleDateFormat("dd/MM/yyyy").format(date.getDate()))) {
+                    if (!record.getDate().equals(new SimpleDateFormat("yyyy/MM/dd").format(date.getDate()))) {
                     JOptionPane.showConfirmDialog(null, "Would you like to change record date?");
                         if (JOptionPane.YES_NO_OPTION == JOptionPane.YES_OPTION) {
-                            record.setDate(new SimpleDateFormat("dd/MM/yyyy").format(date.getDate()));
+                            record.setDate(new SimpleDateFormat("yyyy/MM/dd").format(date.getDate()));
                             }
                         }
-                    date.setDate(new SimpleDateFormat("dd/MM/yyyy").parse(record.getDate()));
+                    date.setDate(new SimpleDateFormat("yyyy/MM/dd").parse(record.getDate()));
                     //check existed prod
                     if (isExisted(product.getProductCode()) != -1) {
                         int index = isExisted(product.getProductCode());
@@ -716,7 +716,7 @@ public class exportRecord extends javax.swing.JDialog {
                     recordDetails.add(recordDetail);
                     //set record
                     record.setCustomerID(customer.getCustomerID());
-                    record.setDate(new SimpleDateFormat("dd/MM/yyyy").format(date.getDate()));
+                    record.setDate(new SimpleDateFormat("yyyy/MM/dd").format(date.getDate()));
                     record.setRecordType(RecordType.EXPORT);
                     //record.setHandleBy(WIDTH);
                     record.setTotalPrice(getTotalPrice());

@@ -8,21 +8,15 @@ package View;
 import controller.ProductDAO;
 import controller.RecordDAO;
 import java.awt.Color;
-import java.awt.event.KeyEvent;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalTime;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.Record;
 import model.RecordDetail;
 import model.RecordType;
-import model.Status;
 
 /**
  *
@@ -311,9 +305,9 @@ public class viewRecord extends javax.swing.JDialog {
 
     private void viewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewActionPerformed
         // TODO add your handling code here:
-        start = new SimpleDateFormat("dd/MM/yyyy").format(startDate.getDate());
-        end = new SimpleDateFormat("dd/MM/yyyy").format(endDate.getDate());
-        records = new RecordDAO().findAll("WHERE date <= '" + end + "' AND date >= '" + start + "'");
+        start = new SimpleDateFormat("yyyy/MM/dd").format(startDate.getDate());
+        end = new SimpleDateFormat("yyyy/MM/dd").format(endDate.getDate());
+        records = new RecordDAO().findAll("WHERE date <= '" + end + "'" + " AND date >= '" + start + "'");
         loadData(records);
     }//GEN-LAST:event_viewActionPerformed
 
@@ -431,10 +425,9 @@ public class viewRecord extends javax.swing.JDialog {
     private void initialRecord() {
         endDate.setDate(new Date());
         startDate.setDate(Date.from(ZonedDateTime.now().minusMonths(1).toInstant()));
-        start = new SimpleDateFormat("dd/MM/yyyy").format(startDate.getDate());
-        end = new SimpleDateFormat("dd/MM/yyyy").format(endDate.getDate());
-        System.out.println("WHERE date <= '" + end + "' AND date >= '" + start + "'");
-        records = new RecordDAO().findAll("WHERE date <= '" + end + "' AND date >= '" + start + "'");
+        start = new SimpleDateFormat("yyyy/MM/dd").format(startDate.getDate());
+        end = new SimpleDateFormat("yyyy/MM/dd").format(endDate.getDate());
+        records = new RecordDAO().findAll("WHERE date <= '" + end + "'" + " AND date >= '" + start + "'");
         loadData(records);
     }
 
@@ -459,5 +452,4 @@ public class viewRecord extends javax.swing.JDialog {
         return sum;
     }
 
-   
 }

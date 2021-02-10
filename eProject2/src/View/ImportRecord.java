@@ -582,18 +582,18 @@ public class ImportRecord extends javax.swing.JDialog {
                     if ("SELECT SUPPLIER'S NAME".equalsIgnoreCase(supplier.getSupplierName())) {
                         JOptionPane.showMessageDialog(null, "Please select a supplier and try again!");
                     } else {
-                        if (!selectedSupplier.equals(supplier.getSupplierName()) || !record.getDate().equals(new SimpleDateFormat("dd/MM/yyyy").format(date.getDate()))) {
+                        if (!selectedSupplier.equals(supplier.getSupplierName()) || !record.getDate().equals(new SimpleDateFormat("yyyy/MM/dd").format(date.getDate()))) {
                             int dialogResult = JOptionPane.showConfirmDialog(null, "Would you like to change Record date or supplier name", "Warning", JOptionPane.YES_NO_OPTION);
                             if (dialogResult == JOptionPane.YES_OPTION) {
                                 supplier = new SupplierDAO().convertToArrayList(new SupplierDAO().getQueryResult("supplierName = '" + selectedSupplier + "'")).get(0);
                                 record.setSupplierID(supplier.getSupplierID());
-                                record.setDate(new SimpleDateFormat("dd/MM/yyyy").format(date.getDate()));
+                                record.setDate(new SimpleDateFormat("yyyy/MM/dd").format(date.getDate()));
                             } else {
                                 System.out.println("Here");
                             }
                         }
                         supplierComboBox.setSelectedItem(supplier.getSupplierName());
-                        date.setDate(new SimpleDateFormat("dd/MM/yyyy").parse(record.getDate()));
+                        date.setDate(new SimpleDateFormat("yyyy/MM/dd").parse(record.getDate()));
 
                         //check existed prod
                         if (isExisted(product.getProductCode()) != -1) {
@@ -626,7 +626,7 @@ public class ImportRecord extends javax.swing.JDialog {
                     recordDetails.add(recordDetail);
                     //set record
                     record.setSupplierID(supplier.getSupplierID());
-                    record.setDate(new SimpleDateFormat("dd/MM/yyyy").format(date.getDate()));
+                    record.setDate(new SimpleDateFormat("yyyy/MM/dd").format(date.getDate()));
                     record.setRecordType(RecordType.IMPORT);
                     //record.setHandleBy(WIDTH);
                     //show table
