@@ -921,7 +921,6 @@ public class ImportRecord extends javax.swing.JDialog {
         supplierName();
         record = new model.Record();
         record.setHandleBy(login.user.getId());
-        System.out.println(record.getHandleBy());
         supplier = new Supplier();
         delete.setEnabled(false);
     }

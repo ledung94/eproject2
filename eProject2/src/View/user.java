@@ -11,28 +11,25 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-
-
 /**
  *
  * @author Admin
  */
 public class user extends javax.swing.JFrame {
 
-
     DefaultTableModel tableModel;
-    private ArrayList<User> userList ;   
-    User  user;
+    private ArrayList<User> userList;
+    User user;
 
     /**
      * Creates new form user
      */
     public user() {
         initComponents();
-        tableModel = (DefaultTableModel) TableUsers.getModel();          
+        tableModel = (DefaultTableModel) TableUsers.getModel();
         loadData();
     }
-    
+
 //    private void showUser() {
 //        userList = ControllUser.findAll();
 //
@@ -42,14 +39,18 @@ public class user extends javax.swing.JFrame {
 //            tableModel.addRow(new Object[]{user.getFullname(), user.getLocation(), user.getPhone(), user.getCategory()});
 //        });
 //    }
-    void loadData(){
+    void loadData() {
         userList = new ControllUser().finAll(new ControllUser().getQueryResyl("status = 'AVAILABLE'"));
         tableModel.setRowCount(0);
-        
+        if (!login.user.getRole().equals("ADMINISTRATOR")) {
+            btnAdd.setEnabled(false);
+            btnDelete.setEnabled(false);
+        }
         userList.forEach((user) -> {
             tableModel.addRow(new Object[]{user.getFullname(), user.getLocation(), user.getPhone(), user.getRole()});
         });
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -76,6 +77,7 @@ public class user extends javax.swing.JFrame {
         btnClear = new javax.swing.JButton();
         rbtn1 = new javax.swing.JRadioButton();
         rbtn2 = new javax.swing.JRadioButton();
+        back = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -222,6 +224,13 @@ public class user extends javax.swing.JFrame {
                 .addContainerGap(93, Short.MAX_VALUE))
         );
 
+        back.setText("Back");
+        back.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -232,6 +241,10 @@ public class user extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(7, 7, 7))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(back)
+                .addGap(25, 25, 25))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addContainerGap()
@@ -241,7 +254,9 @@ public class user extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(114, 114, 114)
+                .addContainerGap()
+                .addComponent(back)
+                .addGap(76, 76, 76)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 462, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -257,9 +272,9 @@ public class user extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-       AddUser au = new AddUser();
-       au.setVisible(true);
-       hide();
+        AddUser au = new AddUser();
+        au.setVisible(true);
+        hide();
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void TableUsersMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TableUsersMouseClicked
@@ -286,7 +301,7 @@ public class user extends javax.swing.JFrame {
 
     private void btnEditMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEditMouseClicked
         // TODO add your handling code here:
-        
+
     }//GEN-LAST:event_btnEditMouseClicked
 
     private void btnClearMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnClearMouseClicked
@@ -297,44 +312,48 @@ public class user extends javax.swing.JFrame {
 
         TxtPhone.setText("");
         txtLocation.setText("");
-      
+
     }//GEN-LAST:event_btnClearMouseClicked
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
         // TODO add your handling code here:
-        if(TableUsers.getSelectedRow() < 0){
-            JOptionPane.showMessageDialog(null, "elect a table data first!");
-        }else{
+        if (TableUsers.getSelectedRow() < 0) {
+            JOptionPane.showMessageDialog(null, "Select a table data first!");
+        } else {
             int row = TableUsers.getSelectedRow();
-            
+
             tableModel.setValueAt(txtFullname.getText(), row, 1);
             tableModel.setValueAt(txtLocation.getText(), row, 2);
             tableModel.setValueAt(TxtPhone.getText(), row, 3);
-            
+
             user = userList.get(row);
-            user.setFullname(txtFullname.getText());
-            user.setLocation(txtLocation.getText());
-            user.setPhone(TxtPhone.getText());
-            new ControllUser().updateUser(user);
-            btnClearActionPerformed(evt);
-            loadData();
-            
+            if (login.user.getRole().equals("ADMINISTRATOR") | user.getId() == login.user.getId()) {
+                user.setFullname(txtFullname.getText());
+                user.setLocation(txtLocation.getText());
+                user.setPhone(TxtPhone.getText());
+                new ControllUser().updateUser(user);
+                btnClearActionPerformed(evt);
+                loadData();
+
+            } else {
+                JOptionPane.showMessageDialog(null, "You can not edit other user");
+            }
         }
-       
+
     }//GEN-LAST:event_btnEditActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-         // TODO add your handling code here:
+        // TODO add your handling code here:
         int row = TableUsers.getSelectedRow();
         int option = JOptionPane.showConfirmDialog(this, "Do you want to delete this user ?");
-        if(option == 0){
+        if (option == 0) {
             new ControllUser().deleteUser(userList.get(row));
             tableModel.getDataVector().removeAllElements();
             tableModel.fireTableDataChanged();
             loadData();
-        }            
+        }
         btnClearActionPerformed(evt);
-        
+
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
@@ -347,6 +366,13 @@ public class user extends javax.swing.JFrame {
         txtLocation.setText("");
         loadData();
     }//GEN-LAST:event_btnClearActionPerformed
+
+    private void backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backActionPerformed
+        // TODO add your handling code here:
+        dashboard db = new dashboard();
+        db.setVisible(true);
+        this.hide();
+    }//GEN-LAST:event_backActionPerformed
 
     /**
      * @param args the command line arguments
@@ -386,6 +412,7 @@ public class user extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable TableUsers;
     private java.awt.TextField TxtPhone;
+    private javax.swing.JButton back;
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnClear;
     private javax.swing.JButton btnDelete;
