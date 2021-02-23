@@ -163,7 +163,7 @@ public class login extends javax.swing.JFrame {
 
             Connection conn = DriverManager.getConnection(url, "root", "");
             System.out.println("Kết nối CSDL thành công");
-            String sql = "SELECT * FROM users where username=? and password=? ";
+            String sql = "SELECT * FROM users where username=? and password=? and status = 'AVAILABLE'";
             PreparedStatement pt = conn.prepareStatement(sql);
             pt.setString(1, username.getText());
             pt.setString(2, password.getText());
@@ -179,19 +179,16 @@ public class login extends javax.swing.JFrame {
                 user.setPassword(rs.getString("password"));
                 user.setRole(rs.getString("role"));
                 user.setStatus(Status.valueOf(rs.getString("status")));
-                JOptionPane.showMessageDialog(null, "Đăng nhập thành công");
+                JOptionPane.showMessageDialog(null, "Login successful");
                 dashboard db = new dashboard();
                 db.setVisible(true);
-
                 this.hide();
             } else {
                 JOptionPane.showMessageDialog(rootPane, "Wrong username or password?");
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(rootPane, "Đăng nhập thất bại");
-
+            JOptionPane.showMessageDialog(rootPane, "Login fail");
         }
-
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**

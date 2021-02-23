@@ -150,6 +150,9 @@ public class exportRecord extends javax.swing.JDialog {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 productQuantityKeyPressed(evt);
             }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                productQuantityKeyReleased(evt);
+            }
         });
 
         jLabel4.setText("Quantity");
@@ -669,7 +672,15 @@ public class exportRecord extends javax.swing.JDialog {
         model = (DefaultTableModel) recordTable.getModel();
         recordDetails = new ArrayList<>();
         record = new model.Record();
+//        record.setHandleBy(login.user.getId());
         customer = new Customer();
+        receiptCode.setEditable(false);
+        customerCode2.setEditable(false);
+        receiptDate.setEditable(false);
+        customerName2.setEditable(false);
+        customerAddress2.setEditable(false);
+        customerPhone2.setEditable(false);
+        
     }
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
         // TODO add your handling code here:
@@ -803,8 +814,9 @@ public class exportRecord extends javax.swing.JDialog {
         sellingPrice.setText("");
         customerID.setText("");
         customerAddress.setText("");
-        customerName2.setText("");
+        customerName1.setText("");
         customerPhone.setText("");
+        
     }//GEN-LAST:event_clearActionPerformed
 
     private void customerName2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customerName2ActionPerformed
@@ -831,9 +843,13 @@ public class exportRecord extends javax.swing.JDialog {
                     JOptionPane.showMessageDialog(null, "This customer is not exist or wrong customer code!");
                 } else {
                     customer = new CustomerDAO().convertToArrayList(new CustomerDAO().getQueryResult("customerID = '" + customerID.getText() + "'")).get(0);
+                    customerName1.setText((customer.getCustomerName()));
                     customerName2.setText((customer.getCustomerName()));
                     customerAddress.setText((customer.getCustomerAddress()));
+                    customerAddress2.setText((customer.getCustomerAddress()));
                     customerPhone.setText((customer.getCustomerPhone()));
+                    customerPhone2.setText((customer.getCustomerPhone()));
+                    
                 }
             } catch (SQLException ex) {
                 Logger.getLogger(exportRecord.class.getName()).log(Level.SEVERE, null, ex);
@@ -913,13 +929,17 @@ public class exportRecord extends javax.swing.JDialog {
     private void productQuantityKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_productQuantityKeyPressed
         // TODO add your handling code here:
         char c = evt.getKeyChar();
-        
         if(Character.isLetter(c) || Character.isWhitespace(c)) {
-            JOptionPane.showMessageDialog(comment, "U can input only number");
+            JOptionPane.showMessageDialog(comment, "You can input only number");
             productQuantity.setText("");
-        }else{
+        }else if(c == '0'){
+            JOptionPane.showMessageDialog(comment, "Quantity need more than 0");
+            productQuantity.setText("");
+        }
+        else{
             productQuantity.setEditable(true);
        }
+       
 
     }//GEN-LAST:event_productQuantityKeyPressed
 
@@ -966,6 +986,16 @@ public class exportRecord extends javax.swing.JDialog {
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         new RecordDAO().printInvoice(invoice);
     }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void productQuantityKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_productQuantityKeyReleased
+        try {
+            int i = Integer.parseInt(productQuantity.getText());
+            
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(comment, "You can input only number");
+            productQuantity.setText("");
+        }
+    }//GEN-LAST:event_productQuantityKeyReleased
     private void loadBySearch(String text) {
         try {
             record = new RecordDAO().getSearchRecordQueryResult(text);
@@ -973,9 +1003,7 @@ public class exportRecord extends javax.swing.JDialog {
             loadData();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Cannot found this record!");
-
         }
-
     }
     private void loadData() {
         receiptCode.setText(record.getRecordCode());
