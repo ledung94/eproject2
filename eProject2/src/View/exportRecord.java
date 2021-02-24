@@ -928,17 +928,16 @@ public class exportRecord extends javax.swing.JDialog {
 
     private void productQuantityKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_productQuantityKeyPressed
         // TODO add your handling code here:
-        char c = evt.getKeyChar();
-        if(Character.isLetter(c) || Character.isWhitespace(c)) {
-            JOptionPane.showMessageDialog(comment, "You can input only number");
-            productQuantity.setText("");
-        }else if(c == '0'){
-            JOptionPane.showMessageDialog(comment, "Quantity need more than 0");
-            productQuantity.setText("");
-        }
-        else{
-            productQuantity.setEditable(true);
-       }
+//        char c = evt.getKeyChar();
+//        if(Character.isLetter(c) || Character.isWhitespace(c)) {
+//            JOptionPane.showMessageDialog(comment, "You can input only number");
+//            productQuantity.setText("");
+//        }
+//        }else if(c == '0'){
+//            JOptionPane.showMessageDialog(comment, "Quantity need more than 0");
+//            productQuantity.setText("");
+//        }
+        
        
 
     }//GEN-LAST:event_productQuantityKeyPressed
@@ -988,10 +987,28 @@ public class exportRecord extends javax.swing.JDialog {
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void productQuantityKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_productQuantityKeyReleased
-        try {
+//        char c = evt.getKeyChar();
+//        if(Character.isLetter(c) || Character.isWhitespace(c)) {
+//            JOptionPane.showMessageDialog(comment, "You can input only number");
+//            productQuantity.setText("");
+//        }
+//        else{
+//            productQuantity.setEditable(true);
+//       }
+//        try {
+//            int i = Integer.parseInt(productQuantity.getText());
+//            
+//        } catch (NumberFormatException e) {
+//            JOptionPane.showMessageDialog(comment, "You can input only number");
+//            productQuantity.setText("");
+//        }
+        try{
             int i = Integer.parseInt(productQuantity.getText());
-            
-        } catch (NumberFormatException e) {
+            if(i <= 0){
+            JOptionPane.showMessageDialog(comment, "Quantity need more than 0");
+            productQuantity.setText("");
+            }
+        }catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(comment, "You can input only number");
             productQuantity.setText("");
         }
