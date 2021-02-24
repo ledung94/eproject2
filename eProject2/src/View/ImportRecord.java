@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JComboBox;
@@ -313,7 +314,13 @@ public class ImportRecord extends javax.swing.JDialog {
 
         jLabel8.setText("Supplier Name");
 
-        jLabel13.setText("Supplier Loaction");
+        supplierName.setEditable(false);
+
+        jLabel13.setText("Supplier Location");
+
+        supplierLocation.setEditable(false);
+
+        supplierContact.setEditable(false);
 
         jLabel17.setText("Supplier Contact");
 
@@ -629,7 +636,6 @@ public class ImportRecord extends javax.swing.JDialog {
                     record.setSupplierID(supplier.getSupplierID());
                     record.setDate(new SimpleDateFormat("yyyy/MM/dd").format(date.getDate()));
                     record.setRecordType(RecordType.IMPORT);
-                    //record.setHandleBy(WIDTH);
                     //show table
                     loadData();
                 }
@@ -676,7 +682,7 @@ public class ImportRecord extends javax.swing.JDialog {
 
     private void clearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearActionPerformed
         // TODO add your handling code here:
-        date.setDateFormatString("");
+        date.setDate(null);
         productCode.setText("");
         productQuantity.setText("");
         costPrice.setText("");
@@ -695,7 +701,7 @@ public class ImportRecord extends javax.swing.JDialog {
 
     private void deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteActionPerformed
         // TODO add your handling code here:
-        int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete? This action cannot be undone!","Warning",JOptionPane.YES_NO_OPTION);
+        int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete? This action cannot be undone!", "Warning", JOptionPane.YES_NO_OPTION);
         if (dialogResult == JOptionPane.YES_OPTION) {
             System.out.println(record.getRecordID());
             new RecordDAO().deleteRecord(record);
@@ -748,12 +754,6 @@ public class ImportRecord extends javax.swing.JDialog {
         model.getDataVector().removeAllElements();
         model.fireTableDataChanged();
         initialRecord();
-        add.setEnabled(true);
-        remove.setEnabled(true);
-        edit.setEnabled(true);
-        clear.setEnabled(true);
-        createRecord.setEnabled(true);
-        vat.setEnabled(true);
         for (Component control : invoice.getComponents()) {
             if (control instanceof JTextField) {
                 JTextField ctrl = (JTextField) control;
@@ -915,14 +915,23 @@ public class ImportRecord extends javax.swing.JDialog {
 
     public void initialRecord() {
         model = (DefaultTableModel) recordTable.getModel();
+        
+        add.setEnabled(true);
+        remove.setEnabled(true);
+        edit.setEnabled(true);
+        clear.setEnabled(true);
+        createRecord.setEnabled(true);
+        vat.setEnabled(true);
+        delete.setEnabled(false);
+
         recordDetails = new ArrayList<RecordDetail>();
         supplierComboBox.removeAllItems();
         supplierComboBox.addItem("Select Supplier's Name");
+        date.setDate(new Date());
         supplierName();
         record = new model.Record();
         record.setHandleBy(login.user.getId());
         supplier = new Supplier();
-        delete.setEnabled(false);
     }
 
     public int isExisted(String productCode) {

@@ -682,15 +682,24 @@
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="supplierName">
+              <Properties>
+                <Property name="editable" type="boolean" value="false"/>
+              </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel13">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Supplier Loaction"/>
+                <Property name="text" type="java.lang.String" value="Supplier Location"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="supplierLocation">
+              <Properties>
+                <Property name="editable" type="boolean" value="false"/>
+              </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="supplierContact">
+              <Properties>
+                <Property name="editable" type="boolean" value="false"/>
+              </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel17">
               <Properties>

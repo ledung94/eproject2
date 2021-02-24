@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th2 09, 2021 lúc 11:00 AM
+-- Thời gian đã tạo: Th2 22, 2021 lúc 04:10 PM
 -- Phiên bản máy phục vụ: 10.4.11-MariaDB
 -- Phiên bản PHP: 7.2.31
 
@@ -37,12 +37,13 @@ CREATE TABLE `currentstocks` (
 --
 
 INSERT INTO `currentstocks` (`productID`, `quantity`) VALUES
-('1', 10),
-('2', 24),
+('1', 12),
+('2', 29),
 ('3', 0),
 ('5', 0),
 ('6', 5),
-('7', 0);
+('7', 0),
+('8', 0);
 
 -- --------------------------------------------------------
 
@@ -92,9 +93,10 @@ INSERT INTO `products` (`productID`, `productName`, `productCode`, `costprice`, 
 (2, 'iphone', 'I12', 200, 1500, 'phone', 'C:\\Users\\ADMIN\\Downloads\\image.png', 'AVAILABLE', '2021-01-31'),
 (3, 'huawei', 'H2', 100, 500, 'phone', NULL, 'AVAILABLE', '2021-02-06'),
 (4, 'xiaomi', 'RED1', 200, 400, 'phone', 'C:\\Users\\ADMIN\\Downloads\\image.png', 'AVAILABLE', '2021-02-06'),
-(5, 'xiami', 'RED7', 100, 300, 'phone', NULL, 'AVAILABLE', '2021-02-06'),
+(5, 'xiami', 'RED7', 200, 300, 'phone', NULL, 'AVAILABLE', '2021-02-06'),
 (6, 'Macbook pro', 'MF2015', 1000, 1799, 'laptop', 'C:\\Users\\ADMIN\\Downloads\\image.png', 'AVAILABLE', '2021-02-09'),
-(7, 'Thinkpad', 'HF5K1', 600, 1200, 'laptop', 'C:\\Users\\ADMIN\\Downloads\\image.png', 'AVAILABLE', '2021-02-09');
+(7, 'Thinkpad', 'HF5K1', 600, 1200, 'laptop', 'C:\\Users\\ADMIN\\Downloads\\image.png', 'DELETED', '2021-02-09'),
+(8, 'samsung H1', 'H122', 300, 500, 'phone', 'C:\\Users\\ADMIN\\Downloads\\image.png', 'AVAILABLE', '2021-02-19');
 
 -- --------------------------------------------------------
 
@@ -117,11 +119,15 @@ INSERT INTO `recorddetail` (`productID`, `quantity`, `recordID`) VALUES
 (1, 2, 2),
 (1, 5, 3),
 (1, 2, 4),
+(1, 2, 8),
 (2, 2, 1),
 (2, 2, 2),
 (2, 5, 3),
 (2, 5, 4),
 (2, 10, 5),
+(2, 1, 6),
+(2, 1, 7),
+(2, 3, 8),
 (6, 5, 5);
 
 -- --------------------------------------------------------
@@ -147,11 +153,14 @@ CREATE TABLE `records` (
 --
 
 INSERT INTO `records` (`recordID`, `recordCode`, `recordType`, `supplierID`, `customerID`, `handleBy`, `date`, `totalPrice`, `vat`) VALUES
-(1, 'RC1', 'DELETED', 68, 0, 0, '05/01/2021', 300, 0),
-(2, 'RC2', 'IMPORT', 69, 0, 0, '07/01/2021', 400, 10),
-(3, 'RC3', 'IMPORT', 69, 0, 0, '05/01/2021', 1100, 10),
-(4, 'RC4', 'IMPORT', 69, 0, 0, '05/01/2021', 770, 10),
-(5, 'RC5', 'IMPORT', 143, 0, 58, '09/02/2021', 7700, 10);
+(1, 'RC1', 'DELETED', 68, 0, 0, '2021/02/10', 300, 0),
+(2, 'RC2', 'IMPORT', 69, 0, 0, '2021/02/11', 400, 10),
+(3, 'RC3', 'IMPORT', 69, 0, 0, '2021/01/11', 1100, 10),
+(4, 'RC4', 'IMPORT', 69, 0, 0, '2021/02/12', 770, 10),
+(5, 'RC5', 'IMPORT', 143, 0, 58, '2021/02/09', 7700, 10),
+(6, 'RC6', 'EXPORT', 0, 2, 0, '2021/01/09', 1500, 0),
+(7, 'RC7', 'IMPORT', 143, 0, 58, '2021/02/05', 200, 0),
+(8, 'RC8', 'IMPORT', 69, 0, 58, '2021/02/17', 880, 10);
 
 -- --------------------------------------------------------
 
@@ -198,10 +207,13 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`userID`, `fullname`, `location`, `phone`, `username`, `password`, `role`, `status`) VALUES
-(54, 'Sajan Rajbhandari', 'Pokhara', '9849284991', 'user4', 'cc03e747a6afbbcbf8be7668acfebee5', 'ADMINISTRATOR', ''),
-(56, 'Ram', 'Kathmandu', '9849284991', 'user5', 'a791842f52a0acfbb3a783378c066b8', 'NORMAL USER', ''),
-(57, 'shyam', 'ktm', '98239832', 'user6', 'affec3b64cf90492377a8114c86fc093', 'NORMAL USER', ''),
-(58, 'Le Dung', 'HaNoi', '123', 'ledung94', '123', 'ADMINISTRATOR', 'DELETED');
+(54, 'Sajan Rajbhandari', 'Pokhara', '984928', 'user4', 'cc03e747a6afbbcbf8be7668acfebee5', 'ADMINISTRATOR', 'AVAILABLE'),
+(56, 'Ram', 'Kathmandu', '1234', 'user5', 'a791842f52a0acfbb3a783378c066b8', 'NORMAL USER', 'AVAILABLE'),
+(57, 'shyam', 'ktm', '98239832', 'user6', 'affec3b64cf90492377a8114c86fc093', 'NORMAL USER', 'DELETED'),
+(58, 'Le Dung', 'HaNoi', '123', 'ledung94', '123', 'ADMINISTRATOR', 'DELETED'),
+(59, 'le van dung', 'hanoi', '123', 'ledung123', '123', 'ADMINISTRATOR', 'AVAILABLE'),
+(60, 'LE VAN DUNG', 'HN', '123', 'flynn', '123', 'ADMINISTRATOR', 'AVAILABLE'),
+(61, 'hieu', 'hanoi', '1234', 'hieu', '123', 'NORMAL USER', 'AVAILABLE');
 
 --
 -- Chỉ mục cho các bảng đã đổ
@@ -260,13 +272,13 @@ ALTER TABLE `customers`
 -- AUTO_INCREMENT cho bảng `products`
 --
 ALTER TABLE `products`
-  MODIFY `productID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `productID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT cho bảng `records`
 --
 ALTER TABLE `records`
-  MODIFY `recordID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `recordID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT cho bảng `suppliers`
@@ -278,7 +290,7 @@ ALTER TABLE `suppliers`
 -- AUTO_INCREMENT cho bảng `users`
 --
 ALTER TABLE `users`
-  MODIFY `userID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
+  MODIFY `userID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -152,6 +152,12 @@ public class RecordDAO {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(RecordDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return records;
     }
@@ -170,6 +176,12 @@ public class RecordDAO {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(RecordDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return recordDetails;
     }
