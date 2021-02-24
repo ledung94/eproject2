@@ -570,7 +570,8 @@ public class dashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_btnUserActionPerformed
 
     private void btnCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCustomerActionPerformed
-        
+        Customer c = new Customer(this, rootPaneCheckingEnabled);
+        c.setVisible(true);
     }//GEN-LAST:event_btnCustomerActionPerformed
 
     private void btnSaleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaleActionPerformed

@@ -20,6 +20,7 @@ import model.RecordDetail;
  */
 public class Customer extends javax.swing.JDialog {
 
+    model.Customer customer;
     ArrayList<model.Customer> customers;
     ArrayList<Record> records;
     ArrayList<RecordDetail> rcdts;
@@ -94,6 +95,11 @@ public class Customer extends javax.swing.JDialog {
                 "Index", "Name", "Code", "Address", "Phone", "Total"
             }
         ));
+        customerList.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                customerListMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(customerList);
 
         jTabbedPane2.addTab("Customer List", jScrollPane1);
@@ -178,6 +184,15 @@ public class Customer extends javax.swing.JDialog {
         this.hide();
     }//GEN-LAST:event_backActionPerformed
 
+    private void customerListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_customerListMouseClicked
+        // TODO add your handling code here:
+        int row = customerList.getSelectedRow();
+        customer = customers.get(row);
+        records = new RecordDAO().findAll("WHERE customerID = '" + customer.getCustomerID() + "'");
+        getRecordDetail(customer);
+
+    }//GEN-LAST:event_customerListMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -235,12 +250,41 @@ public class Customer extends javax.swing.JDialog {
     // End of variables declaration//GEN-END:variables
 
     private void loadData() {
-        model = (DefaultTableModel) CustomerOrder.getModel();
         records = new RecordDAO().findAll("WHERE recordType = 'EXPORT'");
+        getRecordDetail(customer);
+        customers = new CustomerDAO().convertToArrayList(new CustomerDAO().getQueryResult("1"));
+        getRecord(customers);
+    }
+
+    private void loadBySearch(String text) {
+
+        customers = new CustomerDAO().convertToArrayList(new CustomerDAO().getSearchCustomerQueryResult(text));
+        if (!customers.isEmpty()) {
+            records = new RecordDAO().findAll("WHERE customerID = '" + customers.get(0).getCustomerID() + "'");
+        } else {
+            return;
+        }
+        getRecord(customers);
+        getRecordDetail(customer);
+    }
+
+    private float getTotal(model.Customer customer) {
+        float sum = 0;
+        records = new RecordDAO().findAll("WHERE customerID = '" + customer.getCustomerID() + "'");
+        for (Record record : records) {
+            sum += record.getTotalPrice();
+        }
+        return sum;
+    }
+
+    private void getRecordDetail(model.Customer customer) {
+        model = (DefaultTableModel) CustomerOrder.getModel();
+        model.getDataVector().removeAllElements();
+        model.fireTableDataChanged();
         int index = 1;
         for (Record record : records) {
             rcdts = new RecordDAO().getSearchRecordDetailQueryResult(record);
-            model.Customer customer = new CustomerDAO().convertToArrayList(new CustomerDAO().getQueryResult("customerID = '" + record.getCustomerID() + "'")).get(0);
+            customer = new CustomerDAO().convertToArrayList(new CustomerDAO().getQueryResult("customerID = '" + record.getCustomerID() + "'")).get(0);
 
             for (RecordDetail rcdt : rcdts) {
                 model.Product product = new ProductDAO().convertToArrayList(new ProductDAO().getQueryResult("productID = '" + rcdt.getProductID() + "'")).get(0);
@@ -250,26 +294,28 @@ public class Customer extends javax.swing.JDialog {
                     record.getRecordCode(),
                     product.getProductName(),
                     rcdt.getQuantity(),
-                    rcdt.getQuantity()*product.getSellingPrice(),
+                    rcdt.getQuantity() * product.getSellingPrice(),
                     record.getDate()
                 });
             }
             index += rcdts.size();
         }
+    }
+
+    private void getRecord(ArrayList<model.Customer> customers) {
         model = (DefaultTableModel) customerList.getModel();
-        customers = new CustomerDAO().convertToArrayList(new CustomerDAO().getQueryResult("1"));
+        model.getDataVector().removeAllElements();
+        model.fireTableDataChanged();
         for (model.Customer customer : customers) {
             model.addRow(new Object[]{
                 customers.indexOf(customer) + 1,
                 customer.getCustomerName(),
                 customer.getCustomerCode(),
                 customer.getCustomerAddress(),
-                customer.getCustomerPhone()
+                customer.getCustomerPhone(),
+                getTotal(customer)
             });
         }
     }
 
-    private void loadBySearch(String text) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 }
