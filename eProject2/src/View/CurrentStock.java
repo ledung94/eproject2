@@ -47,8 +47,6 @@ public class CurrentStock extends javax.swing.JDialog {
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         currentStockTable = new javax.swing.JTable();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        soldTable = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -63,21 +61,10 @@ public class CurrentStock extends javax.swing.JDialog {
 
             },
             new String [] {
-                "Index", "Prod Name", "Prod Code", "Current Quantity", "Cost Price", "Selling Price"
+                "Index", "Prod Name", "Prod Code", "Current Quantity", "Cost Price", "Selling Price", "Sold", "Percent"
             }
         ));
         jScrollPane1.setViewportView(currentStockTable);
-
-        soldTable.setAutoCreateRowSorter(true);
-        soldTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Code", "Sold", "Percent"
-            }
-        ));
-        jScrollPane2.setViewportView(soldTable);
 
         jButton1.setText("Back");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -93,14 +80,11 @@ public class CurrentStock extends javax.swing.JDialog {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 870, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(234, 234, 234)
-                        .addComponent(jButton1))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 661, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(250, 250, 250)
+                        .addComponent(jButton1)))
                 .addContainerGap(18, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -111,9 +95,7 @@ public class CurrentStock extends javax.swing.JDialog {
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton1))
                 .addGap(38, 38, 38)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 566, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1)))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 566, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -191,8 +173,6 @@ public class CurrentStock extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable soldTable;
     // End of variables declaration//GEN-END:variables
 
     private void loadData() {
@@ -200,27 +180,17 @@ public class CurrentStock extends javax.swing.JDialog {
         model = (DefaultTableModel) currentStockTable.getModel();
         for (model.CurrentStock currentStock : currentStocks) {
             product = new ProductDAO().convertToArrayList(new ProductDAO().getQueryResult("productID = '" + currentStock.getProductID() + "'")).get(0);
+            ArrayList<Integer> list = new RecordDAO().getSoldQuantity(product);
             model.addRow(new Object[]{
                 currentStocks.indexOf(currentStock) + 1,
                 product.getProductName(),
                 product.getProductCode(),
                 currentStock.getQuantity(),
                 product.getCostPrice(),
-                product.getSellingPrice()
-            });
-        }
-
-        model = (DefaultTableModel) soldTable.getModel();
-        products = new ProductDAO().convertToArrayList(new ProductDAO().getQueryResult("1"));
-        for (model.Product prd : products) {
-            ArrayList<Integer> list = new RecordDAO().getSoldQuantity(prd);
-            model.addRow(new Object[]{
-                prd.getProductCode(),
+                product.getSellingPrice(),
                 list.get(0),
-                (list.get(1) == 0) ? 0 + "%" : list.get(0)/list.get(1)*100 + "%"
-                
+                (list.get(1) == 0) ? 0 + "%" : Math.round(list.get(0) / (float) list.get(1) * 100) + "%"
             });
-
         }
 
     }

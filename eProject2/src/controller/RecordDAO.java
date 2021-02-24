@@ -138,7 +138,7 @@ public class RecordDAO {
 
     public ArrayList<Record> findAll(String condition) {
         try {
-            String query = "SELECT * FROM `records`" + condition + "ORDER BY `recordID` ASC ";
+            String query = "SELECT * FROM `records`" + condition + "ORDER BY `date` DESC ";
             rs = stmt.executeQuery(query);
             records = new ArrayList<>();
             while (rs.next()) {

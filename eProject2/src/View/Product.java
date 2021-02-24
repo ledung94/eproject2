@@ -585,7 +585,8 @@ public class Product extends javax.swing.JDialog {
     // End of variables declaration//GEN-END:variables
 
     private void loadData() {
-        products = new ProductDAO().convertToArrayList(new ProductDAO().getQueryResult("status = 'AVAILABLE' or status = 'SOLD_OUT'"));
+//        products = new ProductDAO().convertToArrayList(new ProductDAO().getQueryResult("status = 'AVAILABLE' or status = 'SOLD_OUT'"));
+        products = new ProductDAO().convertToArrayList(new ProductDAO().getQueryResult("1"));
         model = (DefaultTableModel) productTable.getModel();
         model.getDataVector().removeAllElements();
         model.fireTableDataChanged();

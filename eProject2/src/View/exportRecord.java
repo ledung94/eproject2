@@ -673,7 +673,7 @@ public class exportRecord extends javax.swing.JDialog {
         model = (DefaultTableModel) recordTable.getModel();
         recordDetails = new ArrayList<>();
         record = new model.Record();
-//        record.setHandleBy(login.user.getId());
+        record.setHandleBy(login.user.getId());
         customer = new Customer();
         receiptCode.setEditable(false);
         customerCode2.setEditable(false);
