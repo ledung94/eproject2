@@ -103,7 +103,7 @@ public class RecordDAO {
             for (RecordDetail recordDetail : recordDetails) {
                 recordDetail.setRecordID(Integer.parseInt(recordID));
                 addRecordDetail(recordDetail);
-                new CurrentStockDAO().updateCurrentStock(recordDetail.getProductID(), recordDetail.getQuantity(), RecordType.IMPORT);
+                new CurrentStockDAO().updateCurrentStock(recordDetail.getProductID(), recordDetail.getQuantity(), record.getRecordType());
                 int currentStock = new CurrentStockDAO().getCurrentStock(recordDetail.getProductID());
                 if (currentStock == 0){
                     new ProductDAO().soldOut(recordDetail.getProductID());
