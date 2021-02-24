@@ -313,7 +313,13 @@ public class ImportRecord extends javax.swing.JDialog {
 
         jLabel8.setText("Supplier Name");
 
-        jLabel13.setText("Supplier Loaction");
+        supplierName.setEditable(false);
+
+        jLabel13.setText("Supplier Location");
+
+        supplierLocation.setEditable(false);
+
+        supplierContact.setEditable(false);
 
         jLabel17.setText("Supplier Contact");
 
@@ -629,7 +635,6 @@ public class ImportRecord extends javax.swing.JDialog {
                     record.setSupplierID(supplier.getSupplierID());
                     record.setDate(new SimpleDateFormat("yyyy/MM/dd").format(date.getDate()));
                     record.setRecordType(RecordType.IMPORT);
-                    //record.setHandleBy(WIDTH);
                     //show table
                     loadData();
                 }
