@@ -168,7 +168,7 @@ public class login extends javax.swing.JFrame {
 
             Connection conn = DriverManager.getConnection(url, "root", "");
             System.out.println("Kết nối CSDL thành công");
-            String sql = "SELECT * FROM users where username=? and password=? ";
+            String sql = "SELECT * FROM users where username=? and password=? and status = 'AVAILABLE'";
             PreparedStatement pt = conn.prepareStatement(sql);
             pt.setString(1, username.getText());
             pt.setString(2, password.getText());
@@ -184,6 +184,7 @@ public class login extends javax.swing.JFrame {
                 user.setPassword(rs.getString("password"));
                 user.setRole(rs.getString("role"));
                 user.setStatus(Status.valueOf(rs.getString("status")));
+<<<<<<< HEAD
                 if ("DELETED".equals(user.getStatus().name())) {
                     JOptionPane.showMessageDialog(null, "This user is deleted");
                 } else {
@@ -192,13 +193,19 @@ public class login extends javax.swing.JFrame {
                     db.setVisible(true);
                     this.hide();
                 }
+=======
+                JOptionPane.showMessageDialog(null, "Login successful");
+                dashboard db = new dashboard();
+                db.setVisible(true);
+                this.hide();
+>>>>>>> 5122ffb968f62348b7a8daf8ab6e0e8158a60503
             } else {
                 JOptionPane.showMessageDialog(rootPane, "Wrong username or password?");
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(rootPane, "Đăng nhập thất bại");
-
+            JOptionPane.showMessageDialog(rootPane, "Login fail");
         }
+<<<<<<< HEAD
 
     }//GEN-LAST:event_loginActionPerformed
 
@@ -207,6 +214,9 @@ public class login extends javax.swing.JFrame {
         username.setText("");
         password.setText("");
     }//GEN-LAST:event_resetActionPerformed
+=======
+    }//GEN-LAST:event_jButton1ActionPerformed
+>>>>>>> 5122ffb968f62348b7a8daf8ab6e0e8158a60503
 
     /**
      * @param args the command line arguments
