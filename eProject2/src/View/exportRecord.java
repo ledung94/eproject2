@@ -5,6 +5,7 @@
  */
 package View;
 
+import controller.CurrentStockDAO;
 import controller.CustomerDAO;
 import controller.ProductDAO;
 import controller.RecordDAO;
@@ -701,12 +702,19 @@ public class exportRecord extends javax.swing.JDialog {
                     if (isExisted(product.getProductCode()) != -1) {
                         int index = isExisted(product.getProductCode());
                         int newQuantity = recordDetails.get(index).getQuantity() + Integer.parseInt(productQuantity.getText());
+                        if(checkQuantity(newQuantity) == false) {
+                            return;
+                        }
                         model.setValueAt(Integer.toString(newQuantity), index, 3);
                         recordDetails.get(index).setQuantity(newQuantity);
                     } else {
                         //create new recordDetail
                         recordDetail.setProductID(product.getProductID());
-                        recordDetail.setQuantity(Integer.parseInt(productQuantity.getText()));
+                        int quantity = Integer.parseInt(productQuantity.getText());
+                        if(checkQuantity(quantity) == false) {
+                            return;
+                        }
+                        recordDetail.setQuantity(quantity);
                         recordDetails.add(recordDetail);
                         //update record
                         record.setTotalPrice(getTotalPrice());
@@ -723,7 +731,11 @@ public class exportRecord extends javax.swing.JDialog {
             } else { //TH chua co sp nao trong record
                     //create new recordDetail
                     recordDetail.setProductID(product.getProductID());
-                    recordDetail.setQuantity(Integer.parseInt(productQuantity.getText()));
+                    int quantity = Integer.parseInt(productQuantity.getText());
+                    if(checkQuantity(quantity) == false) {
+                            return;
+                        }
+                    recordDetail.setQuantity(quantity);
                     recordDetails.add(recordDetail);
                     //set record
                     record.setCustomerID(customer.getCustomerID());
@@ -1021,6 +1033,19 @@ public class exportRecord extends javax.swing.JDialog {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Cannot found this record!");
         }
+    }
+    private boolean checkQuantity(int quantity) {
+        int currentStock = new CurrentStockDAO().getCurrentStock(recordDetail.getProductID());
+        if (quantity > currentStock) {
+            JOptionPane.showMessageDialog(null, "Quantity entered is greater than the quantity available");
+            return false;
+        } else if (currentStock == 0) {
+            JOptionPane.showMessageDialog(null, "This product is out of stock");
+            return false;
+        } else if (quantity == currentStock){
+            new ProductDAO().soldOut(product.getProductID());
+        }
+        return true;
     }
     private void loadData() {
         receiptCode.setText(record.getRecordCode());

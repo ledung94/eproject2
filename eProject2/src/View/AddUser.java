@@ -8,10 +8,11 @@ package View;
 import Controller.ControllUser;
 import model.Status;
 import Model.User;
+import java.awt.event.KeyEvent;
+import java.security.MessageDigest;
 import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-
 
 /**
  *
@@ -19,8 +20,7 @@ import javax.swing.JOptionPane;
  */
 public class AddUser extends javax.swing.JFrame {
 //    DefaultTableModel tableModel
-    
-    
+
     /**
      * Creates new form AddUser
      */
@@ -28,7 +28,7 @@ public class AddUser extends javax.swing.JFrame {
         initComponents();
         
     }
-    
+
 //    private void loadData(){
 //        userList = new ControllUser().finAll(new ControllUser().getQueryResyl("status = 'ACTIVE'"));
 //        tableModel.setRowCount(0);
@@ -91,9 +91,20 @@ public class AddUser extends javax.swing.JFrame {
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel6.setText("Add User");
 
+        txtFullName.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtFullNameKeyPressed(evt);
+            }
+        });
+
         txtPhone.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtPhoneActionPerformed(evt);
+            }
+        });
+        txtPhone.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtPhoneKeyPressed(evt);
             }
         });
 
@@ -195,48 +206,76 @@ public class AddUser extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
     
-    
-    
-    
-    
+
     private void txtPhoneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPhoneActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtPhoneActionPerformed
-
+    
+    public static String getMd5(String msg) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            md.update(msg.getBytes());
+            byte byteData[] = md.digest();
+            //convert the byte to hex format method 1
+            StringBuffer sb = new StringBuffer();
+            for (int i = 0; i < byteData.length; i++) {
+                sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
+            }
+            return sb.toString();
+        } catch (Exception ex) {
+            return "";
+        }
+    }
+    
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         // TODO add your handling code here:   
-        
+        if (txtFullName.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "full name is empty");
+        } else if (txtLocation.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "location is empty");
+        } else if (txtUserName.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "user name is empty");
+        } else if (txt_pass.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "pass word is empty");
+        } else if (txtPhone.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "location is empty");
+        } else {
             User us = new User();
             us.setFullname(txtFullName.getText());
-            System.out.println("fullname :" + txtFullName);  
+//            System.out.println("fullname :" + txtFullName);  
             us.setLocation(txtLocation.getText());
             us.setPhone(txtPhone.getText());
             us.setUsername(txtUserName.getText());
-            us.setPassword(txt_pass.getText());
+            if (getMd5(txt_pass.getText()).equals("")) {
+                JOptionPane.showMessageDialog(this, "no no no", "error raise", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            us.setPassword(getMd5(txt_pass.getText()));
             String value = cbox_category.getSelectedItem().toString();
             us.setRole(value);
             System.out.println(value);
             us.setStatus(Status.AVAILABLE);
-        
-        new ControllUser().insertUser(us);
-        clear();
-        
+            
+            new ControllUser().insertUser(us);
+            clear();
+        }
         
     }//GEN-LAST:event_btnSaveActionPerformed
-    public  void clear(){
+    public void clear() {
         txtFullName.setText("");
         txtLocation.setText("");
         txtPhone.setText("");
         txtUserName.setText("");
         txt_pass.setText("");
         int itemCount = cbox_category.getItemCount();
-
-        for(int i=0;i<itemCount;i++){
+        
+        for (int i = 0; i < itemCount; i++) {
             cbox_category.removeItemAt(0);
-         }
+        }
     }
     private void cbox_categoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbox_categoryActionPerformed
-            // TODO add your handling code here:
+        // TODO add your handling code here:
 //            int index = cbox_category.getSelectedIndex();
 //            if(index > 0){
 //                String selectValue = cbox_category.getItemAt(index);
@@ -246,14 +285,53 @@ public class AddUser extends javax.swing.JFrame {
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
         // TODO add your handling code here:
-        int option = JOptionPane.showConfirmDialog(null, "Do you want to go back ?",null, JOptionPane.YES_NO_OPTION);
-        if(option == JOptionPane.YES_OPTION){
+        int option = JOptionPane.showConfirmDialog(null, "Do you want to go back ?", null, JOptionPane.YES_NO_OPTION);
+        if (option == JOptionPane.YES_OPTION) {
             user u = new user();
             u.setVisible(true);
             hide();
             
-        }      
+        }        
     }//GEN-LAST:event_btnBackActionPerformed
+
+    private void txtPhoneKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPhoneKeyPressed
+        String number = txtPhone.getText();
+        int length = number.length();
+        
+        char c = evt.getKeyChar();
+//        if(Character.isLetter(c)){
+//            txtPhone.setEditable(false);
+//            
+//            JOptionPane.showMessageDialog(this, "please enter number only");
+//        }
+//        else{
+//            txtPhone.setEditable(true);
+//        }
+        
+        if (evt.getKeyChar() >= '0' && evt.getKeyChar() <= '9') {
+            if (length < 10) {
+                txtPhone.setEditable(true);
+            } else {
+                txtPhone.setEditable(false);
+            }
+        } else {
+            if (evt.getExtendedKeyCode() == KeyEvent.VK_BACK_SPACE || evt.getExtendedKeyCode() == KeyEvent.VK_DELETE) {
+                txtPhone.setEditable(true);
+            } else {
+                txtPhone.setEditable(false);
+            }
+        }
+    }//GEN-LAST:event_txtPhoneKeyPressed
+
+    private void txtFullNameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFullNameKeyPressed
+        // TODO add your handling code here:
+        char c = evt.getKeyChar();
+        if (Character.isLetter(c) || Character.isWhitespace(c) || Character.isISOControl(c)) {
+            txtFullName.setEditable(true);
+        } else {
+            txtFullName.setEditable(false);
+        }
+    }//GEN-LAST:event_txtFullNameKeyPressed
 
     /**
      * @param args the command line arguments

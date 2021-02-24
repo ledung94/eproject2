@@ -200,9 +200,15 @@ public class viewRecord extends javax.swing.JDialog {
 
         jLabel4.setText("Revenue");
 
+        revenue.setEditable(false);
+
         jLabel5.setText("Profit");
 
+        profit.setEditable(false);
+
         jLabel6.setText("Total cost price");
+
+        totalCost.setEditable(false);
 
         view.setText("View");
         view.addActionListener(new java.awt.event.ActionListener() {

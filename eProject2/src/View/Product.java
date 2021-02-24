@@ -8,6 +8,7 @@ package View;
 import controller.CurrentStockDAO;
 import controller.ProductDAO;
 import java.awt.Image;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -23,11 +24,12 @@ import model.Status;
  * @author Flynn
  */
 public class Product extends javax.swing.JDialog {
-
+    
     private ArrayList<model.Product> products;
     DefaultTableModel model;
     String path;
     model.Product product;
+    float price;
 
     /**
      * Creates new form Product
@@ -36,7 +38,7 @@ public class Product extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         loadData();
-
+        
     }
 
     /**
@@ -135,16 +137,16 @@ public class Product extends javax.swing.JDialog {
         productImage.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         sellingPrice.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0.00"))));
-        sellingPrice.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                sellingPriceActionPerformed(evt);
+        sellingPrice.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                sellingPriceKeyPressed(evt);
             }
         });
 
         costPrice.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0.00"))));
-        costPrice.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                costPriceActionPerformed(evt);
+        costPrice.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                costPriceKeyPressed(evt);
             }
         });
 
@@ -370,7 +372,7 @@ public class Product extends javax.swing.JDialog {
         // TODO add your handling code here:
         int row = productTable.getSelectedRow();
         product = products.get(row);
-
+        
         productName.setText(product.getProductName());
         productCode.setText(product.getProductCode());
         costPrice.setText(Float.toString(product.getCostPrice()));
@@ -383,7 +385,7 @@ public class Product extends javax.swing.JDialog {
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
         // TODO add your handling code here:
         product = new model.Product();
-        if (productName.getText().equals("") || productCode.getText().equals("") || productImage.getIcon()== null || productCategory.getText().equals("") || costPrice.getText().equals("") || sellingPrice.getText().equals("")) {
+        if (productName.getText().equals("") | productCode.getText().equals("") | productImage.getIcon() == null | productCategory.getText().equals("") | costPrice.getText().equals("") | sellingPrice.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "Please fill all the fields!");
         } else {
             product.setProductName(productName.getText());
@@ -392,9 +394,9 @@ public class Product extends javax.swing.JDialog {
             product.setSellingPrice(Float.parseFloat(sellingPrice.getText()));
             product.setProductCategory(productCategory.getText());
             product.setDate(LocalDate.now().toString());
-            product.setProductStatus(Status.AVAILABLE);
+            product.setProductStatus(Status.SOLD_OUT);
             product.setProductImage(path);
-
+            
             products.add(product);
             new ProductDAO().addProductDAO(product);
             loadData();
@@ -411,10 +413,6 @@ public class Product extends javax.swing.JDialog {
         productCategory.setText("");
         productImage.setIcon(null);
     }//GEN-LAST:event_clearActionPerformed
-
-    private void costPriceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_costPriceActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_costPriceActionPerformed
 
     private void uploadImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_uploadImageActionPerformed
         // TODO add your handling code here:
@@ -438,7 +436,7 @@ public class Product extends javax.swing.JDialog {
         if (row == -1) {
             JOptionPane.showMessageDialog(null, "Please select product!");
         } else {
-            int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete? This action cannot be undone!","Warning",JOptionPane.YES_NO_OPTION);
+            int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete? This action cannot be undone!", "Warning", JOptionPane.YES_NO_OPTION);
             if (dialogResult == JOptionPane.YES_OPTION) {
                 new ProductDAO().deleteProductDAO(products.get(row));
                 loadData();
@@ -452,7 +450,7 @@ public class Product extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(null, "Select a table data first!");
         } else {
             int row = productTable.getSelectedRow();
-            product.setProductID(new ProductDAO().convertToArrayList(new ProductDAO().getQueryResult("productCode = '" + model.getValueAt(row, 3) +"'")).get(0).getProductID());
+            product.setProductID(new ProductDAO().convertToArrayList(new ProductDAO().getQueryResult("productCode = '" + model.getValueAt(row, 3) + "'")).get(0).getProductID());
             product.setProductName(productName.getText());
             product.setProductCode(productCode.getText());
             product.setCostPrice(Float.parseFloat(costPrice.getText()));
@@ -462,7 +460,7 @@ public class Product extends javax.swing.JDialog {
             new ProductDAO().editProductDAO(product);
             loadData();
             clearActionPerformed(evt);
-
+            
         }
     }//GEN-LAST:event_editActionPerformed
 
@@ -478,10 +476,6 @@ public class Product extends javax.swing.JDialog {
         loadBySearch(text);
     }//GEN-LAST:event_searchByTabKeyReleased
 
-    private void sellingPriceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sellingPriceActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_sellingPriceActionPerformed
-
     private void productCategoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_productCategoryActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_productCategoryActionPerformed
@@ -496,6 +490,28 @@ public class Product extends javax.swing.JDialog {
         d.setVisible(true);
         this.hide();
     }//GEN-LAST:event_backActionPerformed
+
+    private void costPriceKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_costPriceKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            price = Float.parseFloat(costPrice.getText());
+            if (price < 0) {
+                JOptionPane.showMessageDialog(null, "Price must be greaten than 0");
+                costPrice.setText("");
+            }
+        }
+    }//GEN-LAST:event_costPriceKeyPressed
+
+    private void sellingPriceKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_sellingPriceKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            price = Float.parseFloat(sellingPrice.getText());
+            if (price < 0) {
+                JOptionPane.showMessageDialog(null, "Price must be greaten than 0");
+                sellingPrice.setText("");
+            }
+        }
+    }//GEN-LAST:event_sellingPriceKeyPressed
 
     /**
      * @param args the command line arguments
@@ -568,9 +584,8 @@ public class Product extends javax.swing.JDialog {
     private javax.swing.JButton uploadImage;
     // End of variables declaration//GEN-END:variables
 
-
     private void loadData() {
-        products = new ProductDAO().convertToArrayList(new ProductDAO().getQueryResult("status = 'AVAILABLE'"));
+        products = new ProductDAO().convertToArrayList(new ProductDAO().getQueryResult("status = 'AVAILABLE' or status = 'SOLD_OUT'"));
         model = (DefaultTableModel) productTable.getModel();
         model.getDataVector().removeAllElements();
         model.fireTableDataChanged();
@@ -587,9 +602,9 @@ public class Product extends javax.swing.JDialog {
                 product.getProductStatus()
             });
         }
-
+        
     }
-
+    
     private ImageIcon resizeImage(String path) {
         ImageIcon image = new ImageIcon(path);
         Image img = image.getImage();
@@ -597,7 +612,7 @@ public class Product extends javax.swing.JDialog {
         ImageIcon resizeImage = new ImageIcon(newImg);
         return resizeImage;
     }
-
+    
     private void loadBySearch(String text) {
         model.getDataVector().removeAllElements();
         model.fireTableDataChanged();
@@ -621,5 +636,5 @@ public class Product extends javax.swing.JDialog {
             }
         }
     }
-
+    
 }

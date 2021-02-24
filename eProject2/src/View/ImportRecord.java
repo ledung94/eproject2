@@ -581,7 +581,7 @@ public class ImportRecord extends javax.swing.JDialog {
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
         // TODO add your handling code here:
         recordDetail = new RecordDetail();
-        if (productCode.getText().equals("") || date.getDateFormatString().equals("") || productQuantity.getText().equals("")) {
+        if (productCode.getText().equals("") | date.getDateFormatString().equals("") | productQuantity.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "Please fill all the fields!");
         } else {
             if (recordDetails.size() > 0) {//TH da co sp trong record
@@ -590,7 +590,7 @@ public class ImportRecord extends javax.swing.JDialog {
                     if ("SELECT SUPPLIER'S NAME".equalsIgnoreCase(supplier.getSupplierName())) {
                         JOptionPane.showMessageDialog(null, "Please select a supplier and try again!");
                     } else {
-                        if (!selectedSupplier.equals(supplier.getSupplierName()) || !record.getDate().equals(new SimpleDateFormat("yyyy/MM/dd").format(date.getDate()))) {
+                        if (!selectedSupplier.equals(supplier.getSupplierName()) | !record.getDate().equals(new SimpleDateFormat("yyyy/MM/dd").format(date.getDate()))) {
                             int dialogResult = JOptionPane.showConfirmDialog(null, "Would you like to change Record date or supplier name", "Warning", JOptionPane.YES_NO_OPTION);
                             if (dialogResult == JOptionPane.YES_OPTION) {
                                 supplier = new SupplierDAO().convertToArrayList(new SupplierDAO().getQueryResult("supplierName = '" + selectedSupplier + "'")).get(0);
@@ -783,10 +783,14 @@ public class ImportRecord extends javax.swing.JDialog {
     private void productQuantityKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_productQuantityKeyReleased
         // TODO add your handling code here:
         try {
+            if ("".equals(productQuantity.getText())) {
+                return;
+            }
             int i = Integer.parseInt(productQuantity.getText());
-            validate_text.setText("");
         } catch (NumberFormatException e) {
-            validate_text.setText("Invalid Number");
+            JOptionPane.showMessageDialog(null, "You can input only number");
+            productQuantity.setText("");
+
         }
     }//GEN-LAST:event_productQuantityKeyReleased
 
@@ -915,7 +919,7 @@ public class ImportRecord extends javax.swing.JDialog {
 
     public void initialRecord() {
         model = (DefaultTableModel) recordTable.getModel();
-        
+
         add.setEnabled(true);
         remove.setEnabled(true);
         edit.setEnabled(true);

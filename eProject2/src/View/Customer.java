@@ -189,7 +189,7 @@ public class Customer extends javax.swing.JDialog {
         int row = customerList.getSelectedRow();
         customer = customers.get(row);
         records = new RecordDAO().findAll("WHERE customerID = '" + customer.getCustomerID() + "'");
-        getRecordDetail(customer);
+        getRecordDetail();
 
     }//GEN-LAST:event_customerListMouseClicked
 
@@ -251,7 +251,7 @@ public class Customer extends javax.swing.JDialog {
 
     private void loadData() {
         records = new RecordDAO().findAll("WHERE recordType = 'EXPORT'");
-        getRecordDetail(customer);
+        getRecordDetail();
         customers = new CustomerDAO().convertToArrayList(new CustomerDAO().getQueryResult("1"));
         getRecord(customers);
     }
@@ -265,7 +265,7 @@ public class Customer extends javax.swing.JDialog {
             return;
         }
         getRecord(customers);
-        getRecordDetail(customer);
+        getRecordDetail();
     }
 
     private float getTotal(model.Customer customer) {
@@ -277,7 +277,7 @@ public class Customer extends javax.swing.JDialog {
         return sum;
     }
 
-    private void getRecordDetail(model.Customer customer) {
+    private void getRecordDetail() {
         model = (DefaultTableModel) CustomerOrder.getModel();
         model.getDataVector().removeAllElements();
         model.fireTableDataChanged();

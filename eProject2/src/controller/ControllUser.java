@@ -54,6 +54,15 @@ public class ControllUser {
         }
         return rs;
     }
+    public ResultSet getSearchUsersQueryResult(String searchTxt) {
+        try {
+            String query = "SELECT * FROM users WHERE fullname LIKE '%" + searchTxt + "%' OR location LIKE '%"  + searchTxt + "%' OR phone LIKE '%" + searchTxt + "%' OR role LIKE '%" + searchTxt + "%'" + "AND status = 'AVAILABLE'";
+            rs = stmt.executeQuery(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return rs;
+    }
     public  ArrayList<User> finAll(ResultSet rs){
         try {
             userList = new ArrayList<>();

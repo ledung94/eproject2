@@ -61,14 +61,18 @@ public class ProductDAO {
             rs = stmt.executeQuery(query);
             if (rs.next()) {
                 String text = "";
-                if (rs.getString("status").equals(Status.AVAILABLE.toString())) {
+                if (rs.getString("status").equals(Status.AVAILABLE.toString()) | rs.getString("status").equals(Status.SOLD_OUT.toString())) {
                     text = "Same Product has already been added! Do you want update this product";
                 } else if (rs.getString("status").equals(Status.DELETED.toString())) {
                     text = "This product is deleted! Are you sure you want to add this product to list?";
                 }
                 int dialogResult = JOptionPane.showConfirmDialog(null, text, "Warning", JOptionPane.YES_NO_OPTION);
                 if (dialogResult == JOptionPane.YES_OPTION) {
-                    product.setProductStatus(Status.AVAILABLE);
+                    if (new CurrentStockDAO().getCurrentStock(rs.getInt("productID")) == 0) {
+                        product.setProductStatus(Status.SOLD_OUT);
+                    } else {
+                        product.setProductStatus(Status.AVAILABLE);
+                    }
                     product.setProductID(convertToArrayList(getSearchProductsQueryResult(product.getProductCode())).get(0).getProductID());
                     new ProductDAO().editProductDAO(product);
                 }
@@ -117,6 +121,23 @@ public class ProductDAO {
             pstmt.setString(1, product.getProductCode());
             pstmt.executeUpdate();
             JOptionPane.showMessageDialog(null, "Delete Successfully!");
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
+    public void soldOut(int productID) {
+        try {
+            String query = "UPDATE products SET status = 'SOlD_OUT' WHERE productID=?";
+            pstmt = (PreparedStatement) con.prepareStatement(query);
+            pstmt.setString(1, Integer.toString(productID));
+            pstmt.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
@@ -191,7 +212,5 @@ public class ProductDAO {
         }
         return products;
     }
-
-
 
 }

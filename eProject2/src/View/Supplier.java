@@ -7,6 +7,7 @@ package View;
 
 import controller.CurrentStockDAO;
 import controller.SupplierDAO;
+import java.awt.Component;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -118,9 +119,9 @@ public class Supplier extends javax.swing.JDialog {
 
         jLabel12.setText("Supplier Code");
 
-        supplierContact.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                supplierContactActionPerformed(evt);
+        supplierContact.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                supplierContactKeyReleased(evt);
             }
         });
 
@@ -354,10 +355,6 @@ public class Supplier extends javax.swing.JDialog {
         loadBySearch(text);
     }//GEN-LAST:event_searchByTabKeyReleased
 
-    private void supplierContactActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_supplierContactActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_supplierContactActionPerformed
-
     private void supplierLocationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_supplierLocationActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_supplierLocationActionPerformed
@@ -368,6 +365,24 @@ public class Supplier extends javax.swing.JDialog {
         d.setVisible(true);
         this.hide();
     }//GEN-LAST:event_backActionPerformed
+
+    private void supplierContactKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_supplierContactKeyReleased
+        // TODO add your handling code here:
+        int i = supplierContact.getText().length();
+        if (i == 0) {
+            return;
+        } else if (i > 10) {
+            JOptionPane.showMessageDialog(null, "Phone number only 10 character");
+            supplierContact.setText("");
+        } else {
+            try {
+                i = Integer.parseInt(supplierContact.getText());
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "You can input only number");
+                supplierContact.setText("");
+            }
+        }
+    }//GEN-LAST:event_supplierContactKeyReleased
 
     /**
      * @param args the command line arguments
