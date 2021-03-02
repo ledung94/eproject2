@@ -5,6 +5,8 @@
  */
 package controller;
 
+import Model.User;
+import com.google.gson.Gson;
 import eproject2.connection.connectiondb;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -13,6 +15,8 @@ import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
+import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -28,6 +32,9 @@ import model.Record;
 import model.RecordDetail;
 import model.RecordType;
 import model.Supplier;
+import model.Customer;
+import org.apache.commons.io.FileUtils;
+import org.w3c.dom.html.HTMLObjectElement;
 
 /**
  *
@@ -44,6 +51,9 @@ public class RecordDAO {
     ArrayList<RecordDetail> recordDetails;
     Record record;
     ArrayList<Record> records;
+    Supplier supplier;
+    Customer customer;
+    ArrayList<Product> products;
 
     public RecordDAO() {
         try {
@@ -105,7 +115,7 @@ public class RecordDAO {
                 addRecordDetail(recordDetail);
                 new CurrentStockDAO().updateCurrentStock(recordDetail.getProductID(), recordDetail.getQuantity(), record.getRecordType());
                 int currentStock = new CurrentStockDAO().getCurrentStock(recordDetail.getProductID());
-                if (currentStock == 0){
+                if (currentStock == 0) {
                     new ProductDAO().soldOut(recordDetail.getProductID());
                 }
             }
@@ -202,30 +212,84 @@ public class RecordDAO {
         }
     }
 
-    public void printInvoice(JPanel panel) {
-        PrinterJob printerJob = PrinterJob.getPrinterJob();
-        printerJob.setJobName("Print Record");
-        printerJob.setPrintable(new Printable() {
-            @Override
-            public int print(Graphics grphcs, PageFormat pf, int i) throws PrinterException {
-                if (i > 0) {
-                    return Printable.NO_SUCH_PAGE;
-                }
-                Graphics2D graphics2D = (Graphics2D) grphcs;
-                graphics2D.translate(pf.getImageableX() * 2, pf.getImageableY() * 2);
-                graphics2D.scale(0.5, 0.5);
-                panel.paint(graphics2D);
-                return Printable.PAGE_EXISTS;
+//    public void printInvoice(JPanel panel) {
+//        PrinterJob printerJob = PrinterJob.getPrinterJob();
+//        printerJob.setJobName("Print Record");
+//        printerJob.setPrintable(new Printable() {
+//            @Override
+//            public int print(Graphics grphcs, PageFormat pf, int i) throws PrinterException {
+//                if (i > 0) {
+//                    return Printable.NO_SUCH_PAGE;
+//                }
+//                Graphics2D graphics2D = (Graphics2D) grphcs;
+//                graphics2D.translate(pf.getImageableX() * 2, pf.getImageableY() * 2);
+//                graphics2D.scale(0.5, 0.5);
+//                panel.paint(graphics2D);
+//                return Printable.PAGE_EXISTS;
+//            }
+//        });
+//        boolean returnResult = printerJob.printDialog();
+//        if (returnResult) {
+//            try {
+//                printerJob.print();
+//            } catch (PrinterException e) {
+//                JOptionPane.showMessageDialog(null, "Print error: " + e.getMessage());
+//            }
+//        }
+//    }
+    public void printInvoice(Record record) {
+        try {
+            File recordTemplateFile = new File("D:\\Flynn\\java\\prj\\eproject2.github.io\\eProject2\\src\\View\\recordTemplate.html");
+            String htmlString = FileUtils.readFileToString(recordTemplateFile);
+
+            String recordCode = record.getRecordCode();
+            String date = record.getDate();
+            User user = new Controller.ControllUser().finAll(new Controller.ControllUser().getQueryResyl("userID = '" + record.getHandleBy() + "'")).get(0);
+            String handleBy = user.getUsername();
+            recordDetails = new RecordDAO().getSearchRecordDetailQueryResult(record);
+            products = new ProductDAO().convertToArrayList(new ProductDAO().getQueryResult("1"));
+            String rcdtsJson = new Gson().toJson(recordDetails);
+            String recordJson = new Gson().toJson(record);
+            String prdJson = new Gson().toJson(products);
+            String subTotal = Float.toString(record.getTotalPrice());
+            String tax = Float.toString(record.getTotalPrice()*record.getVat()/100);
+            String total = Float.toString(record.getTotalPrice()*(record.getVat()+100)/100);
+            if (record.getRecordType() == RecordType.IMPORT) {
+                System.out.println("HERE");
+                supplier = new SupplierDAO().convertToArrayList(new SupplierDAO().getQueryResult("supplierID ='" + record.getSupplierID() + "'")).get(0);
+                String supplierName = supplier.getSupplierName();
+                String supplierLocation = supplier.getSupplierLocation();
+                String supplierContact = supplier.getSupplierContact();
+                htmlString = htmlString.replace("$supplierName", supplierName);
+                htmlString = htmlString.replace("$supplierLocation", supplierLocation);
+                htmlString = htmlString.replace("$supplierContact", supplierContact);
+            } else if (record.getRecordType() == RecordType.EXPORT) {
+                customer = new CustomerDAO().convertToArrayList(new CustomerDAO().getQueryResult("customerID ='" + record.getCustomerID() + "'")).get(0);
+                String customerName = customer.getCustomerName();
+                String customerAddress = customer.getCustomerAddress();
+                String customerPhone = customer.getCustomerPhone();
+                htmlString = htmlString.replace("$customerName", customerName);
+                htmlString = htmlString.replace("$customerAddress", customerAddress);
+                htmlString = htmlString.replace("$customerPhone", customerPhone);
             }
-        });
-        boolean returnResult = printerJob.printDialog();
-        if (returnResult) {
-            try {
-                printerJob.print();
-            } catch (PrinterException e) {
-                JOptionPane.showMessageDialog(null, "Print error: " + e.getMessage());
-            }
+
+            htmlString = htmlString.replace("$recordCode", recordCode);
+            htmlString = htmlString.replace("$date", date);
+            htmlString = htmlString.replace("$handleBy", handleBy);
+            htmlString = htmlString.replace("$rcdtsJson", rcdtsJson);
+            htmlString = htmlString.replace("$recordJson", recordJson);
+            htmlString = htmlString.replace("$prdJson", prdJson);
+            htmlString = htmlString.replace("$subTotal", subTotal);
+            htmlString = htmlString.replace("$tax", tax);
+            htmlString = htmlString.replace("$total", total);
+
+            File newHtmlFile = new File("D:\\Flynn\\java\\prj\\eproject2.github.io\\eProject2\\src\\View\\recordToday.html");
+            FileUtils.writeStringToFile(newHtmlFile, htmlString);
+
+        } catch (IOException ex) {
+            Logger.getLogger(RecordDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
+
     }
 
     public ArrayList<Record> convertToArrayList(ResultSet rs) {

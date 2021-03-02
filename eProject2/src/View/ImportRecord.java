@@ -796,7 +796,8 @@ public class ImportRecord extends javax.swing.JDialog {
 
     private void printActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printActionPerformed
         // TODO add your handling code here:
-        new RecordDAO().printInvoice(invoice);
+//        new RecordDAO().printInvoice(invoice);
+            new RecordDAO().printInvoice(record);
     }//GEN-LAST:event_printActionPerformed
 
     private void backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backActionPerformed

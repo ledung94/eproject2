@@ -5,9 +5,9 @@
         <group>
             <file>file:/D:/Flynn/java/prj/eproject2.github.io/eProject2/src/controller/RecordDAO.java</file>
             <file>file:/D:/Flynn/java/prj/eproject2.github.io/eProject2/src/View/exportRecord.java</file>
-            <file>file:/D:/Flynn/java/prj/eproject2.github.io/eProject2/src/View/Product.java</file>
-            <file>file:/D:/Flynn/java/prj/eproject2.github.io/eProject2/src/View/viewRecord.java</file>
-            <file>file:/D:/Flynn/java/prj/eproject2.github.io/eProject2/src/View/CurrentStock.java</file>
+            <file>file:/D:/Flynn/java/prj/eproject2.github.io/eProject2/src/controller/ProductDAO.java</file>
+            <file>file:/D:/Flynn/java/prj/eproject2.github.io/eProject2/src/View/ImportRecord.java</file>
+            <file>file:/D:/Flynn/java/prj/eproject2.github.io/eProject2/src/View/recordTemplate.html</file>
         </group>
     </open-files>
 </project-private>

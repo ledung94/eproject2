@@ -24,7 +24,7 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import model.Constant;
 import model.Customer;
-import model.Product ;
+import model.Product;
 import model.RecordDetail;
 import model.RecordType;
 import model.Supplier;
@@ -34,6 +34,7 @@ import model.Supplier;
  * @author THINH PC
  */
 public class exportRecord extends javax.swing.JDialog {
+
     model.Customer customer;
     model.Product product;
     model.RecordDetail recordDetail;
@@ -43,7 +44,7 @@ public class exportRecord extends javax.swing.JDialog {
     model.Record record;
     DefaultTableModel model;
     int taxPercent;
-    
+
     /**
      * Creates new form exportRecord
      */
@@ -681,28 +682,28 @@ public class exportRecord extends javax.swing.JDialog {
         customerName2.setEditable(false);
         customerAddress2.setEditable(false);
         customerPhone2.setEditable(false);
-        
+
     }
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
         // TODO add your handling code here:
         recordDetail = new RecordDetail();
-        if (productCode.getText().equals("") || date.getDateFormatString().equals("") || productQuantity.getText().equals("") || customerID.getText().equals("") || customerName2.equals("") || customerAddress.equals("") || customerPhone.equals("") ) {
+        if (productCode.getText().equals("") || date.getDateFormatString().equals("") || productQuantity.getText().equals("") || customerID.getText().equals("") || customerName2.equals("") || customerAddress.equals("") || customerPhone.equals("")) {
             JOptionPane.showMessageDialog(null, "Please fill all the fields!");
         } else {
             if (recordDetails.size() > 0) {//TH da co sp trong record
-                try{
+                try {
                     if (!record.getDate().equals(new SimpleDateFormat("yyyy/MM/dd").format(date.getDate()))) {
-                    JOptionPane.showConfirmDialog(null, "Would you like to change record date?");
+                        JOptionPane.showConfirmDialog(null, "Would you like to change record date?");
                         if (JOptionPane.YES_NO_OPTION == JOptionPane.YES_OPTION) {
                             record.setDate(new SimpleDateFormat("yyyy/MM/dd").format(date.getDate()));
-                            }
                         }
+                    }
                     date.setDate(new SimpleDateFormat("yyyy/MM/dd").parse(record.getDate()));
                     //check existed prod
                     if (isExisted(product.getProductCode()) != -1) {
                         int index = isExisted(product.getProductCode());
                         int newQuantity = recordDetails.get(index).getQuantity() + Integer.parseInt(productQuantity.getText());
-                        if(checkQuantity(newQuantity) == false) {
+                        if (checkQuantity(newQuantity) == false) {
                             return;
                         }
                         model.setValueAt(Integer.toString(newQuantity), index, 3);
@@ -711,7 +712,7 @@ public class exportRecord extends javax.swing.JDialog {
                         //create new recordDetail
                         recordDetail.setProductID(product.getProductID());
                         int quantity = Integer.parseInt(productQuantity.getText());
-                        if(checkQuantity(quantity) == false) {
+                        if (checkQuantity(quantity) == false) {
                             return;
                         }
                         recordDetail.setQuantity(quantity);
@@ -729,29 +730,29 @@ public class exportRecord extends javax.swing.JDialog {
                 }
 
             } else { //TH chua co sp nao trong record
-                    //create new recordDetail
-                    recordDetail.setProductID(product.getProductID());
-                    int quantity = Integer.parseInt(productQuantity.getText());
-                    if(checkQuantity(quantity) == false) {
-                            return;
-                        }
-                    recordDetail.setQuantity(quantity);
-                    recordDetails.add(recordDetail);
-                    //set record
-                    record.setCustomerID(customer.getCustomerID());
-                    record.setDate(new SimpleDateFormat("yyyy/MM/dd").format(date.getDate()));
-                    record.setRecordType(RecordType.EXPORT);
-                    //record.setHandleBy(WIDTH);
-                    record.setTotalPrice(getTotalPrice());
-                    //show table
-                    if (vat.isSelected()) {
-                        showInvoice(Constant.VAT);
-                    } else {
-                        showInvoice(Constant.NO_VAT);
-                    }
+                //create new recordDetail
+                recordDetail.setProductID(product.getProductID());
+                int quantity = Integer.parseInt(productQuantity.getText());
+                if (checkQuantity(quantity) == false) {
+                    return;
+                }
+                recordDetail.setQuantity(quantity);
+                recordDetails.add(recordDetail);
+                //set record
+                record.setCustomerID(customer.getCustomerID());
+                record.setDate(new SimpleDateFormat("yyyy/MM/dd").format(date.getDate()));
+                record.setRecordType(RecordType.EXPORT);
+                //record.setHandleBy(WIDTH);
+                record.setTotalPrice(getTotalPrice());
+                //show table
+                if (vat.isSelected()) {
+                    showInvoice(Constant.VAT);
+                } else {
+                    showInvoice(Constant.NO_VAT);
+                }
             }
         }
-        
+
     }//GEN-LAST:event_addActionPerformed
     private float getTotalPrice() {
         float total = 0;
@@ -760,6 +761,7 @@ public class exportRecord extends javax.swing.JDialog {
         }
         return total;
     }
+
     public int isExisted(String productCode) {
         int result = -1;
         for (int i = 0; i < recordDetails.size(); i++) {
@@ -771,6 +773,7 @@ public class exportRecord extends javax.swing.JDialog {
         }
         return result;
     }
+
     private void showInvoice(int taxValue) {
         customerCode2.setText(Integer.toString(customer.getCustomerID()));
         receiptDate.setText(record.getDate());
@@ -793,13 +796,13 @@ public class exportRecord extends javax.swing.JDialog {
             recordDetail.getQuantity(),
             product.getSellingPrice(),
             taxValue,
-            product.getSellingPrice()* recordDetail.getQuantity()
+            product.getSellingPrice() * recordDetail.getQuantity()
         });
 
     }
-    
+
     private void editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editActionPerformed
-        
+
         if (recordTable.getSelectedRow() < 0) {
             JOptionPane.showMessageDialog(null, "Select a table data first!");
         } else {
@@ -818,7 +821,7 @@ public class exportRecord extends javax.swing.JDialog {
 
         }
     }//GEN-LAST:event_editActionPerformed
-    
+
     private void clearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearActionPerformed
         date.setDateFormatString("");
         productCode.setText("");
@@ -828,7 +831,7 @@ public class exportRecord extends javax.swing.JDialog {
         customerAddress.setText("");
         customerName1.setText("");
         customerPhone.setText("");
-        
+
     }//GEN-LAST:event_clearActionPerformed
 
     private void customerName2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customerName2ActionPerformed
@@ -848,7 +851,7 @@ public class exportRecord extends javax.swing.JDialog {
     }//GEN-LAST:event_customerIDActionPerformed
 
     private void customerIDKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_customerIDKeyPressed
-        if(evt.getKeyCode()==KeyEvent.VK_ENTER){
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             try {
                 String text = customerID.getText();
                 if (!new CustomerDAO().getQueryResult("customerID = '" + text + "'").next()) {
@@ -861,7 +864,7 @@ public class exportRecord extends javax.swing.JDialog {
                     customerAddress2.setText((customer.getCustomerAddress()));
                     customerPhone.setText((customer.getCustomerPhone()));
                     customerPhone2.setText((customer.getCustomerPhone()));
-                    
+
                 }
             } catch (SQLException ex) {
                 Logger.getLogger(exportRecord.class.getName()).log(Level.SEVERE, null, ex);
@@ -871,15 +874,14 @@ public class exportRecord extends javax.swing.JDialog {
 
     private void deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteActionPerformed
         if (JOptionPane.showConfirmDialog(null, "Are you sure you want to delete? This action cannot be undone!", "WARNING",
-        JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
             System.out.println(record.getRecordID());
             new RecordDAO().deleteRecord(record);
             newRecordActionPerformed(evt);
+        } else {
         }
-        else{       
-    }
     }//GEN-LAST:event_deleteActionPerformed
-    private void newRecordActionPerformed(java.awt.event.ActionEvent evt) {                                          
+    private void newRecordActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
         model.getDataVector().removeAllElements();
         model.fireTableDataChanged();
@@ -899,19 +901,19 @@ public class exportRecord extends javax.swing.JDialog {
 //                ctrl.setSelectedIndex(0);
 //            }
 //        }
-    }                  
+    }
     private void createRecordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createRecordActionPerformed
         // TODO add your handling code here:
-                new RecordDAO().addRecord(record, recordDetails);
-                receiptCode.setText(record.getRecordCode());
-                clearActionPerformed(evt);
-                add.setEnabled(false);
-                remove.setEnabled(false);
-                edit.setEnabled(false);
-                clear.setEnabled(false);
-                createRecord.setEnabled(false);
-                vat.setEnabled(false);
-                comment.setEnabled(false);
+        new RecordDAO().addRecord(record, recordDetails);
+        receiptCode.setText(record.getRecordCode());
+        clearActionPerformed(evt);
+        add.setEnabled(false);
+        remove.setEnabled(false);
+        edit.setEnabled(false);
+        clear.setEnabled(false);
+        createRecord.setEnabled(false);
+        vat.setEnabled(false);
+        comment.setEnabled(false);
     }//GEN-LAST:event_createRecordActionPerformed
 
     private void vatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_vatActionPerformed
@@ -949,8 +951,7 @@ public class exportRecord extends javax.swing.JDialog {
 //            JOptionPane.showMessageDialog(comment, "Quantity need more than 0");
 //            productQuantity.setText("");
 //        }
-        
-       
+
 
     }//GEN-LAST:event_productQuantityKeyPressed
 
@@ -995,7 +996,8 @@ public class exportRecord extends javax.swing.JDialog {
     }//GEN-LAST:event_searchByTabKeyPressed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-        new RecordDAO().printInvoice(invoice);
+//        new RecordDAO().printInvoice(invoice);
+        new RecordDAO().printInvoice(record);
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void productQuantityKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_productQuantityKeyReleased
@@ -1014,13 +1016,13 @@ public class exportRecord extends javax.swing.JDialog {
 //            JOptionPane.showMessageDialog(comment, "You can input only number");
 //            productQuantity.setText("");
 //        }
-        try{
+        try {
             int i = Integer.parseInt(productQuantity.getText());
-            if(i <= 0){
-            JOptionPane.showMessageDialog(comment, "Quantity need more than 0");
-            productQuantity.setText("");
+            if (i <= 0) {
+                JOptionPane.showMessageDialog(comment, "Quantity need more than 0");
+                productQuantity.setText("");
             }
-        }catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(comment, "You can input only number");
             productQuantity.setText("");
         }
@@ -1034,6 +1036,7 @@ public class exportRecord extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(null, "Cannot found this record!");
         }
     }
+
     private boolean checkQuantity(int quantity) {
         int currentStock = new CurrentStockDAO().getCurrentStock(recordDetail.getProductID());
         if (quantity > currentStock) {
@@ -1042,11 +1045,12 @@ public class exportRecord extends javax.swing.JDialog {
         } else if (currentStock == 0) {
             JOptionPane.showMessageDialog(null, "This product is out of stock");
             return false;
-        } else if (quantity == currentStock){
+        } else if (quantity == currentStock) {
             new ProductDAO().soldOut(product.getProductID());
         }
         return true;
     }
+
     private void loadData() {
         receiptCode.setText(record.getRecordCode());
         productCode.setText("");
@@ -1054,7 +1058,7 @@ public class exportRecord extends javax.swing.JDialog {
         productQuantity.setText("");
 
         record.setTotalPrice(getTotalPrice());
-        customer = new CustomerDAO().convertToArrayList(new CustomerDAO().getQueryResult("customerID = '" + record.getCustomerID()+ "'")).get(0);
+        customer = new CustomerDAO().convertToArrayList(new CustomerDAO().getQueryResult("customerID = '" + record.getCustomerID() + "'")).get(0);
         customerName2.setText(customer.getCustomerName());
         customerCode2.setText(Integer.toString(customer.getCustomerID()));
         customerAddress2.setText(customer.getCustomerAddress());
@@ -1080,6 +1084,7 @@ public class exportRecord extends javax.swing.JDialog {
             });
         }
     }
+
     /**
      * @param args the command line arguments
      */
