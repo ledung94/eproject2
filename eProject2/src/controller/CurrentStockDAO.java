@@ -56,6 +56,12 @@ public class CurrentStockDAO {
             }
         } catch (SQLException ex) {
             Logger.getLogger(CurrentStockDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(CurrentStockDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return quantity;
     }
@@ -88,6 +94,12 @@ public class CurrentStockDAO {
             pstmt.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(CurrentStockDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(CurrentStockDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 

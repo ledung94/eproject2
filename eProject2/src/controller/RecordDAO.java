@@ -239,9 +239,8 @@ public class RecordDAO {
 //    }
     public void printInvoice(Record record) {
         try {
-            File recordTemplateFile = new File("D:\\Flynn\\java\\prj\\eproject2.github.io\\eProject2\\src\\View\\recordTemplate.html");
-            String htmlString = FileUtils.readFileToString(recordTemplateFile);
-
+            File recordTemplateFile = null;
+            String htmlString = "";
             String recordCode = record.getRecordCode();
             String date = record.getDate();
             User user = new Controller.ControllUser().finAll(new Controller.ControllUser().getQueryResyl("userID = '" + record.getHandleBy() + "'")).get(0);
@@ -252,10 +251,11 @@ public class RecordDAO {
             String recordJson = new Gson().toJson(record);
             String prdJson = new Gson().toJson(products);
             String subTotal = Float.toString(record.getTotalPrice());
-            String tax = Float.toString(record.getTotalPrice()*record.getVat()/100);
-            String total = Float.toString(record.getTotalPrice()*(record.getVat()+100)/100);
+            String tax = Float.toString(record.getTotalPrice() * record.getVat() / 100);
+            String total = Float.toString(record.getTotalPrice() * (record.getVat() + 100) / 100);
             if (record.getRecordType() == RecordType.IMPORT) {
-                System.out.println("HERE");
+                recordTemplateFile = new File("D:\\Flynn\\java\\prj\\eproject2.github.io\\eProject2\\src\\View\\recordTemplate.html");
+                htmlString = FileUtils.readFileToString(recordTemplateFile);
                 supplier = new SupplierDAO().convertToArrayList(new SupplierDAO().getQueryResult("supplierID ='" + record.getSupplierID() + "'")).get(0);
                 String supplierName = supplier.getSupplierName();
                 String supplierLocation = supplier.getSupplierLocation();
@@ -264,7 +264,10 @@ public class RecordDAO {
                 htmlString = htmlString.replace("$supplierLocation", supplierLocation);
                 htmlString = htmlString.replace("$supplierContact", supplierContact);
             } else if (record.getRecordType() == RecordType.EXPORT) {
+                recordTemplateFile = new File("D:\\Flynn\\java\\prj\\eproject2.github.io\\eProject2\\src\\View\\recordTemplate-sale.html");
+                htmlString = FileUtils.readFileToString(recordTemplateFile);
                 customer = new CustomerDAO().convertToArrayList(new CustomerDAO().getQueryResult("customerID ='" + record.getCustomerID() + "'")).get(0);
+                System.out.println("customer" + customer.getCustomerCode());
                 String customerName = customer.getCustomerName();
                 String customerAddress = customer.getCustomerAddress();
                 String customerPhone = customer.getCustomerPhone();
@@ -272,6 +275,7 @@ public class RecordDAO {
                 htmlString = htmlString.replace("$customerAddress", customerAddress);
                 htmlString = htmlString.replace("$customerPhone", customerPhone);
             }
+            
 
             htmlString = htmlString.replace("$recordCode", recordCode);
             htmlString = htmlString.replace("$date", date);
@@ -283,11 +287,12 @@ public class RecordDAO {
             htmlString = htmlString.replace("$tax", tax);
             htmlString = htmlString.replace("$total", total);
 
-            File newHtmlFile = new File("D:\\Flynn\\java\\prj\\eproject2.github.io\\eProject2\\src\\View\\recordToday.html");
+            File newHtmlFile = new File("D:\\Flynn\\java\\prj\\eproject2.github.io\\eProject2\\src\\printedRecord\\" + record.getRecordCode() + ".html");
             FileUtils.writeStringToFile(newHtmlFile, htmlString);
+            JOptionPane.showMessageDialog(null, "Printed record successfully");
 
-        } catch (IOException ex) {
-            Logger.getLogger(RecordDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Printed record failed");
         }
 
     }
