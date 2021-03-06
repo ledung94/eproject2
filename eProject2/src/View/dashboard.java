@@ -562,26 +562,31 @@ public class dashboard extends javax.swing.JFrame {
     private void btnProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProductActionPerformed
         Product p = new Product(this, rootPaneCheckingEnabled);
         p.setVisible(true);
+        this.hide();
     }//GEN-LAST:event_btnProductActionPerformed
 
     private void btnUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUserActionPerformed
         user u = new user();
         u.setVisible(true);
+        this.hide();
     }//GEN-LAST:event_btnUserActionPerformed
 
     private void btnCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCustomerActionPerformed
         Customer c = new Customer(this, rootPaneCheckingEnabled);
         c.setVisible(true);
+        this.hide();
     }//GEN-LAST:event_btnCustomerActionPerformed
 
     private void btnSaleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaleActionPerformed
         exportRecord ep = new exportRecord(this, rootPaneCheckingEnabled);
         ep.setVisible(true);
+        this.hide();
     }//GEN-LAST:event_btnSaleActionPerformed
 
     private void btnPurchaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPurchaseActionPerformed
         ImportRecord r = new ImportRecord(this, rootPaneCheckingEnabled);
         r.setVisible(true);
+        this.hide();
        
     }//GEN-LAST:event_btnPurchaseActionPerformed
 
@@ -593,11 +598,13 @@ public class dashboard extends javax.swing.JFrame {
     private void btnCurrentStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCurrentStockActionPerformed
         CurrentStock c = new CurrentStock(this, rootPaneCheckingEnabled);
         c.setVisible(true);
+        this.hide();
     }//GEN-LAST:event_btnCurrentStockActionPerformed
 
     private void btnViewRecordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewRecordActionPerformed
         viewRecord vr = new viewRecord(this, rootPaneCheckingEnabled);
         vr.setVisible(true);
+        this.hide();
     }//GEN-LAST:event_btnViewRecordActionPerformed
 
     /**

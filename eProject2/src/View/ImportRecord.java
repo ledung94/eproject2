@@ -653,7 +653,7 @@ public class ImportRecord extends javax.swing.JDialog {
             try {
                 // TODO add your handling code here:
                 String text = productCode.getText();
-                if (!new ProductDAO().getQueryResult("productCode = '" + text + "' AND status = 'AVAILABLE'").next()) {
+                if (!new ProductDAO().getQueryResult("productCode = '" + text + "' AND status = 'AVAILABLE'").next() & !new ProductDAO().getQueryResult("productCode = '" + text + "' AND status = 'SOLD_OUT'").next()) {
                     JOptionPane.showMessageDialog(null, "This product is not exist or wrong product code!");
                 } else {
                     product = new ProductDAO().convertToArrayList(new ProductDAO().getQueryResult("productCode = '" + productCode.getText() + "'")).get(0);

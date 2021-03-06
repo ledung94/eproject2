@@ -44,6 +44,7 @@ public class exportRecord extends javax.swing.JDialog {
     model.Record record;
     DefaultTableModel model;
     int taxPercent;
+    String customerStatus;
 
     /**
      * Creates new form exportRecord
@@ -83,7 +84,7 @@ public class exportRecord extends javax.swing.JDialog {
         jLabel25 = new javax.swing.JLabel();
         customerPhone = new javax.swing.JTextField();
         jLabel26 = new javax.swing.JLabel();
-        customerID = new javax.swing.JTextField();
+        customerCode = new javax.swing.JTextField();
         date = new com.toedter.calendar.JDateChooser();
         customerName1 = new javax.swing.JTextField();
         refresh = new javax.swing.JButton();
@@ -119,6 +120,7 @@ public class exportRecord extends javax.swing.JDialog {
         jButton7 = new javax.swing.JButton();
         createRecord = new javax.swing.JButton();
         delete = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -209,16 +211,16 @@ public class exportRecord extends javax.swing.JDialog {
             }
         });
 
-        jLabel26.setText("Customer ID");
+        jLabel26.setText("Customer Code");
 
-        customerID.addActionListener(new java.awt.event.ActionListener() {
+        customerCode.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                customerIDActionPerformed(evt);
+                customerCodeActionPerformed(evt);
             }
         });
-        customerID.addKeyListener(new java.awt.event.KeyAdapter() {
+        customerCode.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                customerIDKeyPressed(evt);
+                customerCodeKeyPressed(evt);
             }
         });
 
@@ -249,7 +251,7 @@ public class exportRecord extends javax.swing.JDialog {
                             .addComponent(jLabel26))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(customerID)
+                            .addComponent(customerCode)
                             .addComponent(productQuantity)
                             .addComponent(sellingPrice)
                             .addComponent(productCode)
@@ -297,7 +299,7 @@ public class exportRecord extends javax.swing.JDialog {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel26)
-                    .addComponent(customerID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(customerCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -580,6 +582,13 @@ public class exportRecord extends javax.swing.JDialog {
             }
         });
 
+        jButton1.setText("Back");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -605,10 +614,12 @@ public class exportRecord extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 367, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel21)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(searchByTab, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(jButton1)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(jLabel21)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(searchByTab, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -619,7 +630,9 @@ public class exportRecord extends javax.swing.JDialog {
                         .addGap(35, 35, 35)
                         .addComponent(refresh))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(48, 48, 48)
+                        .addContainerGap()
+                        .addComponent(jButton1)
+                        .addGap(10, 10, 10)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(2, 2, 2)
@@ -687,7 +700,7 @@ public class exportRecord extends javax.swing.JDialog {
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
         // TODO add your handling code here:
         recordDetail = new RecordDetail();
-        if (productCode.getText().equals("") || date.getDateFormatString().equals("") || productQuantity.getText().equals("") || customerID.getText().equals("") || customerName2.equals("") || customerAddress.equals("") || customerPhone.equals("")) {
+        if (productCode.getText().equals("") || date.getDateFormatString().equals("") || productQuantity.getText().equals("") || customerCode.getText().equals("") || customerName2.equals("") || customerAddress.equals("") || customerPhone.equals("")) {
             JOptionPane.showMessageDialog(null, "Please fill all the fields!");
         } else {
             if (recordDetails.size() > 0) {//TH da co sp trong record
@@ -739,11 +752,22 @@ public class exportRecord extends javax.swing.JDialog {
                 recordDetail.setQuantity(quantity);
                 recordDetails.add(recordDetail);
                 //set record
-                record.setCustomerID(customer.getCustomerID());
+
                 record.setDate(new SimpleDateFormat("yyyy/MM/dd").format(date.getDate()));
                 record.setRecordType(RecordType.EXPORT);
                 //record.setHandleBy(WIDTH);
                 record.setTotalPrice(getTotalPrice());
+                if (customerName1.getText().equals(customer.getCustomerName()) && customerAddress.getText().equals(customer.getCustomerAddress()) && customerPhone.getText().equals(customer.getCustomerPhone())) {
+                    customerStatus = "EXISTED";
+                    record.setCustomerID(customer.getCustomerID());
+                } else if (customerName1.getText().equals(customer.getCustomerName()) | customerAddress.getText().equals(customer.getCustomerAddress()) | customerPhone.getText().equals(customer.getCustomerPhone())) {
+                    customerStatus = "UPDATE";
+                } else {
+                    customerStatus = "NEW";
+                }
+                customerAddress2.setText(customerAddress.getText());
+                customerPhone2.setText(customerPhone.getText());
+                customerName2.setText(customerName1.getText());
                 //show table
                 if (vat.isSelected()) {
                     showInvoice(Constant.VAT);
@@ -775,7 +799,7 @@ public class exportRecord extends javax.swing.JDialog {
     }
 
     private void showInvoice(int taxValue) {
-        customerCode2.setText(Integer.toString(customer.getCustomerID()));
+        customerCode2.setText((customer.getCustomerCode()));
         receiptDate.setText(record.getDate());
         subtotal.setText(Float.toString(record.getTotalPrice()));
         if (vat.isSelected()) {
@@ -827,7 +851,7 @@ public class exportRecord extends javax.swing.JDialog {
         productCode.setText("");
         productQuantity.setText("");
         sellingPrice.setText("");
-        customerID.setText("");
+        customerCode.setText("");
         customerAddress.setText("");
         customerName1.setText("");
         customerPhone.setText("");
@@ -846,31 +870,29 @@ public class exportRecord extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_customerPhoneActionPerformed
 
-    private void customerIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customerIDActionPerformed
+    private void customerCodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customerCodeActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_customerIDActionPerformed
+    }//GEN-LAST:event_customerCodeActionPerformed
 
-    private void customerIDKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_customerIDKeyPressed
+    private void customerCodeKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_customerCodeKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             try {
-                String text = customerID.getText();
-                if (!new CustomerDAO().getQueryResult("customerID = '" + text + "'").next()) {
-                    JOptionPane.showMessageDialog(null, "This customer is not exist or wrong customer code!");
-                } else {
-                    customer = new CustomerDAO().convertToArrayList(new CustomerDAO().getQueryResult("customerID = '" + customerID.getText() + "'")).get(0);
+                String text = customerCode.getText();
+                if (new CustomerDAO().getQueryResult("customerCode = '" + text + "'").next()) {
+                    customer = new CustomerDAO().convertToArrayList(new CustomerDAO().getQueryResult("customerCode = '" + customerCode.getText() + "'")).get(0);
                     customerName1.setText((customer.getCustomerName()));
-                    customerName2.setText((customer.getCustomerName()));
+//                    customerName2.setText((customer.getCustomerName()));
                     customerAddress.setText((customer.getCustomerAddress()));
-                    customerAddress2.setText((customer.getCustomerAddress()));
+//                    customerAddress2.setText((customer.getCustomerAddress()));
                     customerPhone.setText((customer.getCustomerPhone()));
-                    customerPhone2.setText((customer.getCustomerPhone()));
-
+//                    customerPhone2.setText((customer.getCustomerPhone())); 
+                    customerCode2.setText(customerCode.getText());
                 }
             } catch (SQLException ex) {
                 Logger.getLogger(exportRecord.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-    }//GEN-LAST:event_customerIDKeyPressed
+    }//GEN-LAST:event_customerCodeKeyPressed
 
     private void deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteActionPerformed
         if (JOptionPane.showConfirmDialog(null, "Are you sure you want to delete? This action cannot be undone!", "WARNING",
@@ -904,8 +926,15 @@ public class exportRecord extends javax.swing.JDialog {
     }
     private void createRecordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createRecordActionPerformed
         // TODO add your handling code here:
+        customer.setCustomerCode((customerCode.getText()));
+        customer.setCustomerName(customerName1.getText());
+        customer.setCustomerAddress(customerAddress.getText());
+        customer.setCustomerPhone(customerPhone.getText());
+        new CustomerDAO().add(customerStatus, customer);
+        customer.setCustomerID(new CustomerDAO().convertToArrayList(new CustomerDAO().getQueryResult("customerCode = '" + customer.getCustomerCode() + "'")).get(0).getCustomerID());
         new RecordDAO().addRecord(record, recordDetails);
         receiptCode.setText(record.getRecordCode());
+
         clearActionPerformed(evt);
         add.setEnabled(false);
         remove.setEnabled(false);
@@ -1027,6 +1056,13 @@ public class exportRecord extends javax.swing.JDialog {
             productQuantity.setText("");
         }
     }//GEN-LAST:event_productQuantityKeyReleased
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        dashboard db = new dashboard();
+        db.setVisible(true);
+        this.hide();
+    }//GEN-LAST:event_jButton1ActionPerformed
     private void loadBySearch(String text) {
         try {
             record = new RecordDAO().getSearchRecordQueryResult(text);
@@ -1060,7 +1096,7 @@ public class exportRecord extends javax.swing.JDialog {
         record.setTotalPrice(getTotalPrice());
         customer = new CustomerDAO().convertToArrayList(new CustomerDAO().getQueryResult("customerID = '" + record.getCustomerID() + "'")).get(0);
         customerName2.setText(customer.getCustomerName());
-        customerCode2.setText(Integer.toString(customer.getCustomerID()));
+        customerCode2.setText((customer.getCustomerCode()));
         customerAddress2.setText(customer.getCustomerAddress());
         customerPhone2.setText(customer.getCustomerPhone());
         receiptDate.setText(record.getDate());
@@ -1135,8 +1171,8 @@ public class exportRecord extends javax.swing.JDialog {
     private javax.swing.JButton createRecord;
     private javax.swing.JTextField customerAddress;
     private javax.swing.JTextField customerAddress2;
+    private javax.swing.JTextField customerCode;
     private javax.swing.JTextField customerCode2;
-    private javax.swing.JTextField customerID;
     private javax.swing.JTextField customerName1;
     private javax.swing.JTextField customerName2;
     private javax.swing.JTextField customerPhone;
@@ -1145,6 +1181,7 @@ public class exportRecord extends javax.swing.JDialog {
     private javax.swing.JButton delete;
     private javax.swing.JButton edit;
     private javax.swing.JPanel invoice;
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton7;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;

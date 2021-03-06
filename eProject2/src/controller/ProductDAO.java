@@ -134,7 +134,14 @@ public class ProductDAO {
     
     public void soldOut(int productID) {
         try {
-            String query = "UPDATE products SET status = 'SOLD_OUT' WHERE productID=?";
+            String query;
+            int currentStock = new CurrentStockDAO().getCurrentStock(productID);
+            System.out.println(currentStock);
+            if(currentStock > 0){
+                query = "UPDATE products SET status = 'AVAILABLE' WHERE productID=?";
+            } else {
+                query = "UPDATE products SET status = 'SOLD_OUT' WHERE productID=?";
+            }
             pstmt = (PreparedStatement) con.prepareStatement(query);
             pstmt.setString(1, Integer.toString(productID));
             pstmt.executeUpdate();

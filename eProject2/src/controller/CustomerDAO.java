@@ -14,6 +14,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import model.Customer;
 import model.Customer;
 
 /**
@@ -21,6 +23,7 @@ import model.Customer;
  * @author THINH PC
  */
 public class CustomerDAO {
+
     Connection con = null;
     PreparedStatement pstmt = null;
     Statement stmt = null;
@@ -38,8 +41,8 @@ public class CustomerDAO {
             Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-     public ResultSet getQueryResult(String condition) {
+
+    public ResultSet getQueryResult(String condition) {
         try {
             String query = "SELECT * FROM customers " + "WHERE " + condition;
             rs = stmt.executeQuery(query);
@@ -48,6 +51,52 @@ public class CustomerDAO {
             e.printStackTrace();
         }
         return rs;
+    }
+
+    public void add(String customerStatus, Customer customer) {
+        try {
+            if (customerStatus.equals("UPDATE")) {
+                update(customer);
+            } else if (customerStatus.equals("NEW")) {
+                String q = "INSERT INTO customers VALUES(null,?,?,?,?)";
+                pstmt = (PreparedStatement) con.prepareStatement(q);
+                pstmt.setString(2, customer.getCustomerName());
+                pstmt.setString(1, customer.getCustomerCode());
+                pstmt.setString(4, customer.getCustomerPhone());
+                pstmt.setString(3, customer.getCustomerAddress());
+
+                pstmt.executeUpdate();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(CustomerDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    public void update(Customer customer) {
+        try {
+            String query = "UPDATE customers SET customerName=?,customerCode=?,customerPhone=?,customerAddress=? WHERE customerID=?";
+            pstmt = (PreparedStatement) con.prepareStatement(query);
+            pstmt.setString(1, customer.getCustomerName());
+            pstmt.setString(2, customer.getCustomerCode());
+            pstmt.setString(3, customer.getCustomerPhone());
+            pstmt.setString(4, customer.getCustomerAddress());
+            pstmt.setInt(5, customer.getCustomerID());
+            pstmt.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(CustomerDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
     public ArrayList<Customer> convertToArrayList(ResultSet rs) {
@@ -73,7 +122,7 @@ public class CustomerDAO {
         }
         return customers;
     }
-    
+
     public ResultSet getSearchCustomerQueryResult(String searchTxt) {
         try {
             String query = "SELECT * FROM customers WHERE customerCode LIKE '%" + searchTxt + "%' OR customerName LIKE '%" + searchTxt + "%'";
