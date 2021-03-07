@@ -142,4 +142,41 @@ public class ControllUser {
              Logger.getLogger(ControllUser.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    
+    public void changePass(User user){
+        try {
+                      
+            String sql = "UPDATE users SET password = ? WHERE username = ?";
+            
+            psmt = (PreparedStatement) conn.prepareStatement(sql);
+            
+            psmt.setString(1, user.getPassword());
+            psmt.setString(2, user.getUsername());
+            
+            psmt.executeUpdate();
+            
+            JOptionPane.showMessageDialog(null, "Update Password Successfully!");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+    
+    public void checkPass(User user, String userName ){
+        try {
+                      
+            String sql = "select * form users where username = '"+userName+"'";
+            
+//            rs = stmt.executeQuery(sql);
+            psmt = (PreparedStatement) conn.prepareStatement(sql);
+            
+//            psmt.setString(1, user.getPassword());
+            psmt.setString(1, user.getUsername());
+            
+            psmt.executeUpdate();
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

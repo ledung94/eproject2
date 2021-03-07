@@ -265,7 +265,6 @@ public class RecordDAO {
                 recordTemplateFile = new File("D:\\Flynn\\java\\prj\\eproject2.github.io\\eProject2\\src\\View\\recordTemplate-sale.html");
                 htmlString = FileUtils.readFileToString(recordTemplateFile);
                 customer = new CustomerDAO().convertToArrayList(new CustomerDAO().getQueryResult("customerID ='" + record.getCustomerID() + "'")).get(0);
-                System.out.println("customer" + customer.getCustomerCode());
                 String customerName = customer.getCustomerName();
                 String customerAddress = customer.getCustomerAddress();
                 String customerPhone = customer.getCustomerPhone();

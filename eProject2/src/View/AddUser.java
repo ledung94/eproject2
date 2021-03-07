@@ -228,7 +228,11 @@ public class AddUser extends javax.swing.JFrame {
     }
     
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        // TODO add your handling code here:   
+        // TODO add your handling code here: 
+        String userName, addUserName;
+        userName = txtUserName.getText();
+        
+        
         if (txtFullName.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "full name is empty");
         } else if (txtLocation.getText().trim().isEmpty()) {
@@ -238,9 +242,10 @@ public class AddUser extends javax.swing.JFrame {
         } else if (txt_pass.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "pass word is empty");
         } else if (txtPhone.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "location is empty");
+            JOptionPane.showMessageDialog(this, "phone is empty");
         } else {
             User us = new User();
+            
             us.setFullname(txtFullName.getText());
 //            System.out.println("fullname :" + txtFullName);  
             us.setLocation(txtLocation.getText());
@@ -257,6 +262,9 @@ public class AddUser extends javax.swing.JFrame {
             System.out.println(value);
             us.setStatus(Status.AVAILABLE);
             
+//            if(userName.equals(addUserName)){
+//                JOptionPane.showMessageDialog(rootPane, "Username da ton tai");
+//            }else{
             new ControllUser().insertUser(us);
             clear();
         }
@@ -268,11 +276,11 @@ public class AddUser extends javax.swing.JFrame {
         txtPhone.setText("");
         txtUserName.setText("");
         txt_pass.setText("");
-        int itemCount = cbox_category.getItemCount();
-        
-        for (int i = 0; i < itemCount; i++) {
-            cbox_category.removeItemAt(0);
-        }
+//        int itemCount = cbox_category.getItemCount();
+//        
+//        for (int i = 0; i < itemCount; i++) {
+//            cbox_category.removeItemAt(0);
+//        }
     }
     private void cbox_categoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbox_categoryActionPerformed
         // TODO add your handling code here:

@@ -316,7 +316,10 @@ public class Supplier extends javax.swing.JDialog {
             suppliers.add(supplier);
             new SupplierDAO().add(supplier);
             loadData();
-
+            supplierName.setText("");
+            supplierCode.setText("");
+            supplierContact.setText("");
+            supplierLocation.setText("");
         }
     }//GEN-LAST:event_createActionPerformed
 
@@ -343,6 +346,10 @@ public class Supplier extends javax.swing.JDialog {
     private void refreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshActionPerformed
         // TODO add your handling code here:
         loadData();
+        supplierName.setText("");
+        supplierCode.setText("");
+        supplierContact.setText("");
+        supplierLocation.setText("");
     }//GEN-LAST:event_refreshActionPerformed
 
     private void searchByTabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchByTabActionPerformed

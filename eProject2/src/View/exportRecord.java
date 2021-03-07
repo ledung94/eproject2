@@ -897,7 +897,6 @@ public class exportRecord extends javax.swing.JDialog {
     private void deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteActionPerformed
         if (JOptionPane.showConfirmDialog(null, "Are you sure you want to delete? This action cannot be undone!", "WARNING",
                 JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-            System.out.println(record.getRecordID());
             new RecordDAO().deleteRecord(record);
             newRecordActionPerformed(evt);
         } else {
@@ -931,7 +930,7 @@ public class exportRecord extends javax.swing.JDialog {
         customer.setCustomerAddress(customerAddress.getText());
         customer.setCustomerPhone(customerPhone.getText());
         new CustomerDAO().add(customerStatus, customer);
-        customer.setCustomerID(new CustomerDAO().convertToArrayList(new CustomerDAO().getQueryResult("customerCode = '" + customer.getCustomerCode() + "'")).get(0).getCustomerID());
+        record.setCustomerID(new CustomerDAO().convertToArrayList(new CustomerDAO().getQueryResult("customerCode = '" + customer.getCustomerCode() + "'")).get(0).getCustomerID());
         new RecordDAO().addRecord(record, recordDetails);
         receiptCode.setText(record.getRecordCode());
 
@@ -1067,7 +1066,11 @@ public class exportRecord extends javax.swing.JDialog {
         try {
             record = new RecordDAO().getSearchRecordQueryResult(text);
             recordDetails = new RecordDAO().getSearchRecordDetailQueryResult(record);
-            loadData();
+            if(record.getRecordType() == RecordType.DELETED){
+                JOptionPane.showMessageDialog(null, "This record is deleted");
+            } else {
+                loadData();
+            }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Cannot found this record!");
         }

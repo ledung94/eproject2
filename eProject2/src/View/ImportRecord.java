@@ -105,7 +105,6 @@ public class ImportRecord extends javax.swing.JDialog {
         createRecord = new javax.swing.JButton();
         print = new javax.swing.JButton();
         delete = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
         newRecord = new javax.swing.JButton();
         jLabel20 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
@@ -459,9 +458,6 @@ public class ImportRecord extends javax.swing.JDialog {
             }
         });
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/icons8-important-mail-24.png"))); // NOI18N
-        jButton1.setText("Mail");
-
         javax.swing.GroupLayout receiptLayout = new javax.swing.GroupLayout(receipt);
         receipt.setLayout(receiptLayout);
         receiptLayout.setHorizontalGroup(
@@ -472,8 +468,6 @@ public class ImportRecord extends javax.swing.JDialog {
                     .addComponent(invoice, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, receiptLayout.createSequentialGroup()
                         .addComponent(print)
-                        .addGap(31, 31, 31)
-                        .addComponent(jButton1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(createRecord)
                         .addGap(40, 40, 40)
@@ -489,8 +483,7 @@ public class ImportRecord extends javax.swing.JDialog {
                 .addGroup(receiptLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(createRecord)
                     .addComponent(delete)
-                    .addComponent(print)
-                    .addComponent(jButton1))
+                    .addComponent(print))
                 .addGap(21, 21, 21))
         );
 
@@ -703,7 +696,6 @@ public class ImportRecord extends javax.swing.JDialog {
         // TODO add your handling code here:
         int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete? This action cannot be undone!", "Warning", JOptionPane.YES_NO_OPTION);
         if (dialogResult == JOptionPane.YES_OPTION) {
-            System.out.println(record.getRecordID());
             new RecordDAO().deleteRecord(record);
             newRecordActionPerformed(evt);
         }
@@ -866,7 +858,6 @@ public class ImportRecord extends javax.swing.JDialog {
     private javax.swing.JButton delete;
     private javax.swing.JButton edit;
     private javax.swing.JPanel invoice;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -997,7 +988,11 @@ public class ImportRecord extends javax.swing.JDialog {
         try {
             record = new RecordDAO().getSearchRecordQueryResult(text);
             recordDetails = new RecordDAO().getSearchRecordDetailQueryResult(record);
-            loadData();
+            if(record.getRecordType() == RecordType.DELETED){
+                JOptionPane.showMessageDialog(null, "This record is deleted");
+            } else {
+                loadData();
+            }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Cannot found this record!");
 
