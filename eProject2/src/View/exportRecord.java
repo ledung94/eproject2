@@ -337,6 +337,11 @@ public class exportRecord extends javax.swing.JDialog {
         refresh.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         refresh.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/icons8-repeat-64.png"))); // NOI18N
         refresh.setText("Refesh");
+        refresh.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                refreshActionPerformed(evt);
+            }
+        });
 
         jLabel20.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
         jLabel20.setForeground(new java.awt.Color(0, 102, 204));
@@ -716,7 +721,7 @@ public class exportRecord extends javax.swing.JDialog {
                     if (isExisted(product.getProductCode()) != -1) {
                         int index = isExisted(product.getProductCode());
                         int newQuantity = recordDetails.get(index).getQuantity() + Integer.parseInt(productQuantity.getText());
-                        if (checkQuantity(newQuantity) == false) {
+                        if (checkQuantity(newQuantity, recordDetails.get(index).getProductID()) == false) {
                             return;
                         }
                         model.setValueAt(Integer.toString(newQuantity), index, 3);
@@ -725,7 +730,7 @@ public class exportRecord extends javax.swing.JDialog {
                         //create new recordDetail
                         recordDetail.setProductID(product.getProductID());
                         int quantity = Integer.parseInt(productQuantity.getText());
-                        if (checkQuantity(quantity) == false) {
+                        if (checkQuantity(quantity,recordDetail.getProductID()) == false) {
                             return;
                         }
                         recordDetail.setQuantity(quantity);
@@ -746,7 +751,7 @@ public class exportRecord extends javax.swing.JDialog {
                 //create new recordDetail
                 recordDetail.setProductID(product.getProductID());
                 int quantity = Integer.parseInt(productQuantity.getText());
-                if (checkQuantity(quantity) == false) {
+                if (checkQuantity(quantity,recordDetail.getProductID()) == false) {
                     return;
                 }
                 recordDetail.setQuantity(quantity);
@@ -1062,6 +1067,23 @@ public class exportRecord extends javax.swing.JDialog {
         db.setVisible(true);
         this.hide();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void refreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshActionPerformed
+        // TODO add your handling code here:
+        clearActionPerformed(evt);
+        model.getDataVector().removeAllElements();
+        model.fireTableDataChanged();
+        for (Component control : invoice.getComponents()) {
+            if (control instanceof JTextField) {
+                JTextField ctrl = (JTextField) control;
+                ctrl.setText("");
+            } else if (control instanceof JComboBox) {
+                JComboBox ctrl = (JComboBox) control;
+                ctrl.setSelectedIndex(0);
+            }
+        }
+
+    }//GEN-LAST:event_refreshActionPerformed
     private void loadBySearch(String text) {
         try {
             record = new RecordDAO().getSearchRecordQueryResult(text);
@@ -1076,8 +1098,8 @@ public class exportRecord extends javax.swing.JDialog {
         }
     }
 
-    private boolean checkQuantity(int quantity) {
-        int currentStock = new CurrentStockDAO().getCurrentStock(recordDetail.getProductID());
+    private boolean checkQuantity(int quantity, int prodID) {
+        int currentStock = new CurrentStockDAO().getCurrentStock(prodID);
         if (quantity > currentStock) {
             JOptionPane.showMessageDialog(null, "Quantity entered is greater than the quantity available");
             return false;
